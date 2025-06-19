@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import './MaatuQuizPage.css';
+import './MaatuQuizPage.css'; // Renamed CSS file
 
 // --- Your Curated Data ---
+// IMPORTANT: Ensure each entry has enough UNIQUE incorrectOptions
+// to allow for selecting 3 distinct incorrect answers.
+// Add all your sentences with the new 'romanKannada' field!
 const allSentences = [
   {
     english: "How are you?",
@@ -30,7 +33,7 @@ const allSentences = [
   {
     english: "Can I go to the bathroom?",
     kannada: "ನಾನು ಬಚ್ಚಲಿಗೆ ಹೋಗಲಾ?",
-    incorrectOptions: ["ನಾನು ಹೊರಗೆ ಹೋಗಲಾ?", "ನ ನಾನು ಬರಲಾ?", "ನನಗೆ ನೀರು ಕೊಡಿ?", "ನಾನು ಕುಳಿತುಕೊಳ್ಳಲಾ?"],
+    incorrectOptions: ["ನಾನು ಹೊರಗೆ ಹೋಗಲಾ?", "ನಾನು ಬರಲಾ?", "ನನಗೆ ನೀರು ಕೊಡಿ?", "ನಾನು ಕುಳಿತುಕೊಳ್ಳಲಾ?"],
     romanKannada: "nānu baccalige hōgalā?"
   },
   {
@@ -78,7 +81,7 @@ const allSentences = [
   {
     english: "I don't know.",
     kannada: "ನನಗೆ ಗೊತ್ತಿಲ್ಲ",
-    incorrectOptions: ["ನನಗೆ ಗೊತ್ತು", "ನಾನು ಮರೆತೆ", "ನಾನು ಕಲಿತೆ", "ನಾನು ನೋಡಿದೆ"],
+    incorrectOptions: ["ನನಗೆ ಗೊತ್ತು", "ನ ನಾನು ಮರೆತೆ", "ನಾನು ಕಲಿತೆ", "ನಾನು ನೋಡಿದೆ"],
     romanKannada: "nanage gottilla"
   },
   {
@@ -151,7 +154,7 @@ const allSentences = [
     english: "Can we play together?",
     kannada: "ಒಟ್ಟಿಗೆ ಆಡಬಹುದಾ?",
     incorrectOptions: ["ಒಟ್ಟಿಗೆ ಓದಬಹುದಾ?", "ಒಟ್ಟಿಗೆ ಕುಳಿತುಕೊಳ್ಳಬಹುದಾ?", "ಒಟ್ಟಿಗೆ ಹೋಗಬಹುದಾ?", "ಒಟ್ಟಿಗೆ ಮಲಗಬಹುದಾ?"],
-    romanKannada: "oṭṭṭige āḍabahudā?"
+    romanKannada: "oṭṭige āḍabahudā?"
   },
   {
     english: "Let's go!",
@@ -246,13 +249,13 @@ const allSentences = [
   {
     english: "I don’t want to do it.",
     kannada: "ನಾನು ಮಾಡಲ್ಲ",
-    incorrectOptions: ["ನಾನು ಮಾಡ್ತೀನಿ", "ನಾನು ಮಾಡಿದೆ", "ನಾನು ಮಾಡಬೇಕು", "ನಾನು ಮಾಡೋಣ"],
+    incorrectOptions: ["ನಾನು ಮಾಡ್ತೀನಿ", "ನಾನು ಮಾಡಿದೆ", "ನ ನಾನು ಮಾಡಬೇಕು", "ನಾನು ಮಾಡೋಣ"],
     romanKannada: "nānu māḍalla"
   },
   {
     english: "I will be right back.",
     kannada: "ಇರಿ ಬಂದೆ",
-    incorrectOptions: ["ಹೋಗ್ತಾ ಇದ್ದೀನಿ", "ನಾನು ಬರಲ್ಲ", "ನಾನು ಇಲ್ಲಿ ಇಲ್ಲ", "ನ ನಾನು ಮಲಗುತ್ತೇನೆ"],
+    incorrectOptions: ["ಹೋಗ್ತಾ ಇದ್ದೀನಿ", "ನಾನು ಬರಲ್ಲ", "ನಾನು ಇಲ್ಲಿ ಇಲ್ಲ", "ನಾನು ಮಲಗುತ್ತೇನೆ"],
     romanKannada: "iri bande"
   },
   {
@@ -342,7 +345,7 @@ const allSentences = [
   {
     english: "He laughed (He was laughing).",
     kannada: "ಅವನು ನಕ್ಕ (ಅವನು ನಗುತ್ತಾ ಇದ್ದ)",
-    incorrectOptions: ["ಅವನು ಅತ್ತ (ಅವನು ಅಳುತ್ತಾ ಇದ್ದ)", "ಅವನು ಓಡಿದ (ಅವನು ಓಡುತ್ತಾ ಇದ್ದ)", "ಅವನು ಕುಡಿದ (ಅವನು ಕುಡಿಯುತ್ತಾ ಇದ್ದ)", "ಅವನು ತಿಂದು (ಅವನು ತಿನ್ನುತ್ತಾ ಇದ್ದ)"],
+    incorrectOptions: ["ಅವನು ಅತ್ತ (ಅವನು ಅಳುತ್ತಾ ಇದ್ದ)", "ಅವನು ಓಡಿದ (ಅವನು ಓಡುತ್ತಾ ಇದ್ದ)", "ಅವನು ಕುಡಿದ (ಅವನು ಕುಡಿಯುತ್ತಾ ಇದ್ದ)", "ಅವನು ತಿಂದ (ಅವನು ತಿನ್ನುತ್ತಾ ಇದ್ದ)"],
     romanKannada: "avanu nakka (avanu naguttā idda)"
   },
   {
@@ -379,7 +382,7 @@ const allSentences = [
     english: "She is walking.",
     kannada: "ಅವಳು ನಡೀತಾ ಇದ್ದಾಳೆ",
     incorrectOptions: ["ಅವಳು ಓಡ್ತಾ ಇದ್ದಾಳೆ", "ಅವಳು ಕುಳಿತುಕೊಂಡಿದ್ದಾಳೆ", "ಅವಳು ಮಲಗಿದ್ದಾಳೆ", "ಅವಳು ತಿನ್ನುತ್ತಾ ಇದ್ದಾಳೆ"],
-    romanKannana: "avaḷu naḍītā iddāḷe"
+    romanKannada: "avaḷu naḍītā iddāḷe"
   },
   {
     english: "You are walking.",
@@ -630,7 +633,7 @@ const allSentences = [
   {
     english: "I saw.",
     kannada: "ನಾನು ನೋಡಿದೆ",
-    incorrectOptions: ["ನಾನು ಕೇಳಿದೆ", "ನಾನು ಹೇಳಿದೆ", "ನಾನು ಮಾಡಿದೆ", "ನಾನು ಬರೆದೆ"],
+    incorrectOptions: ["ನಾನು ಕೇಳಿದೆ", "ನಾನು ಹೇಳಿದೆ", "ನಾನು ಮಾಡಿದೆ", "ನ ನಾನು ಬರೆದೆ"],
     romanKannada: "nānu nōḍide"
   },
   {
@@ -668,403 +671,6 @@ const allSentences = [
     kannada: "ಸ್ವಲ್ಪ ತಡಿ!",
     incorrectOptions: ["ಬೇಗ ಮಾಡು!", "ಹೋಗು!", "ಮಾಡು!", "ಬಾ!"],
     romanKannada: "svalpa taḍi!"
-  },
-  // --- New Sentences Added Below ---
-  {
-    english: "What do we have for Tuesday?",
-    kannada: "ಮಂಗಳವಾರ ಏನು ಕಾರ್ಯಕ್ರಮವಿದೆ?",
-    incorrectOptions: ["ಮಂಗಳವಾರ ಯಾವಾಗ?", "ಏನು ಕಾರ್ಯಕ್ರಮ?", "ನಾಳೆ ಏನು?", "ಇವತ್ತು ಏನು?"],
-    romanKannada: "maṅgaḷavāra ēnu kāryakramavide?"
-  },
-  {
-    english: "Do we have tabs?",
-    kannada: "ನಮ್ಮನೆಲಿ ಟ್ಯಾಬ್‌ ಇದೆಯಾ?", // Corrected Kannada script
-    incorrectOptions: ["ನಮಗೆ ಟ್ಯಾಬ್ ಬೇಕಾ?", "ನೀವು ಟ್ಯಾಬ್ ಕೊಟ್ಟೀರಾ?", "ಟ್ಯಾಬ್ ಎಲ್ಲಿದೆ?", "ಟ್ಯಾಬ್ ಇಲ್ಲ?"],
-    romanKannada: "nammameḷi ṭyāb‌ ideyā?" // Corrected Romanization
-  },
-  {
-    english: "Are we going somewhere today?",
-    kannada: "ಇವತ್ತು ಎಲ್ಲಿಗಾದರೂ ಹೋಗಬೇಕಾ?",
-    incorrectOptions: ["ಇವತ್ತು ಎಲ್ಲಿದ್ದಾರೆ?", "ನಾಳೆ ಹೋಗೋಣವಾ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತೀವಿ?", "ಇವತ್ತು ಮನೆಯಲ್ಲಿ ಇದ್ದೀರಾ?"],
-    romanKannada: "ivattu elligādarū hōgabēkā?"
-  },
-  {
-    english: "Do I still have to do it?",
-    kannada: "ನಾನು ಇದನ್ನ ಇನ್ನೂ ಮಾಡಲೇಬೇಕಾ?",
-    incorrectOptions: ["ನಾನು ಇದನ್ನು ಮಾಡಲಾ?", "ನೀನು ಮಾಡು", "ಇನ್ನೂ ಮಾಡ್ತೀಯಾ?", "ಮಾಡಿ ಆಯ್ತಾ?"],
-    romanKannada: "nānu idanna innū māḍalēbēkā?"
-  },
-  {
-    english: "Can we go outside and decide?",
-    kannada: "ನಾವು ಹೊರಗೆ ಹೋಗಿ ತೀರ್ಮಾನ ಮಾಡೋಣ್ವಾ?",
-    incorrectOptions: ["ಹೊರಗೆ ಹೋಗೋಣವಾ?", "ತೀರ್ಮಾನ ಯಾವಾಗ?", "ಒಳಗೆ ಹೋಗೋಣವಾ?", "ನಾವು ಯಾವಾಗ ತೀರ್ಮಾನ ಮಾಡೋಣ?"],
-    romanKannada: "nāvu horage hōgi tīrmāna māḍōṇvā?"
-  },
-  {
-    english: "What's for breakfast?",
-    kannada: "ಬೆಳಿಗ್ಗೆ ಏನು ತಿಂಡಿ?",
-    incorrectOptions: ["ರಾತ್ರಿ ಏನು ಊಟ?", "ಮಧ್ಯಾಹ್ನ ಏನು?", "ಬೆಳಿಗ್ಗೆ ಎಲ್ಲಿ?", "ತಿಂಡಿ ಏನು?"],
-    romanKannada: "beḷigge ēnu tiṇḍi?"
-  },
-  {
-    english: "Is anyone coming to our house?",
-    kannada: "ಯಾರಾದರೂ ನಮ್ಮ ಮನೆಗೆ ಬರುತ್ತಿದ್ದಾರಾ?",
-    incorrectOptions: ["ಯಾರು ಮನೆಯಲ್ಲಿ ಇದ್ದಾರೆ?", "ಮನೆಗೆ ಯಾರು ಹೋಗ್ತಾರೆ?", "ಯಾರಾದರೂ ಇಲ್ಲ?", "ಮನೆಯಲ್ಲಿ ಏನು?"],
-    romanKannada: "yārādarū namma manege baruttiddārā?"
-  },
-  {
-    english: "Is it time for lunch?",
-    kannada: "ಊಟ ಮಾಡೋಣವಾ?",
-    incorrectOptions: ["ಊಟ ಯಾವಾಗ?", "ಊಟ ಆಯ್ತಾ?", "ನಿದ್ದೆ ಮಾಡೋಣವಾ?", "ಆಟ ಆಡೋಣವಾ?"],
-    romanKannada: "ūṭa māḍōṇavā?"
-  },
-  {
-    english: "I want to watch cartoons for some time.",
-    kannada: "ಸ್ವಲ್ಪ ಹೊತ್ತು ಕಾರ್ಟೂನ್ ನೋಡ್ಲಾ.",
-    incorrectOptions: ["ಹೆಚ್ಚು ಹೊತ್ತು ಕಾರ್ಟೂನ್ ನೋಡ್ಲಾ?", "ಟಿವಿ ನೋಡ್ಲಾ?", "ಆಟ ಆಡ್ಲಾ?", "ನಿದ್ದೆ ಮಾಡ್ಲಾ?"],
-    romanKannada: "svalpa hottu kārṭūn nōḍlā."
-  },
-  {
-    english: "I like to play video games.",
-    kannada: "ನನಗೆ ವಿಡಿಯೋ ಆಟ ಆಡೋದು ಇಷ್ಟ.",
-    incorrectOptions: ["ನನಗೆ ವಿಡಿಯೋ ಆಟ ಇಷ್ಟ ಇಲ್ಲ.", "ನನಗೆ ಆಟ ಇಷ್ಟ.", "ನನಗೆ ಆಟ ಆಡೋದು ಬೇಡ.", "ನನಗೆ ಟಿವಿ ನೋಡ್ಲಿಕ್ಕೆ ಇಷ್ಟ."],
-    romanKannada: "nanage viḍiyō āṭa āḍōdu iṣṭa."
-  },
-  {
-    english: "When is Anna coming home?",
-    kannada: "ಅಣ್ಣ ಯಾವಾಗ ಮನೆಗೆ ಬರುತ್ತಾನೆ?",
-    incorrectOptions: ["ತಂಗಿ ಯಾವಾಗ ಬರುತ್ತಾಳೆ?", "ಅಣ್ಣ ಎಲ್ಲಿದ್ದಾನೆ?", "ಅಮ್ಮಾ ಯಾವಾಗ ಬರುತ್ತಾಳೆ?", "ಯಾವಾಗ ಬರುತ್ತಾನೆ?"],
-    romanKannada: "aṇṇa yāvāga manege baruttāne?"
-  },
-  {
-    english: "Do you need help with the dishes?",
-    kannada: "ಪಾತ್ರೆ ತೊಳೆಯಲು ಸಹಾಯ ಬೇಕಾ?",
-    incorrectOptions: ["ಪಾತ್ರೆ ಎಲ್ಲಿದೆ?", "ಸಹಾಯ ಬೇಕಾ?", "ಅಡುಗೆಗೆ ಸಹಾಯ ಬೇಕಾ?", "ಪಾತ್ರೆ ತೊಳೆಯುವಿಯಾ?"],
-    romanKannada: "pātre toḷeyalu sahāya bēkā?"
-  },
-  {
-    english: "Can I make my own breakfast?",
-    kannada: "ನಾನೇ ಬೆಳಿಗ್ಗೆ ತಿಂಡಿ ಮಾಡಿಕೊಳ್ಳಬಹುದಾ?",
-    incorrectOptions: ["ನಾನು ತಿಂಡಿ ಮಾಡಲಾ?", "ನೀನು ತಿಂಡಿ ಮಾಡು", "ನಾನು ಊಟ ಮಾಡಿಕೊಳ್ಳಲಾ?", "ಬೆಳಿಗ್ಗೆ ಏನು?"],
-    romanKannada: "nānē beḷigge tiṇḍi māḍikoḷḷabahudā?"
-  },
-  {
-    english: "I want chocolate milk.",
-    kannada: "ನನಗೆ ಚಾಕೋಲೇಟ್ ಹಾಲು ಬೇಕು.",
-    incorrectOptions: ["ನನಗೆ ಹಾಲು ಬೇಕು.", "ನನಗೆ ನೀರು ಬೇಕು.", "ನನಗೆ ಚಾಕೋಲೇಟ್ ಬೇಕು.", "ನನಗೆ ಹಾಲು ಇಷ್ಟ ಇಲ್ಲ."],
-    romanKannada: "nanage cākōlēṭ hālu bēku."
-  },
-  {
-    english: "I have to finish my homework.",
-    kannada: "ನನ್ನ ಮನೆಗೆಲಸ ಮುಗಿಸಬೇಕು.",
-    incorrectOptions: ["ನನ್ನ ಮನೆಗೆಲಸ ಬೇಡ.", "ನಾನು ಮನೆಗೆಲಸ ಮಾಡಿದೆ.", "ಮನೆಗೆಲಸ ಯಾವಾಗ?", "ನಾನು ಓದುವೆ."],
-    romanKannada: "nanna mane gelasa mugisabēku."
-  },
-  {
-    english: "I will go take a bath now.",
-    kannada: "ನಾನು ಈಗ ಸ್ನಾನಕ್ಕೆ ಹೋಗ್ತೀನಿ.",
-    incorrectOptions: ["ನಾನು ಈಗ ಸ್ನಾನ ಮಾಡಲ್ಲ.", "ನಾನು ಈಗ ಹೋಗ್ತೀನಿ.", "ಸ್ನಾನ ಯಾವಾಗ?", "ನಾನು ಆಡ್ತೀನಿ."],
-    romanKannada: "nānu īga snānakke hōgtīni."
-  },
-  {
-    english: "I played with my friends at school.",
-    kannada: "ನಾನು ಶಾಲೆಯಲ್ಲಿ ಗೆಳೆಯರೊಂದಿಗೆ ಆಡಿದೆ.",
-    incorrectOptions: ["ನಾನು ಮನೆಯಲ್ಲಿ ಆಡಿದೆ.", "ನಾನು ಶಾಲೆಯಲ್ಲಿ ಓದಿದೆ.", "ಗೆಳೆಯರು ಎಲ್ಲಿದ್ದಾರೆ?", "ನಾನು ಆಟ ಆಡಲ್ಲ."],
-    romanKannada: "nānu śāleyalli geḷeyarondege āḍide."
-  },
-  {
-    english: "Can I go to Ian’s house to play?",
-    kannada: "ಇಯಾನ್ ಮನೆಗೆ ಆಟಕ್ಕೆ ಹೋಗಬಹುದಾ?",
-    incorrectOptions: ["ಯಾನ್ ಮನೆ ಎಲ್ಲಿದೆ?", "ಆಟಕ್ಕೆ ಹೋಗಲಾ?", "ಮನೆಗೆ ಹೋಗಲಾ?", "ಇಯಾನ್ ಜೊತೆ ಆಡ್ಲಾ?"],
-    romanKannada: "iyān manege āṭakke hōgabahudā?"
-  },
-  {
-    english: "I have to do my Kumon homework.",
-    kannada: "ನಾನು ಕುಮೋನ್ ಮನೆಗೆಲಸ ಮುಗಿಸಬೇಕು.",
-    incorrectOptions: ["ನಾನು ಕುಮೋನ್ ಮಾಡಿದೆ.", "ನನಗೆ ಕುಮೋನ್ ಬೇಡ.", "ಕುಮೋನ್ ಯಾವಾಗ?", "ಮನೆಗೆಲಸ ಮಾಡು."],
-    romanKannada: "nānu kumōn mane gelasa mugisabēku."
-  },
-  {
-    english: "Can I watch TV?",
-    kannada: "ನಾನು ಟಿವಿ ನೋಡಬಹುದಾ?",
-    incorrectOptions: ["ನಾನು ಟಿವಿ ನೋಡ್ಲಾ?", "ಟಿವಿ ಬೇಡ?", "ಟಿವಿ ಆನ್ ಮಾಡು", "ನಾನು ಆಟ ಆಡ್ಲಾ?"],
-    romanKannada: "nānu ṭivi nōḍabahudā?"
-  },
-  {
-    english: "What's the food, Amma?",
-    kannada: "ಅಮ್ಮಾ, ಊಟಕ್ಕೆ ಏನು?",
-    incorrectOptions: ["ಅಮ್ಮಾ, ಎಲ್ಲಿ?", "ಅಮ್ಮಾ, ಯಾವಾಗ?", "ಅಮ್ಮಾ, ಏನು ಮಾಡ್ತಾ ಇದ್ದೀಯಾ?", "ಊಟಕ್ಕೆ ಏನು?"],
-    romanKannada: "ammā, ūṭakke ēnu?"
-  },
-  {
-    english: "Can you give me Froot Loops or Maggi?",
-    kannada: "ನೀನು ನನಗೆ ಫ್ರೂಟ್ ಲೂಪ್ಸ್ ಅಥವಾ ಮ್ಯಾಗಿ ಕೊಡ್ತಿಯಾ?",
-    incorrectOptions: ["ಫ್ರೂಟ್ ಲೂಪ್ಸ್ ಬೇಕು?", "ಮ್ಯಾಗಿ ಬೇಡ?", "ನೀನು ನನಗೆ ಕೊಡು?", "ಫ್ರೂಟ್ ಲೂಪ್ಸ್ ಎಲ್ಲಿದೆ?"],
-    romanKannada: "nīnu nanage frūṭ lūps athavā myāgi koḍtiyā?"
-  },
-  {
-    english: "Appa, come play with me.",
-    kannada: "ಅಪ್ಪಾ, ನನ್ನ ಜೊತೆಗೆ ಆಟಕ್ಕೆ ಬಾ.",
-    incorrectOptions: ["ಅಪ್ಪಾ, ಎಲ್ಲಿದ್ದೀರಾ?", "ಅಪ್ಪಾ, ಕೆಲಸ ಮಾಡು", "ಅಪ್ಪಾ, ಆಟ ಆಡಲ್ಲ?", "ನನ್ನ ಜೊತೆ ಆಟ ಆಡು."],
-    romanKannada: "appā, nanna jotage āṭakke bā."
-  },
-  {
-    english: "I want to sleep for some more time.",
-    kannada: "ನನಗೆ ಇನ್ನೂ ಸ್ವಲ್ಪ ಹೊತ್ತು ಮಲಗಬೇಕು.",
-    incorrectOptions: ["ನನಗೆ ಈಗ ನಿದ್ದೆ ಬೇಡ.", "ನಾನು ಎದ್ದೆ.", "ನಾನು ಕೆಲಸ ಮಾಡಬೇಕು.", "ನನಗೆ ಮಲಗಲಿಕ್ಕೆ ಇಷ್ಟ ಇಲ್ಲ."],
-    romanKannada: "nanage innū svalpa hottu malagabēku."
-  },
-  {
-    english: "Appa, can you give me a coloring page?",
-    kannada: "ಅಪ್ಪಾ, ನನಗೆ ಬಣ್ಣ ಹಚ್ಚುವ ಪುಟ ಕೊಡ್ತಿಯಾ?",
-    incorrectOptions: ["ಅಪ್ಪಾ, ಬಣ್ಣ ಎಲ್ಲಿದೆ?", "ನನಗೆ ಬಣ್ಣ ಬೇಕು?", "ಪುಟ ಕೊಡು", "ಅಪ್ಪಾ, ಪುಸ್ತಕ ಕೊಡು."],
-    romanKannada: "appā, nanage baṇṇa haccuva puṭa koḍtiyā?"
-  },
-  {
-    english: "Just stop it, OK?",
-    kannada: "ಬೇಡ, ಹಾಗೆ ಮಾಡಬೇಡ?",
-    incorrectOptions: ["ಹಾಗೆ ಮಾಡು.", "ನಿಲ್ಲಿಸು", "ಬೇಡ", "ಓಕೆ?"],
-    romanKannada: "bēḍa, hāge māḍabēḍa?"
-  },
-  {
-    english: "What is the time now?",
-    kannada: "ಈಗ ಎಷ್ಟು ಗಂಟೆ ಆಯ್ತು?",
-    incorrectOptions: ["ಟೈಮ್ ಯಾವಾಗ?", "ಈಗ ಯಾವಾಗ?", "ಗಂಟೆ ಏನು?", "ಟೈಮ್ ಎಲ್ಲಿ?"],
-    romanKannada: "īga eṣṭu gaṇṭe āytu?"
-  },
-  {
-    english: "Can you fill my water bottle?",
-    kannada: "ನನ್ನ ನೀರಿನ ಬಾಟಲಿ ತುಂಬಿಸುತ್ತೀಯಾ?",
-    incorrectOptions: ["ನೀರಿನ ಬಾಟಲಿ ಎಲ್ಲಿದೆ?", "ನನಗೆ ನೀರು ಕೊಡು.", "ಬಾಟಲಿ ತುಂಬಿಸು", "ನನ್ನ ಬಾಟಲಿ."],
-    romanKannada: "nanna nīrina bāṭali tumbisuttīyā?"
-  },
-  {
-    english: "I will come, wait.",
-    kannada: "ಬರುತ್ತೀನಿ, ಸ್ವಲ್ಪ ತಡಿ.",
-    incorrectOptions: ["ನಾನು ಬರಲ್ಲ.", "ನಾನು ಈಗ ಹೋಗ್ತೀನಿ.", "ಸ್ವಲ್ಪ ತಡಿ.", "ನೀನು ಹೋಗು."],
-    romanKannada: "baruttīni, svalpa taḍi."
-  },
-  {
-    english: "Appa/Amma, are you done with your work?",
-    kannada: "ಅಪ್ಪಾ/ಅಮ್ಮಾ, ನಿನ್ನ ಕೆಲಸ ಮುಗಿತಾ?",
-    incorrectOptions: ["ಕೆಲಸ ಯಾವಾಗ?", "ನೀನು ಕೆಲಸ ಮಾಡು.", "ಕೆಲಸ ಆಯ್ತಾ?", "ಅಮ್ಮಾ ಎಲ್ಲಿದ್ದೀರಾ?"],
-    romanKannada: "appā/ammā, ninna kelasa mugitā?"
-  },
-  {
-    english: "Is it morning time in India? Shall we call Vijayamma?",
-    kannada: "ಭಾರತದಲ್ಲಿ ಈಗ ಬೆಳಿಗ್ಗೆ ನಾ? ವಿಜಯಮ್ಮನಿಗೆ ಫೋನ್ ಮಾಡೋಣವೆ?",
-    incorrectOptions: ["ಭಾರತದಲ್ಲಿ ಈಗ ರಾತ್ರಿ ನಾ?", "ವಿಜಯಮ್ಮ ಎಲ್ಲಿದೆ?", "ಫೋನ್ ಮಾಡು", "ಭಾರತದಲ್ಲಿ ಈಗ ಸಂಜೆ ನಾ?"],
-    romanKannada: "bhāratadalli īga beḷigge nā? vijayammānige phōn māḍōṇave?"
-  },
-  {
-    english: "I like to play in the bathtub for some more time.",
-    kannada: "ನಾನು ಇನ್ನೂ ಸ್ವಲ್ಪ ಹೊತ್ತು ಬಾತ್‌ಟಬ್‌ನಲ್ಲಿ ಆಡ್ತೀನಿ.",
-    incorrectOptions: ["ನಾನು ಬಾತ್‌ಟಬ್‌ನಲ್ಲಿ ಆಟ ಆಡಲ್ಲ.", "ಸ್ವಲ್ಪ ಹೊತ್ತು ಆಡ್ತೀನಿ.", "ಬಾತ್‌ಟಬ್ ಎಲ್ಲಿದೆ?", "ನಾನು ಈಗ ಸ್ನಾನ ಮಾಡ್ತೀನಿ."],
-    romanKannada: "nānu innū svalpa hottu bāth‌ṭabnalli āḍtīni."
-  },
-  {
-    english: "My markers are not working. Can you buy me a new set?",
-    kannada: "ನನ್ನ ಮಾರ್ಕರ್‌ಗಳು ಬರೀತಿಲ್ಲ. ಹೊಸತು ತಂದು ಕೊಡ್ತಿಯಾ?",
-    incorrectOptions: ["ಮಾರ್ಕರ್‌ಗಳು ಎಲ್ಲಿದೆ?", "ನನಗೆ ಹೊಸತು ಬೇಕು.", "ಬರೀತಿದೆ", "ಕೊಂಡು ಕೊಡು."],
-    romanKannana: "nanna mārkar’gaḷu barītilla. hosatu tandu koḍtiyā?"
-  },
-  {
-    english: "I always feel like eating pizza.",
-    kannada: "ನನಗೆ ಯಾವಾಗಲೂ ಪಿಜ್ಜಾ ತಿನ್ನಬೇಕು ಆನ್ನಿಸುತ್ತದೆ.",
-    incorrectOptions: ["ನನಗೆ ಪಿಜ್ಜಾ ಇಷ್ಟ ಇಲ್ಲ.", "ನಾನು ಪಿಜ್ಜಾ ತಿಂದೆ.", "ಯಾವಾಗಲೂ ತಿನ್ನಬೇಕು.", "ಪಿಜ್ಜಾ ಬೇಡ."],
-    romanKannada: "nanage yāvāgalū pijā tinnabēku ānnisuttade."
-  },
-  {
-    english: "Check my height.",
-    kannada: "ನಾನು ಎಷ್ಟು ಎತ್ತರ ನೋಡು.",
-    incorrectOptions: ["ನನ್ನ ಎತ್ತರ ಎಷ್ಟು?", "ನೋಡು", "ನಾನು ಎತ್ತರ ಇದ್ದೀನಿ", "ಎತ್ತರ ನೋಡು."],
-    romanKannada: "nānu eṣṭu ettara nōḍu."
-  },
-  {
-    english: "Appa is in a call.",
-    kannada: "ಅಪ್ಪಾ ಕರೆ ಮಾಡ್ತಾ ಇದ್ದಾರೆ.",
-    incorrectOptions: ["ಅಪ್ಪಾ ಎಲ್ಲಿದ್ದೀರಾ?", "ಅಪ್ಪಾ ಕೆಲಸ ಮಾಡ್ತಾ ಇದ್ದಾರೆ.", "ಕರೆ ಮಾಡ್ತಾ ಇದ್ದಾರೆ.", "ಅಮ್ಮಾ ಕರೆ ಮಾಡ್ತಾ ಇದ್ದಾರೆ."],
-    romanKannada: "appā kare māḍtā iddāre."
-  },
-  {
-    english: "What can I build with Lego? Give me some idea.",
-    kannada: "ಲೆಗೋದಿಂದ ನಾನು ಏನು ಕಟ್ಟಬಹುದು? ನನಗೆ ಉಪಾಯ ಹೇಳು.",
-    incorrectOptions: ["ಲೆಗೋ ಎಲ್ಲಿದೆ?", "ನಾನು ಏನು ಕಟ್ಟಲಿ?", "ನನಗೆ ಉಪಾಯ ಬೇಕು.", "ಲೆಗೋ ಬೇಡ."],
-    romanKannada: "legōdinda nānu ēnu kaṭṭabahudu? nanage upāya hēḷu."
-  },
-  {
-    english: "Can we go to the park?",
-    kannada: "ನಾವು ಪಾರ್ಕ್‌ಗೆ ಹೋಗೋಣವಾ?",
-    incorrectOptions: ["ಪಾರ್ಕ್ ಎಲ್ಲಿದೆ?", "ನಾವು ಹೋಗೋಣವಾ?", "ನಾವು ಪಾರ್ಕ್‌ಗೆ ಹೋಗಲ್ಲ?", "ಹೋಗೋಣವಾ?"],
-    romanKannada: "nāvu pārk'ge hōgōṇavā?"
-  },
-  {
-    english: "What shall I do now? It’s boring.",
-    kannada: "ನಾನು ಏನು ಮಾಡಲಿ? ಬೋರ್ ಆಗುತ್ತಿದೆ.",
-    incorrectOptions: ["ನನಗೆ ಬೋರ್ ಆಗಿದೆ.", "ನಾನು ಏನು ಮಾಡಲಿ?", "ಖುಷಿಯಾಗಿದೆ.", "ಆಟ ಆಡು."],
-    romanKannada: "nānu ēnu māḍali? bōr āguttide."
-  },
-  {
-    english: "Can we do one origami craft?",
-    kannada: "ನಾವೊಂದು ಒರಿಗಾಮಿ ಕ್ರಾಫ್ಟ್ ಮಾಡೋಣವೇ?",
-    incorrectOptions: ["ಒರಿಗಾಮಿ ಕ್ರಾಫ್ಟ್ ಎಲ್ಲಿದೆ?", "ನಾವು ಮಾಡೋಣವಾ?", "ಕ್ರಾಫ್ಟ್ ಮಾಡು", "ಒರಿಗಾಮಿ ಬೇಡ."],
-    romanKannada: "nāvondu origāmi krāphṭ māḍōṇave?"
-  },
-  {
-    english: "What should I do now?",
-    kannada: "ನಾನು ಈಗ ಏನು ಮಾಡ್ಲಿ?",
-    incorrectOptions: ["ನಾನು ಏನು ಮಾಡಲಿ?", "ಈಗ ಏನು?", "ನಾನು ಈಗ ಮಾಡಲ್ಲ?", "ಏನು ಮಾಡು?"],
-    romanKannada: "nānu īga ēnu māḍli?"
-  },
-  {
-    english: "Should I write this?",
-    kannada: "ನಾನು ಇದನ್ನು ಬರೆಯಬೇಕಾ?",
-    incorrectOptions: ["ನಾನು ಇದನ್ನು ಬರೆದೆ?", "ನಾನು ಇದನ್ನು ಓದಿದೆ?", "ನಾನು ಬರೆಯಬೇಕು.", "ಬರೆಯಬೇಡ."],
-    romanKannada: "nānu idannu bareyabēkā?"
-  },
-  {
-    english: "I want water.",
-    kannada: "ನನಗೆ ನೀರು ಬೇಕು",
-    incorrectOptions: ["ನನಗೆ ಊಟ ಬೇಕು", "ನನಗೆ ಹಾಲು ಬೇಕು", "ನನಗೆ ನೀರು ಬೇಡ", "ನೀರು ಎಲ್ಲಿದೆ?"],
-    romanKannada: "nanage nīru bēku"
-  },
-  {
-    english: "I had gone outside.",
-    kannada: "ನಾನು ಹೊರಗೆ ಹೋಗಿದ್ದೆ",
-    incorrectOptions: ["ನಾನು ಹೊರಗೆ ಹೋಗಲ್ಲ", "ನಾನು ಒಳಗೆ ಹೋಗಿದ್ದೆ", "ನಾನು ಮನೆಯಲ್ಲಿ ಇದ್ದೆ", "ನಾನು ಹೊರಗೆ ಹೋಗ್ತೀನಿ"],
-    romanKannada: "nānu horage hōgiddē"
-  },
-  {
-    english: "I ate sweet food for Dasara festival.",
-    kannada: "ನಾನು ದಸರಾ ಹಬ್ಬಕ್ಕೆ ಸಿಹಿಊಟ ಮಾಡಿದೆ",
-    incorrectOptions: ["ನಾನು ದಸರಾ ಹಬ್ಬಕ್ಕೆ ಸಿಹಿ ಊಟ ಮಾಡಲ್ಲ", "ನಾನು ದಸರಾ ಹಬ್ಬಕ್ಕೆ ಸಿಹಿ ತಿಂಡಿ ಮಾಡಿದೆ", "ಹಬ್ಬ ಯಾವಾಗ?", "ಊಟ ಮಾಡಿದೆ"],
-    romanKannada: "nānu dasarā habbakke sihiūṭa māḍide"
-  },
-  {
-    english: "Appa, do I have class today?",
-    kannada: "ಅಪ್ಪ ನನ್ನ ಕ್ಲಾಸ್ ಇದೆಯಾ ಇವತ್ತು",
-    incorrectOptions: ["ಅಪ್ಪಾ, ಕ್ಲಾಸ್ ಯಾವಾಗ?", "ಇವತ್ತು ಕ್ಲಾಸ್ ಇಲ್ಲ?", "ಅಪ್ಪಾ, ನೀನು ಕ್ಲಾಸ್ ಹೋಗು", "ಕ್ಲಾಸ್ ಇದೆಯಾ?"],
-    romanKannada: "appā nanna klās ideyā ivattu"
-  },
-  {
-    english: "I will sleep.",
-    kannada: "ನಾನು ಮಲಗುತ್ತೇನೆ",
-    incorrectOptions: ["ನಾನು ಎದ್ದೆ", "ನಾನು ಆಡ್ತೀನಿ", "ನಾನು ಓದ್ತೀನಿ", "ನಾನು ಮಲಗಲ್ಲ"],
-    romanKannada: "nānu malaguttēne"
-  },
-  {
-    english: "It rained today.",
-    kannada: "ಇವತ್ತು ಮಳೆ ಬಂದಿತ್ತು",
-    incorrectOptions: ["ಇವತ್ತು ಮಳೆ ಬರಲ್ಲ", "ಇವತ್ತು ಬಿಸಿಲು ಇತ್ತು", "ಇವತ್ತು ಚಳಿ ಇತ್ತು", "ಮಳೆ ಯಾವಾಗ?"],
-    romanKannada: "ivattu maḷe bandittu"
-  },
-  {
-    english: "I drew a picture.",
-    kannada: "ನಾನು ಚಿತ್ರ ಬಿಡಿಸಿದೆ",
-    incorrectOptions: ["ನಾನು ಚಿತ್ರ ಬಿಡಿಸಲ್ಲ", "ನಾನು ಚಿತ್ರ ನೋಡಿದೆ", "ನಾನು ಚಿತ್ರ ಬರೆದೆ", "ಚಿತ್ರ ಎಲ್ಲಿದೆ?"],
-    romanKannada: "nānu citra biḍiside"
-  },
-  {
-    english: "Tomorrow is Thursday, Kannada class is there.",
-    kannada: "ನಾಳೆ ಗುರುವಾರ ಕನ್ನಡ ತರಗತಿ ಇದೆ.",
-    incorrectOptions: ["ನಾಳೆ ಕನ್ನಡ ತರಗತಿ ಇಲ್ಲ", "ಇವತ್ತು ಕನ್ನಡ ತರಗತಿ ಇದೆ", "ಗುರುವಾರ ಯಾವಾಗ?", "ತರಗತಿ ಇದೆ"],
-    romanKannada: "nāḷe guruvāra kannaḍa taragati ide."
-  },
-  {
-    english: "I went to the temple.",
-    kannada: "ನಾನು ದೇವಸ್ಥಾನಕ್ಕೆ ಹೋಗಿದ್ದೆ",
-    incorrectOptions: ["ನಾನು ದೇವಸ್ಥಾನಕ್ಕೆ ಹೋಗಲ್ಲ", "ನಾನು ದೇವಸ್ಥಾನದಲ್ಲಿ ಇದ್ದೆ", "ದೇವಸ್ಥಾನ ಎಲ್ಲಿದೆ?", "ನಾನು ಮನೆಗೆ ಹೋಗಿದ್ದೆ"],
-    romanKannada: "nānu dēvasthānakke hōgiddē"
-  },
-  {
-    english: "I bought new clothes.",
-    kannada: "ನಾನು ಹೊಸ ಬಟ್ಟೆ ಖರೀದಿಸಿದೆ",
-    incorrectOptions: ["ನಾನು ಹಳೆ ಬಟ್ಟೆ ಖರೀದಿಸಿದೆ", "ನಾನು ಹೊಸ ಬಟ್ಟೆ ಮಾರಿದೆ", "ಬಟ್ಟೆ ಎಲ್ಲಿದೆ?", "ನಾನು ಖರೀದಿಸಿದೆ"],
-    romanKannada: "nānu hosa baṭṭe kharīdiside"
-  },
-  {
-    english: "I ate Kesari Bath made for the festival.",
-    kannada: "ನಾನು ಹಬ್ಬಕ್ಕೆ ಮಾಡಿದ ಕೇಸರಿಬಾತ್ ತಿಂದೆ",
-    incorrectOptions: ["ನಾನು ಹಬ್ಬಕ್ಕೆ ಕೇಸರಿಬಾತ್ ಮಾಡಲ್ಲ", "ನಾನು ಹಬ್ಬಕ್ಕೆ ಕೇಸರಿಬಾತ್ ತಿಂದಿಲ್ಲ", "ಹಬ್ಬ ಯಾವಾಗ?", "ಕೇಸರಿಬಾತ್ ತಿನ್ನು"],
-    romanKannada: "nānu habbakke māḍida kēsariāth tinde"
-  },
-  {
-    english: "I spoke with grandma.",
-    kannada: "ನಾನು ಅಜ್ಜಿಯ ಹತ್ತಿರ ಮಾತಾಡಿದೆ",
-    incorrectOptions: ["ನಾನು ಅಜ್ಜಿಯ ಹತ್ತಿರ ಮಾತಾಡಲ್ಲ", "ನಾನು ಅಜ್ಜಿಯ ಹತ್ತಿರ ನೋಡಿದೆ", "ಅಜ್ಜಿ ಎಲ್ಲಿದೆ?", "ನಾನು ಮಾತಾಡಿದೆ"],
-    romanKannada: "nānu ajjīya hattira mātāḍide"
-  },
-  {
-    english: "I drank milk.",
-    kannada: "ನಾನು ಹಾಲು ಕುಡಿದೆ",
-    incorrectOptions: ["ನಾನು ನೀರು ಕುಡಿದೆ", "ನ ನಾನು ಹಾಲು ಕುಡಿಯಲ್ಲ", "ನಾನು ಹಾಲು ತಿಂದೆ", "ಹಾಲು ಎಲ್ಲಿದೆ?"],
-    romanKannada: "nānu hālu kuḍide"
-  },
-  {
-    english: "I like dosa.",
-    kannada: "ನನಗೆ ದೋಸೆ ಇಷ್ಟ",
-    incorrectOptions: ["ನನಗೆ ದೋಸೆ ಇಷ್ಟ ಇಲ್ಲ", "ನನಗೆ ಇಡ್ಲಿ ಇಷ್ಟ", "ದೋಸೆ ಎಲ್ಲಿದೆ?", "ನನಗೆ ತಿಂಡಿ ಇಷ್ಟ"],
-    romanKannada: "nanage dōse iṣṭa"
-  },
-  {
-    english: "It's cold outside.",
-    kannada: "ಹೊರಗಡೆ ಚಳಿ ಇದೆ",
-    incorrectOptions: ["ಹೊರಗಡೆ ಬಿಸಿಲು ಇದೆ", "ಹೊರಗಡೆ ಸೆಕೆ ಇದೆ", "ಒಳಗಡೆ ಚಳಿ ಇದೆ", "ಚಳಿ ಇಲ್ಲ"],
-    romanKannada: "horagaḍe caḷi ide"
-  },
-  {
-    english: "Do not trouble/irritate me",
-    kannada: "ನನಗೆ ಕಿರಿಕಿರಿ ಮಾಡಬೇಡ",
-    incorrectOptions: ["ನನಗೆ ಸಹಾಯ ಮಾಡು", "ನನಗೆ ಸಂತೋಷ ಮಾಡು", "ನನಗೆ ಕಿರಿಕಿರಿ ಮಾಡು", "ನನಗೆ ಬೇಡ"],
-    romanKannada: "nanage kirikiri māḍabēḍa"
-  },
-  {
-    english: "I read a book.",
-    kannada: "ನಾನು ಪುಸ್ತಕ ಓದುತ್ತೇನೆ",
-    incorrectOptions: ["ನಾನು ಪುಸ್ತಕ ಓದಿಲ್ಲ", "ನಾನು ಪುಸ್ತಕ ಬರೆಯುತ್ತೇನೆ", "ನಾನು ಟಿವಿ ನೋಡುತ್ತೇನೆ", "ಪುಸ್ತಕ ಎಲ್ಲಿದೆ?"],
-    romanKannada: "nānu pustaka ōduttēne"
-  },
-  {
-    english: "School was good today.",
-    kannada: "ಇವತ್ತು ಶಾಲೆ ಚೆನ್ನಾಗಿತ್ತು",
-    incorrectOptions: ["ಇವತ್ತು ಶಾಲೆ ಚೆನ್ನಾಗಿರಲಿಲ್ಲ", "ಶಾಲೆ ಯಾವಾಗ?", "ಇವತ್ತು ಮನೆ ಚೆನ್ನಾಗಿತ್ತು", "ಶಾಲೆ ಇಲ್ಲ"],
-    romanKannada: "ivattu śāle cennāgittu"
-  },
-  {
-    english: "Read Kannada.",
-    kannada: "ಕನ್ನಡ ಓದು",
-    incorrectOptions: ["ಕನ್ನಡ ಬರೆಯು", "ಕನ್ನಡ ಮಾತಾಡು", "ಇಂಗ್ಲಿಷ್ ಓದು", "ನೋಡು"],
-    romanKannada: "kannaḍa ōdu"
-  },
-  {
-    english: "There is an exam tomorrow.",
-    kannada: "ನಾಳೆ ಪರೀಕ್ಷೆ ಇದೆಯಂತೆ",
-    incorrectOptions: ["ನಾಳೆ ಪರೀಕ್ಷೆ ಇಲ್ಲ", "ಇವತ್ತು ಪರೀಕ್ಷೆ ಇದೆ", "ಪರೀಕ್ಷೆ ಯಾವಾಗ?", "ನಾಳೆ ಶಾಲೆ ಇದೆ"],
-    romanKannada: "nāḷe parīkṣe ideyante"
-  },
-  {
-    english: "Dhruthi, take a bath.",
-    kannada: "ಧೃತಿ ಸ್ನಾನಮಾಡು",
-    incorrectOptions: ["ಧೃತಿ ಊಟ ಮಾಡು", "ಧೃತಿ ಆಟ ಆಡು", "ಧೃತಿ ಮಲಗು", "ಧೃತಿ ಸ್ನಾನ ಮಾಡಲ್ಲ"],
-    romanKannada: "dhṛti snānamāḍu"
-  },
-  {
-    english: "Amma, can you give me the phone?",
-    kannada: "ಅಮ್ಮಾ ಪೋನ್ ಕೊಡುತ್ತೀಯಾ",
-    incorrectOptions: ["ಅಪ್ಪಾ ಪೋನ್ ಕೊಡುತ್ತೀಯಾ", "ಪೋನ್ ಎಲ್ಲಿದೆ?", "ನನಗೆ ಪೋನ್ ಬೇಡ", "ಪೋನ್ ಕೊಡು"],
-    romanKannada: "ammā phōn koḍuttīyā"
-  },
-  {
-    english: "I will go to school.",
-    kannada: "ಶಾಲೆಗೆ ಹೋಗುತ್ತೇನೆ",
-    incorrectOptions: ["ಶಾಲೆಗೆ ಹೋಗಲ್ಲ", "ಮನೆಗೆ ಹೋಗುತ್ತೇನೆ", "ಶಾಲೆ ಎಲ್ಲಿದೆ?", "ನಾನು ಹೋಗುತ್ತೇನೆ"],
-    romanKannada: "śālege hōguttēne"
-  },
-  {
-    english: "Can you tie my hair?",
-    kannada: "ನನ್ನ ಕೂದಲು ಕಟ್ಟುತ್ತೀಯಾ",
-    incorrectOptions: ["ನನ್ನ ಕೂದಲು ಬಿಡು", "ನನ್ನ ಕೂದಲು ಬಾಚು", "ಕೂದಲು ಎಲ್ಲಿದೆ?", "ನನ್ನ ಕೂದಲು ಬೇಕು"],
-    romanKannada: "nanna kūdalu kaṭṭuttīyā"
   },
 ];
 
@@ -1120,15 +726,11 @@ function QuizPage() {
   const [score, setScore] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quizFinished, setQuizFinished] = useState(false);
-  const [showLearningFeedback, setShowLearningFeedback] = useState(false);
-  const [studentName, setStudentName] = useState(''); // New state for student name
+  const [showLearningFeedback, setShowLearningFeedback] = useState(false); // Controls display of correct answer/listen button
 
   // Use a separate state to store the actual questions for the current quiz session.
   // This array won't be cleared when quizFinished is true, preventing 0/0 errors.
   const [sessionQuestions, setSessionQuestions] = useState([]);
-
-  // Moved after sessionQuestions declaration
-  const currentQuestion = sessionQuestions[currentQuestionIndex];
 
   // When the quiz starts, populate sessionQuestions
   useEffect(() => {
@@ -1138,6 +740,8 @@ function QuizPage() {
     }
   }, [quizStarted, quizFinished, numQuestions, sessionQuestions.length]);
 
+
+  const currentQuestion = sessionQuestions[currentQuestionIndex];
 
   // Memoize options to ensure they don't re-shuffle on every render for the current question
   const options = useMemo(() => {
@@ -1206,6 +810,10 @@ function QuizPage() {
       utterance.lang = 'kn-IN'; // Fallback to explicitly setting lang if voice not found
     }
 
+    // Optional: Adjust pitch/rate if needed
+    // utterance.pitch = 1;
+    // utterance.rate = 1;
+
     try {
       synth.speak(utterance);
       console.log("Attempting to speak:", text);
@@ -1216,10 +824,6 @@ function QuizPage() {
   };
 
   const handleStartQuiz = () => {
-    if (studentName.trim() === '') {
-      alert("Please enter your name before starting the quiz.");
-      return;
-    }
     if (numQuestions > 0 && numQuestions <= allSentences.length) {
       setQuizStarted(true);
       setCurrentQuestionIndex(0);
@@ -1227,6 +831,7 @@ function QuizPage() {
       setSelectedOption(null);
       setQuizFinished(false);
       setShowLearningFeedback(false);
+      // Generate and set session questions here
       setSessionQuestions(getRandomQuestions(allSentences, Math.min(numQuestions, allSentences.length)));
     } else {
       alert(`Please enter a number between 1 and ${allSentences.length} for the number of questions.`);
@@ -1252,7 +857,7 @@ function QuizPage() {
       }
 
       const nextIndex = currentQuestionIndex + 1;
-      if (nextIndex < sessionQuestions.length) {
+      if (nextIndex < sessionQuestions.length) { // Use sessionQuestions.length here
         setCurrentQuestionIndex(nextIndex);
         setSelectedOption(null); // Reset selection for next question
         setShowLearningFeedback(false); // Hide feedback for next question
@@ -1265,7 +870,12 @@ function QuizPage() {
   };
 
   const handleListenToLearn = () => {
-    if (currentQuestion && currentQuestion.kannada) {
+    if (currentQuestion && currentQuestion.romanKannada) {
+      // Use the romanKannada field for speech synthesis
+      speakKannada(currentQuestion.romanKannada);
+    } else if (currentQuestion) {
+      // Fallback to Kannada script if romanKannada is missing (shouldn't happen if data is complete)
+      console.warn("romanKannada field missing for current question, falling back to Kannada script.");
       speakKannada(currentQuestion.kannada);
     }
   };
@@ -1283,7 +893,6 @@ function QuizPage() {
     setQuizFinished(false);
     setShowLearningFeedback(false);
     setSessionQuestions([]); // Clear session questions on reset
-    setStudentName(''); // Reset student name
   };
 
   const getOptionClassName = (option) => {
@@ -1301,32 +910,16 @@ function QuizPage() {
 
   return (
     <div className="quiz-container">
-      {/* New Smaller Heading */}
-      <div className="small-heading-banner">
-        <h2>ಕನ್ನಡ ಕಲಿಕೆ ಕೆನಡಾ</h2>
-      </div>
-
       <h1>Daily Kannada Quiz (ಮನೆಯ ಮಾತು ಕಲಿ)</h1>
 
       {!quizStarted && (
         <div className="quiz-settings">
-          <p>Ready to test your Kannada skills?</p>
-          <div className="input-group">
-            <label htmlFor="studentNameInput" className="input-label">Your Name:</label>
-            <input
-              id="studentNameInput"
-              type="text"
-              placeholder="Enter your name"
-              value={studentName}
-              onChange={(e) => setStudentName(e.target.value)}
-              className="student-name-input"
-            />
-          </div>
           <p>Choose how many questions you want to practice:</p>
           <div className="input-group">
             <input
               type="number"
               min="1"
+              // Max should be the actual length of allSentences
               max={allSentences.length}
               value={numQuestions}
               onChange={(e) => setNumQuestions(Math.min(Number(e.target.value), allSentences.length))}
@@ -1340,7 +933,7 @@ function QuizPage() {
 
       {quizStarted && !quizFinished && currentQuestion && (
         <div className="quiz-content">
-          <p className="question-counter">Question {currentQuestionIndex + 1} / {sessionQuestions.length}</p>
+          <p className="question-counter">Question {currentQuestionIndex + 1} / {sessionQuestions.length}</p> {/* Use sessionQuestions.length */}
           <div className="question-box">
             <p className="english-sentence">{currentQuestion.english}</p>
           </div>
@@ -1351,7 +944,7 @@ function QuizPage() {
                 key={index}
                 className={getOptionClassName(option)}
                 onClick={() => handleOptionSelect(option)}
-                disabled={selectedOption !== null}
+                disabled={selectedOption !== null} // Disable after selection
               >
                 {option}
               </button>
@@ -1360,11 +953,6 @@ function QuizPage() {
 
           {selectedOption !== null && (
             <div className="feedback-area">
-              {currentQuestion.romanKannada && (
-                <p className="roman-kannada-feedback">
-                  {currentQuestion.romanKannada}
-                </p>
-              )}
               <button
                 onClick={handleListenToLearn}
                 className="listen-button"
@@ -1381,11 +969,7 @@ function QuizPage() {
 
       {quizFinished && (
         <div className="quiz-results">
-           <div className="small-heading-banner"> {/* Also show in results */}
-            <h2>ಕನ್ನಡ ಕಲಿಕೆ ಕೆನಡಾ</h2>
-          </div>
           <h2>Quiz Finished!</h2>
-          {studentName && <p className="student-name-result">Student: {studentName}</p>}
           <p className="final-score">
             Your Score: {score} / {sessionQuestions.length} ({sessionQuestions.length > 0 ? ((score / sessionQuestions.length) * 100).toFixed(0) : 0}%)
           </p>
