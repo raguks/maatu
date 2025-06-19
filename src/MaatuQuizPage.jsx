@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react'; // Removed useRef
 import './MaatuQuizPage.css';
 
 // --- Your Curated Data ---
@@ -30,7 +30,7 @@ const allSentences = [
   {
     english: "Can I go to the bathroom?",
     kannada: "ನಾನು ಬಚ್ಚಲಿಗೆ ಹೋಗಲಾ?",
-    incorrectOptions: ["ನಾನು ಹೊರಗೆ ಹೋಗಲಾ?", "ನ ನಾನು ಬರಲಾ?", "ನನಗೆ ನೀರು ಕೊಡಿ?", "ನಾನು ಕುಳಿತುಕೊಳ್ಳಲಾ?"],
+    incorrectOptions: ["ನಾನು ಹೊರಗೆ ಹೋಗಲಾ?", "ನಾನು ಬರಲಾ?", "ನನಗೆ ನೀರು ಕೊಡಿ?", "ನಾನು ಕುಳಿತುಕೊಳ್ಳಲಾ?"],
     romanKannada: "nānu baccalige hōgalā?"
   },
   {
@@ -151,7 +151,7 @@ const allSentences = [
     english: "Can we play together?",
     kannada: "ಒಟ್ಟಿಗೆ ಆಡಬಹುದಾ?",
     incorrectOptions: ["ಒಟ್ಟಿಗೆ ಓದಬಹುದಾ?", "ಒಟ್ಟಿಗೆ ಕುಳಿತುಕೊಳ್ಳಬಹುದಾ?", "ಒಟ್ಟಿಗೆ ಹೋಗಬಹುದಾ?", "ಒಟ್ಟಿಗೆ ಮಲಗಬಹುದಾ?"],
-    romanKannada: "oṭṭṭige āḍabahudā?"
+    romanKannada: "oṭṭige āḍabahudā?"
   },
   {
     english: "Let's go!",
@@ -252,7 +252,7 @@ const allSentences = [
   {
     english: "I will be right back.",
     kannada: "ಇರಿ ಬಂದೆ",
-    incorrectOptions: ["ಹೋಗ್ತಾ ಇದ್ದೀನಿ", "ನಾನು ಬರಲ್ಲ", "ನಾನು ಇಲ್ಲಿ ಇಲ್ಲ", "ನ ನಾನು ಮಲಗುತ್ತೇನೆ"],
+    incorrectOptions: ["ಹೋಗ್ತಾ ಇದ್ದೀನಿ", "ನಾನು ಬರಲ್ಲ", "ನಾನು ಇಲ್ಲಿ ಇಲ್ಲ", "ನಾನು ಮಲಗುತ್ತೇನೆ"],
     romanKannada: "iri bande"
   },
   {
@@ -769,7 +769,7 @@ const allSentences = [
   {
     english: "I played with my friends at school.",
     kannada: "ನಾನು ಶಾಲೆಯಲ್ಲಿ ಗೆಳೆಯರೊಂದಿಗೆ ಆಡಿದೆ.",
-    incorrectOptions: ["ನಾನು ಮನೆಯಲ್ಲಿ ಆಡಿದೆ.", "ನಾನು ಶಾಲೆಯಲ್ಲಿ ಓದಿದೆ.", "ಗೆಳೆಯರು ಎಲ್ಲಿದ್ದಾರೆ?", "ನಾನು ಆಟ ಆಡಲ್ಲ."],
+    incorrectOptions: ["ನಾನು ಮನೆಯಲ್ಲಿ ಆಡಿದೆ.", "ನ ನಾನು ಶಾಲೆಯಲ್ಲಿ ಓದಿದೆ.", "ಗೆಳೆಯರು ಎಲ್ಲಿದ್ದಾರೆ?", "ನಾನು ಆಟ ಆಡಲ್ಲ."],
     romanKannada: "nānu śāleyalli geḷeyarondege āḍide."
   },
   {
@@ -812,7 +812,7 @@ const allSentences = [
     english: "I want to sleep for some more time.",
     kannada: "ನನಗೆ ಇನ್ನೂ ಸ್ವಲ್ಪ ಹೊತ್ತು ಮಲಗಬೇಕು.",
     incorrectOptions: ["ನನಗೆ ಈಗ ನಿದ್ದೆ ಬೇಡ.", "ನಾನು ಎದ್ದೆ.", "ನಾನು ಕೆಲಸ ಮಾಡಬೇಕು.", "ನನಗೆ ಮಲಗಲಿಕ್ಕೆ ಇಷ್ಟ ಇಲ್ಲ."],
-    romanKannada: "nanage innū svalpa hottu malagabēku."
+    romanKannana: "nanage innū svalpa hottu malagabēku."
   },
   {
     english: "Appa, can you give me a coloring page?",
@@ -997,7 +997,7 @@ const allSentences = [
   {
     english: "I drank milk.",
     kannada: "ನಾನು ಹಾಲು ಕುಡಿದೆ",
-    incorrectOptions: ["ನಾನು ನೀರು ಕುಡಿದೆ", "ನ ನಾನು ಹಾಲು ಕುಡಿಯಲ್ಲ", "ನಾನು ಹಾಲು ತಿಂದೆ", "ಹಾಲು ಎಲ್ಲಿದೆ?"],
+    incorrectOptions: ["ನಾನು ನೀರು ಕುಡಿದೆ", "ನಾನು ಹಾಲು ಕುಡಿಯಲ್ಲ", "ನಾನು ಹಾಲು ತಿಂದೆ", "ಹಾಲು ಎಲ್ಲಿದೆ?"],
     romanKannada: "nānu hālu kuḍide"
   },
   {
@@ -1120,8 +1120,8 @@ function QuizPage() {
   const [score, setScore] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quizFinished, setQuizFinished] = useState(false);
-  const [showLearningFeedback, setShowLearningFeedback] = useState(false);
-  const [studentName, setStudentName] = useState(''); // New state for student name
+  // Removed showLearningFeedback as it was redundant
+  const [studentName, setStudentName] = useState('');
 
   // Use a separate state to store the actual questions for the current quiz session.
   // This array won't be cleared when quizFinished is true, preventing 0/0 errors.
@@ -1226,7 +1226,7 @@ function QuizPage() {
       setScore(0);
       setSelectedOption(null);
       setQuizFinished(false);
-      setShowLearningFeedback(false);
+      // Removed setShowLearningFeedback(false)
       setSessionQuestions(getRandomQuestions(allSentences, Math.min(numQuestions, allSentences.length)));
     } else {
       alert(`Please enter a number between 1 and ${allSentences.length} for the number of questions.`);
@@ -1236,7 +1236,7 @@ function QuizPage() {
   const handleOptionSelect = (option) => {
     if (selectedOption === null) { // Allow selection only if not already picked
       setSelectedOption(option);
-      setShowLearningFeedback(true); // Show feedback area after selection
+      // Removed setShowLearningFeedback(true)
     }
   };
 
@@ -1255,7 +1255,7 @@ function QuizPage() {
       if (nextIndex < sessionQuestions.length) {
         setCurrentQuestionIndex(nextIndex);
         setSelectedOption(null); // Reset selection for next question
-        setShowLearningFeedback(false); // Hide feedback for next question
+        // Removed setShowLearningFeedback(false)
       } else {
         setQuizFinished(true);
       }
@@ -1281,7 +1281,7 @@ function QuizPage() {
     setScore(0);
     setSelectedOption(null);
     setQuizFinished(false);
-    setShowLearningFeedback(false);
+    // Removed setShowLearningFeedback(false)
     setSessionQuestions([]); // Clear session questions on reset
     setStudentName(''); // Reset student name
   };
@@ -1358,6 +1358,7 @@ function QuizPage() {
             ))}
           </div>
 
+          {/* This section now relies solely on selectedOption !== null */}
           {selectedOption !== null && (
             <div className="feedback-area">
               {currentQuestion.romanKannada && (
