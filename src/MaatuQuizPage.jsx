@@ -152,7 +152,7 @@ const allSentences = [
     english: "Can I have a snack?",
     kannada: "ನನಗೆ ತಿಂಡಿ ಕೊಡ್ತೀರಾ?",
     incorrectOptions: ["ನನಗೆ ಊಟ ಕೊಡ್ತೀರಾ?", "ನನಗೆ ನೀರು ಕೊಡ್ತೀರಾ?", "ನನಗೆ ಆಡಲು ಬಿಡ್ತೀರಾ?", "ನನಗೆ ನಿದ್ದೆ ಕೊಡ್ತೀರಾ?"],
-    romanKannada: "nanage tinḍi koḍtīrā?"
+    romanKannana: "nanage tinḍi koḍtīrā?"
   },
   {
     english: "I need to go.",
@@ -643,7 +643,7 @@ const allSentences = [
   {
     english: "I saw.",
     kannada: "ನಾನು ನೋಡಿದೆ",
-    incorrectOptions: ["ನಾನು ಕೇಳಿದೆ", "ನಾನು ಹೇಳಿದೆ", "ನಾನು ಮಾಡಿದೆ", "ನಾನು ಬರೆದೆ"],
+    incorrectOptions: ["ನಾನು ಕೇಳಿದೆ", "ನಾನು ಹೇಳಿದೆ", "ನಾನು ಮಾಡಿದೆ", "ನ ನಾನು ಬರೆದೆ"],
     romanKannada: "nānu nōḍide"
   },
   {
@@ -735,7 +735,7 @@ const allSentences = [
     english: "I want to watch cartoons for some time.",
     kannada: "ಸ್ವಲ್ಪ ಹೊತ್ತು ಕಾರ್ಟೂನ್ ನೋಡ್ಲಾ.",
     incorrectOptions: ["ಹೆಚ್ಚು ಹೊತ್ತು ಕಾರ್ಟೂನ್ ನೋಡ್ಲಾ?", "ಟಿವಿ ನೋಡ್ಲಾ?", "ಆಟ ಆಡ್ಲಾ?", "ನಿದ್ದೆ ಮಾಡ್ಲಾ?"],
-    romanKannada: "svalpa hottu kārṭūn nōḍlā."
+    romanKannana: "svalpa hottu kārṭūn nōḍlā."
   },
   {
     english: "I like to play video games.",
@@ -782,7 +782,7 @@ const allSentences = [
   {
     english: "I played with my friends at school.",
     kannada: "ನಾನು ಶಾಲೆಯಲ್ಲಿ ಗೆಳೆಯರೊಂದಿಗೆ ಆಡಿದೆ.",
-    incorrectOptions: ["ನಾನು ಮನೆಯಲ್ಲಿ ಆಡಿದೆ.", "ನಾನು ಶಾಲೆಯಲ್ಲಿ ಓದಿದೆ.", "ಗೆಳೆಯರು ಎಲ್ಲಿದ್ದಾರೆ?", "ನಾನು ಆಟ ಆಡಲ್ಲ."],
+    incorrectOptions: ["ನಾನು ಮನೆಯಲ್ಲಿ ಆಡಿದೆ.", "ನ ನಾನು ಶಾಲೆಯಲ್ಲಿ ಓದಿದೆ.", "ಗೆಳೆಯರು ಎಲ್ಲಿದ್ದಾರೆ?", "ನಾನು ಆಟ ಆಡಲ್ಲ."],
     romanKannada: "nānu śāleyalli geḷeyarondege āḍide."
   },
   {
@@ -883,9 +883,9 @@ const allSentences = [
   },
   {
     english: "I always feel like eating pizza.",
-    kannada: "ನನಗೆ ಯಾವಾಗಲೂ ಪಿಜ್ಜಾ ತಿನ್ನಬೇಕು ಆನ್ನಿಸುತ್ತದೆ.",
+    kannada: "ನನಗೆ ಯಾವಾಗಲೂ ಪಿಜ್ಜಾ ತಿನ್ನಬೇಕು ಅನಿಸುತ್ತದೆ.",
     incorrectOptions: ["ನನಗೆ ಪಿಜ್ಜಾ ಇಷ್ಟ ಇಲ್ಲ.", "ನಾನು ಪಿಜ್ಜಾ ತಿಂದೆ.", "ಯಾವಾಗಲೂ ತಿನ್ನಬೇಕು.", "ಪಿಜ್ಜಾ ಬೇಡ."],
-    romanKannada: "nanage yāvāgalū pijā tinnabēku ānnisuttade."
+    romanKannada: "nanage yāvāgalū pijā tinnabēku anisuttade."
   },
   {
     english: "Check my height.",
@@ -921,7 +921,7 @@ const allSentences = [
     english: "Can we do one origami craft?",
     kannada: "ನಾವೊಂದು ಒರಿಗಾಮಿ ಕ್ರಾಫ್ಟ್ ಮಾಡೋಣವೇ?",
     incorrectOptions: ["ಒರಿಗಾಮಿ ಕ್ರಾಫ್ಟ್ ಎಲ್ಲಿದೆ?", "ನಾವು ಮಾಡೋಣವಾ?", "ಕ್ರಾಫ್ಟ್ ಮಾಡು", "ಒರಿಗಾಮಿ ಬೇಡ."],
-    romanKannada: "nāvondu origāmi krāphṭ māḍōṇave?"
+    romanKannana: "nāvondu origāmi krāphṭ māḍōṇave?"
   },
   {
     english: "What should I do now?",
@@ -945,7 +945,7 @@ const allSentences = [
     english: "I had gone outside.",
     kannada: "ನಾನು ಹೊರಗೆ ಹೋಗಿದ್ದೆ",
     incorrectOptions: ["ನಾನು ಹೊರಗೆ ಹೋಗಲ್ಲ", "ನಾನು ಒಳಗೆ ಹೋಗಿದ್ದೆ", "ನಾನು ಮನೆಯಲ್ಲಿ ಇದ್ದೆ", "ನಾನು ಹೊರಗೆ ಹೋಗ್ತೀನಿ"],
-    romanKannada: "nānu horage hōgiddē"
+    romanKannana: "nānu horage hōgiddē"
   },
   {
     english: "I ate sweet food for Dasara festival.",
@@ -987,7 +987,7 @@ const allSentences = [
     english: "I went to the temple.",
     kannada: "ನಾನು ದೇವಸ್ಥಾನಕ್ಕೆ ಹೋಗಿದ್ದೆ",
     incorrectOptions: ["ನಾನು ದೇವಸ್ಥಾನಕ್ಕೆ ಹೋಗಲ್ಲ", "ನಾನು ದೇವಸ್ಥಾನದಲ್ಲಿ ಇದ್ದೆ", "ದೇವಸ್ಥಾನ ಎಲ್ಲಿದೆ?", "ನಾನು ಮನೆಗೆ ಹೋಗಿದ್ದೆ"],
-    romanKannada: "nānu dēvasthānakke hōgiddē"
+    romanKannana: "nānu dēvasthānakke hōgiddē"
   },
   {
     english: "I bought new clothes.",
@@ -1035,7 +1035,7 @@ const allSentences = [
     english: "I read a book.",
     kannada: "ನಾನು ಪುಸ್ತಕ ಓದುತ್ತೇನೆ",
     incorrectOptions: ["ನಾನು ಪುಸ್ತಕ ಓದಿಲ್ಲ", "ನಾನು ಪುಸ್ತಕ ಬರೆಯುತ್ತೇನೆ", "ನಾನು ಟಿವಿ ನೋಡುತ್ತೇನೆ", "ಪುಸ್ತಕ ಎಲ್ಲಿದೆ?"],
-    romanKannada: "nānu pustaka ōduttēne"
+    romanKannana: "nānu pustaka ōduttēne"
   },
   {
     english: "School was good today.",
@@ -1402,8 +1402,6 @@ function QuizPage() {
 
     const resultsElement = document.querySelector('.quiz-results');
     if (resultsElement) {
-      // No need to hide elements anymore as they are part of the target div
-
       try {
         // Use html2canvas from the global scope after it's loaded
         const canvas = await window.html2canvas(resultsElement, {
@@ -1454,7 +1452,7 @@ function QuizPage() {
         <h2>ಕನ್ನಡ ಕಲಿಕೆ ಕೆನಡಾ</h2>
       </div>
 
-      <h1>Daily Kannada Quiz (ಮನೆಯ ಮಾತು ಕಲಿ)</h1>
+      <h1> ಮನೆಯ ಮಾತು ಕಲಿ (Daily Kannada Quiz)</h1>
 
       {!quizStarted && (
         <div className="quiz-settings">
@@ -1529,26 +1527,31 @@ function QuizPage() {
       )}
 
       {quizFinished && (
-        <div className="quiz-results">
-           <div className="small-heading-banner"> {/* Also show in results */}
-            <h2>ಕನ್ನಡ ಕಲಿಕೆ ಕೆನಡಾ</h2>
+        <>
+          <div className="quiz-results">
+            <div className="small-heading-banner"> {/* Also show in results */}
+              <h2>ಕನ್ನಡ ಕಲಿಕೆ ಕೆನಡಾ</h2>
+            </div>
+            <h2>Kannada Quiz Finished!</h2>
+            {studentName && <p className="student-name-result">Student: {studentName}</p>}
+            <p className="final-score">
+              Your Score: {score} / {sessionQuestions.length} ({sessionQuestions.length > 0 ? ((score / sessionQuestions.length) * 100).toFixed(0) : 0}%)
+            </p>
+            {quizDuration && (
+              <p className="quiz-duration">Time taken: {quizDuration}</p>
+            )}
+            <p className="current-date-time">Completed on: {currentDateTime}</p>
+            <div className="author-info">
+              <br/> Kannada Kalike Canada - Kannada Sangha Toronto.
+            </div>
           </div>
-          <h2>Quiz Finished!</h2>
-          {studentName && <p className="student-name-result">Student: {studentName}</p>}
-          <p className="final-score">
-            Your Score: {score} / {sessionQuestions.length} ({sessionQuestions.length > 0 ? ((score / sessionQuestions.length) * 100).toFixed(0) : 0}%)
-          </p>
-          {quizDuration && (
-            <p className="quiz-duration">Time taken: {quizDuration}</p>
-          )}
-          <p className="current-date-time">Completed on: {currentDateTime}</p>
           <div className="results-buttons-container">
-             <button
+            <button
               onClick={handleDownloadResults}
               className="download-results-button"
               disabled={!isHtml2CanvasLoaded}
             >
-              {isHtml2CanvasLoaded ? "Download Results (JPG)" : "Loading Downloader..."}
+              {isHtml2CanvasLoaded ? "Download Results" : "Loading Downloader..."}
             </button>
             <button onClick={resetQuiz} className="reset-button">Start New Quiz</button>
           </div>
@@ -1556,9 +1559,9 @@ function QuizPage() {
             *If "Listen to Learn" doesn't work, ensure your browser's text-to-speech is enabled and a Kannada voice is installed (check browser/OS settings).
           </p>
           <div className="author-info">
-            Author: Ragu Kattinakere <br/> Kannada Kalike Canada - Kannada Sangha Toronto.
+            Author: Ragu Kattinakere <br/>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
