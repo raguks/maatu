@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo} from 'react';
 import './MaatuQuizPage.css';
 import { allSentences, wordBatches, kannadaQuestionsData, minimalLearningSentences, allPossibleEnglishAnswers } from './QuizData.js';
 
