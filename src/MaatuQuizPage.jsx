@@ -782,8 +782,8 @@ const allSentences = [
   {
     english: "I played with my friends at school.",
     kannada: "ನಾನು ಶಾಲೆಯಲ್ಲಿ ಗೆಳೆಯರೊಂದಿಗೆ ಆಡಿದೆ.",
-    incorrectOptions: ["ನಾನು ಮನೆಯಲ್ಲಿ ಆಡಿದೆ.", "ನ ನಾನು ಶಾಲೆಯಲ್ಲಿ ಓದಿದೆ.", "ಗೆಳೆಯರು ಎಲ್ಲಿದ್ದಾರೆ?", "ನಾನು ಆಟ ಆಡಲ್ಲ."],
-    romanKannada: "nānu śāleyalli geḷeyarondege āḍide."
+    incorrectOptions: ["ನಾನು ಮನೆಯಲ್ಲಿ ಆಡಿದೆ.", "ನಾನು ಶಾಲೆಯಲ್ಲಿ ಓದಿದೆ.", "ಗೆಳೆಯರು ಎಲ್ಲಿದ್ದಾರೆ?", "ನಾನು ಆಟ ಆಡಲ್ಲ."],
+    romanKannana: "nānu śāleyalli geḷeyarondege āḍide."
   },
   {
     english: "Can I go to Ian’s house to play?",
@@ -883,9 +883,9 @@ const allSentences = [
   },
   {
     english: "I always feel like eating pizza.",
-    kannada: "ನನಗೆ ಯಾವಾಗಲೂ ಪಿಜ್ಜಾ ತಿನ್ನಬೇಕು ಅನಿಸುತ್ತದೆ.",
+    kannada: "ನನಗೆ ಯಾವಾಗಲೂ ಪಿಜ್ಜಾ ತಿನ್ನಬೇಕು ಆನ್ನಿಸುತ್ತದೆ.",
     incorrectOptions: ["ನನಗೆ ಪಿಜ್ಜಾ ಇಷ್ಟ ಇಲ್ಲ.", "ನಾನು ಪಿಜ್ಜಾ ತಿಂದೆ.", "ಯಾವಾಗಲೂ ತಿನ್ನಬೇಕು.", "ಪಿಜ್ಜಾ ಬೇಡ."],
-    romanKannada: "nanage yāvāgalū pijā tinnabēku anisuttade."
+    romanKannada: "nanage yāvāgalū pijā tinnabēku ānnisuttade."
   },
   {
     english: "Check my height.",
@@ -921,7 +921,7 @@ const allSentences = [
     english: "Can we do one origami craft?",
     kannada: "ನಾವೊಂದು ಒರಿಗಾಮಿ ಕ್ರಾಫ್ಟ್ ಮಾಡೋಣವೇ?",
     incorrectOptions: ["ಒರಿಗಾಮಿ ಕ್ರಾಫ್ಟ್ ಎಲ್ಲಿದೆ?", "ನಾವು ಮಾಡೋಣವಾ?", "ಕ್ರಾಫ್ಟ್ ಮಾಡು", "ಒರಿಗಾಮಿ ಬೇಡ."],
-    romanKannana: "nāvondu origāmi krāphṭ māḍōṇave?"
+    romanKannada: "nāvondu origāmi krāphṭ māḍōṇave?"
   },
   {
     english: "What should I do now?",
@@ -1079,6 +1079,654 @@ const allSentences = [
     incorrectOptions: ["ನನ್ನ ಕೂದಲು ಬಿಡು", "ನನ್ನ ಕೂದಲು ಬಾಚು", "ಕೂದಲು ಎಲ್ಲಿದೆ?", "ನನ್ನ ಕೂದಲು ಬೇಕು"],
     romanKannada: "nanna kūdalu kaṭṭuttīyā"
   },
+  {
+    english: "Come on",
+    kannada: "ಬನ್ನಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "banni"
+  },
+  {
+    english: "Forgive me",
+    kannada: "ಕ್ಷಮಿಸಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "kshamisi"
+  },
+  {
+    english: "Are you coming with me?",
+    kannada: "ನನ್ನ ಜೊತೆ ಬರ್ತೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna jothe barthira?"
+  },
+  {
+    english: "I don’t have time",
+    kannada: "ನನಗೆ ಸಮಯ ಇಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage samaya illa"
+  },
+  {
+    english: "What do you think?",
+    kannada: "ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ ಏನು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma abhipraya enu?"
+  },
+  {
+    english: "It doesn’t matter.",
+    kannada: "ಪರವಾಗಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "parvagilla"
+  },
+  {
+    english: "What are your hobbies?",
+    kannada: "ನಿಮ್ಮ ಹವ್ಯಾಸಗಳು ಯಾವುವು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma havyasagalu yavuvu?"
+  },
+  {
+    english: "What do you need?",
+    kannada: "ನಿಮಗೆ ಏನು ಬೇಕು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage enu beku?"
+  },
+  {
+    english: "Absolutely not.",
+    kannada: "ಖಂಡಿತ ಇಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "khanditha illa"
+  },
+  {
+    english: "I admire you",
+    kannada: "ನಾನು ನಿಮ್ಮನ್ನು ಮೆಚ್ಚುತ್ತೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu nimmanu mechuttene"
+  },
+  {
+    english: "Is all good?",
+    kannada: "ಎಲ್ಲಾ ಚೆನ್ನಾಗಿದೆಯಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "ella chennagiddeya?"
+  },
+  {
+    english: "I knew it.",
+    kannada: "ನನಗೆ ಗೊತ್ತಿತ್ತು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage gothithu"
+  },
+  {
+    english: "It’s ok",
+    kannada: "ಸರಿ ಇದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "sari ide"
+  },
+  {
+    english: "I decline!",
+    kannada: "ನನಗೆ ಬೇಡ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage beda"
+  },
+  {
+    english: "What is your job?",
+    kannada: "ನಿಮ್ಮ ಕೆಲಸ ಏನು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma kelasa enu?"
+  },
+  {
+    english: "Come with me",
+    kannada: "ನನ್ನ ಜೊತೆ ಬನ್ನಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna jothe banni"
+  },
+  {
+    english: "I do not understand",
+    kannada: "ನನಗೆ ಅರ್ಥವಾಗುತ್ತಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage arthavaguttilla"
+  },
+  {
+    english: "I agree.",
+    kannada: "ನಾನು ಒಪ್ಪುತ್ತೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu opputtene"
+  },
+  {
+    english: "When is the train leaving?",
+    kannada: "ರೈಲು ಯಾವಾಗ ಹೊರಡುತ್ತದೆ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "railu yavaga horaduttade?"
+  },
+  {
+    english: "I love you.",
+    kannada: "ನಾನು ನಿನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu ninnanu preetisuttene"
+  },
+  {
+    english: "Stop making such a noise",
+    kannada: "ಗಲಾಟೆ ಮಾಡಬೇಡ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "galate madabeda"
+  },
+  {
+    english: "Do you need anything?",
+    kannada: "ನಿಮಗೆ ಏನಾದರೂ ಬೇಕಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage enadaru beka?"
+  },
+  {
+    english: "Don’t move!",
+    kannada: "ಕದಲಬೇಡ!",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "kadala beda!"
+  },
+  {
+    english: "Do me a favor",
+    kannada: "ನನಗೊಂದು ಸಹಾಯ ಮಾಡು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanagondu sahaya madu"
+  },
+  {
+    english: "I’m sorry.",
+    kannada: "ಕ್ಷಮಿಸಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "kshamisi"
+  },
+  {
+    english: "I got it.",
+    kannada: "ನನಗೆ ಅರ್ಥವಾಯಿತು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage arthavayithu"
+  },
+  {
+    english: "Where are you going?",
+    kannada: "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "ellige hogtha iddeera?"
+  },
+  {
+    english: "I am tired.",
+    kannada: "ನನಗೆ ಸುಸ್ತಾಗಿದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage susthagide"
+  },
+  {
+    english: "It really takes time",
+    kannada: "ಅದು ನಿಜಕ್ಕೂ ಸಮಯ ತೆಗೆದುಕೊಳ್ಳುತ್ತದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "adu nijakku samaya tegedukolluttade"
+  },
+  {
+    english: "So I do",
+    kannada: "ಹಾಗೆ ಮಾಡ್ತೀನಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "hage madtini"
+  },
+  {
+    english: "So so",
+    kannada: "ಸುಮಾರಾಗಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "sumaragii"
+  },
+  {
+    english: "Forget it",
+    kannada: "ಮರೆತುಬಿಡು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "marethubidu"
+  },
+  {
+    english: "How much is it?",
+    kannada: "ಎಷ್ಟು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "eshtu?"
+  },
+  {
+    english: "Join me.",
+    kannada: "ನನ್ನ ಜೊತೆ ಸೇರಿಕೊಳ್ಳಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna jothe serikolli"
+  },
+  {
+    english: "Any day will do",
+    kannada: "ಯಾವ ದಿನವಾದರೂ ಸರಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "yava dinavadaru sari"
+  },
+  {
+    english: "Give me a hand",
+    kannada: "ಸಹಾಯ ಮಾಡಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "sahaya maadi"
+  },
+  {
+    english: "Talk to you tomorrow.",
+    kannada: "ನಾಳೆ ಮಾತಾಡ್ತೀನಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nale matadtini"
+  },
+  {
+    english: "They like each other.",
+    kannada: "ಅವರು ಒಬ್ಬರನ್ನೊಬ್ಬರು ಇಷ್ಟಪಡುತ್ತಾರೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "avaru obbarannobbaru ishtapaduttare"
+  },
+  {
+    english: "Be calm",
+    kannada: "ಶಾಂತವಾಗಿರಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "shantavagiri"
+  },
+  {
+    english: "Where did you get it?",
+    kannada: "ನಿಮಗೆ ಎಲ್ಲಿ ಸಿಕ್ಕಿತು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage elli sikithu?"
+  },
+  {
+    english: "Can you please repeat that?",
+    kannada: "ದಯವಿಟ್ಟು ಇನ್ನೊಮ್ಮೆ ಹೇಳ್ತೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "dayavittu innomme helthira?"
+  },
+  {
+    english: "Where are you?",
+    kannada: "ಎಲ್ಲಿದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "elliddeera?"
+  },
+  {
+    english: "What are you doing?",
+    kannada: "ಏನು ಮಾಡ್ತಾ ಇದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "enu madtha iddeera?"
+  },
+  {
+    english: "I am busy.",
+    kannada: "ನನಗೆ ಕೆಲಸ ಇದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage kelasa ide"
+  },
+  {
+    english: "How long will you stay?",
+    kannada: "ಎಷ್ಟು ದಿನ ಇರ್ತೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "eshtu dina irthira?"
+  },
+  {
+    english: "Call me back.",
+    kannada: "ನನಗೆ ಮತ್ತೆ ಫೋನ್ ಮಾಡಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage matthe phone maadi"
+  },
+  {
+    english: "Are you kidding?",
+    kannada: "ನೀವು ತಮಾಷೆ ಮಾಡ್ತಿದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "neevu tamashe madthira?"
+  },
+  {
+    english: "Allow me",
+    kannada: "ನನಗೆ ಬಿಡಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage bidi"
+  },
+  {
+    english: "How was your weekend?",
+    kannada: "ನಿಮ್ಮ ವಾರಾಂತ್ಯ ಹೇಗಿತ್ತು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma varanthya hegiithu?"
+  },
+  {
+    english: "It’s very thoughtful of you",
+    kannada: "ನಿಮ್ಮ ಯೋಚನೆ ತುಂಬಾ ಒಳ್ಳೆಯದು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma yochane thumba olleyadu"
+  },
+  {
+    english: "Let’s catch up!",
+    kannada: "ಮಾತಾಡೋಣ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "mathadonna"
+  },
+  {
+    english: "What’s your phone number?",
+    kannada: "ನಿಮ್ಮ ಫೋನ್ ನಂಬರ್ ಏನು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma phone number enu?"
+  },
+  {
+    english: "No, I don’t want",
+    kannada: "ಇಲ್ಲ, ನನಗೆ ಬೇಡ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "illa, nanage beda"
+  },
+  {
+    english: "I’m at home",
+    kannada: "ನಾನು ಮನೆಯಲ್ಲಿದ್ದೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu maneyalliddeene"
+  },
+  {
+    english: "I hope so.",
+    kannada: "ಹಾಗೆ ಆಶಿಸುತ್ತೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "hage asisuttene"
+  },
+  {
+    english: "I’m sorry",
+    kannada: "ಕ್ಷಮಿಸಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannana: "kshamisi"
+  },
+  {
+    english: "Did you get it?",
+    kannada: "ನಿಮಗೆ ಅರ್ಥವಾಯಿತಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage arthavayitha?"
+  },
+  {
+    english: "How are you?",
+    kannada: "ನೀವು ಹೇಗಿದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "neevu hegeedira?"
+  },
+  {
+    english: "Don’t worry",
+    kannada: "ಚಿಂತಿಸಬೇಡಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannana: "chintisabedi"
+  },
+  {
+    english: "Anything else?",
+    kannada: "ಬೇರೆ ಏನಾದರೂ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "bere enadaru?"
+  },
+  {
+    english: "Have a good weekend",
+    kannada: "ವಾರಾಂತ್ಯ ಚೆನ್ನಾಗಿರಲಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "varanthya chennagirali"
+  },
+  {
+    english: "Where do you live?",
+    kannada: "ಎಲ್ಲಿ ವಾಸವಾಗಿದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "elli vasavagiddeera?"
+  },
+  {
+    english: "God bless you",
+    kannada: "ದೇವರು ಆಶೀರ್ವದಿಸಲಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "devaru ashirvadisali"
+  },
+  {
+    english: "Is everything OK?",
+    kannada: "ಎಲ್ಲಾ ಸರಿ ಇದೆಯಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "ella sari iddeya?"
+  },
+  {
+    english: "It’s on the tip of my tongue",
+    kannada: "ನನ್ನ ನಾಲಿಗೆ ತುದಿಯಲ್ಲಿದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna nalige thudiyallide"
+  },
+  {
+    english: "Do you understand me?",
+    kannada: "ನಿನಗೆ ಅರ್ಥವಾಯಿತಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "ninage arthavayitha?"
+  },
+  {
+    english: "Believe me.",
+    kannada: "ನನ್ನನ್ನು ನಂಬಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nannanu nambi"
+  },
+  {
+    english: "I can’t wait",
+    kannada: "ನನಗೆ ಕಾಯಲು ಸಾಧ್ಯವಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage kayalu sadhyavilla"
+  },
+  {
+    english: "I don’t agree.",
+    kannada: "ನಾನು ಒಪ್ಪುವುದಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu oppuvudilla"
+  },
+  {
+    english: "Do i have to?",
+    kannada: "ನಾನು ಮಾಡಬೇಕಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu madabeka?"
+  },
+  {
+    english: "How are things going?",
+    kannada: "ಹೇಗಿದೆ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "hegide?"
+  },
+  {
+    english: "What are you talking about?",
+    kannada: "ಏನು ಮಾತಾಡ್ತಾ ಇದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "enu mathadtha iddeera?"
+  },
+  {
+    english: "What did you say?",
+    kannada: "ಏನು ಹೇಳಿದಿರಿ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "enu helidiri?"
+  },
+  {
+    english: "What’s your e-mail address?",
+    kannada: "ನಿಮ್ಮ ಇ-ಮೇಲ್ ವಿಳಾಸ ಏನು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma e-mail vilasa enu?"
+  },
+  {
+    english: "You are wasting my time.",
+    kannada: "ನನ್ನ ಸಮಯ ವ್ಯರ್ಥ ಮಾಡಬೇಡ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna samaya vyartha madabeda"
+  },
+  {
+    english: "What are you up to?",
+    kannada: "ಏನು ಮಾಡ್ತಾ ಇದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "enu madtha iddeera?"
+  },
+  {
+    english: "I have no idea.",
+    kannada: "ನನಗೆ ಗೊತ್ತಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage gothilla"
+  },
+  {
+    english: "Where are you from?",
+    kannada: "ನೀವು ಎಲ್ಲಿಂದ ಬಂದಿದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "neevu ellinda bandiddeera?"
+  },
+  {
+    english: "Slow down",
+    kannada: "ನಿಧಾನವಾಗಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nidhanavagi"
+  },
+  {
+    english: "Good afternoon",
+    kannada: "ಶುಭ ಮಧ್ಯಾಹ್ನ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "shubha madhyahna"
+  },
+  {
+    english: "Are you done?",
+    kannada: "ಮುಗಿತಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "mugitha?"
+  },
+  {
+    english: "You turn.",
+    kannada: "ನಿಮ್ಮ ಸರದಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma saradi"
+  },
+  {
+    english: "How do you feel?",
+    kannada: "ನಿಮಗೆ ಹೇಗನಿಸುತ್ತಿದೆ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage heganisuttide?"
+  },
+  {
+    english: "What’s your name?",
+    kannada: "ನಿಮ್ಮ ಹೆಸರು ಏನು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma hesaru enu?"
+  },
+  {
+    english: "What’s the weather like?",
+    kannada: "ಹವಾಮಾನ ಹೇಗಿದೆ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "havamana hegide?"
+  },
+  {
+    english: "Not yet.",
+    kannada: "ಇನ್ನೂ ಇಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "innu illa"
+  },
+  {
+    english: "Can I help you?",
+    kannada: "ನಾನು ಸಹಾಯ ಮಾಡ್ಲಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu sahaya madla?"
+  },
+  {
+    english: "Cheer up!",
+    kannada: "ಖುಷಿಯಾಗಿರು!",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "khushiyagiru!"
+  },
+  {
+    english: "Enjoy yourself",
+    kannada: "ಮಜಾ ಮಾಡಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "maza maadi"
+  },
+  {
+    english: "I apologize",
+    kannada: "ನಾನು ಕ್ಷಮೆಯಾಚಿಸುತ್ತೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu kshamayachisuttene"
+  },
+  {
+    english: "A lovely day, isn’t it?",
+    kannada: "ಚೆನ್ನಾದ ದಿನ ಅಲ್ವಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "chennada dina alwa?"
+  },
+  {
+    english: "See you next time",
+    kannada: "ಮುಂದಿನ ಬಾರಿ ಸಿಗೋಣ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "mundina bari sigonna"
+  },
+  {
+    english: "Shut up",
+    kannada: "ಬಾಯಿ ಮುಚ್ಚು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannana: "bayi mucchu"
+  },
+  {
+    english: "Are you sure?",
+    kannada: "ಖಚಿತವಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "khachithava?"
+  },
+  {
+    english: "Be careful!",
+    kannada: "ಎಚ್ಚರಿಕೆಯಿಂದ ಇರಿ!",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "eccharikeyinda iri!"
+  },
+  {
+    english: "What do you want?",
+    kannada: "ನಿಮಗೆ ಏನು ಬೇಕು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage enu beku?"
+  },
+  {
+    english: "Don’t be so childish",
+    kannada: "ಮಕ್ಕಳ ತರ ಇರಬೇಡ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "makkala thara irabeda"
+  },
+  {
+    english: "Be quiet!",
+    kannada: "ಸುಮ್ಮನಿರಿ!",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "summaniri!"
+  },
+  {
+    english: "You are going too fast",
+    kannada: "ನೀವು ತುಂಬಾ ವೇಗವಾಗಿ ಹೋಗ್ತಾ ಇದ್ದೀರಾ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನ ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "neevu thumba vegavagi hogtha iddeera"
+  },
+  {
+    english: "I’m good.",
+    kannada: "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu chennagiddeene"
+  },
+  {
+    english: "I hate you!",
+    kannada: "ನಾನು ನಿನ್ನನ್ನು ದ್ವೇಷಿಸುತ್ತೇನೆ!",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu ninnanu dweshisuttene!"
+  },
+  {
+    english: "What is going on?",
+    kannada: "ಏನು ನಡೀತಾ ಇದೆ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "enu naditha ide?"
+  },
+  {
+    english: "Thank you very much.",
+    kannada: "ತುಂಬಾ ಧನ್ಯವಾದಗಳು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannana: "thumba dhanyavadagalu"
+  },
+  {
+    english: "How can I go to the town center?",
+    kannada: "ನಗರ ಕೇಂದ್ರಕ್ಕೆ ಹೇಗೆ ಹೋಗಬೇಕು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nagara kendrakke hege hogabeku?"
+  },
+  {
+    english: "I do not mean it",
+    kannada: "ನನ್ನ ಉದ್ದೇಶ ಅದು ಆಗಿರಲಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna uddesha adu agirallilla"
+  },
+  {
+    english: "Have a good trip",
+    kannada: "ಪ್ರಯಾಣ ಸುಖಕರವಾಗಿರಲಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "prayanna sukhakaravagirali"
+  },
+  {
+    english: "Nice to meet you.",
+    kannada: "ನಿಮ್ಮನ್ನು ಭೇಟಿಯಾದದ್ದು ಸಂತೋಷವಾಯಿತು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimmanu bhetiyadaddu santhosavathu"
+  },
+  {
+    english: "I would love to.",
+    kannada: "ನನಗೆ ಇಷ್ಟವಾಗುತ್ತದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage ishtavaguttade"
+  }
 ];
 
 // --- Helper Functions (Defined before the component) ---
