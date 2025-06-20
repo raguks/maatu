@@ -7,15 +7,16 @@ body {
 
 .quiz-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  max-width: 700px;
+  max-width: 750px; /* Increased max-width for better aspect ratio */
   margin: 40px auto;
-  padding: 0; /* Removed padding from here, added to inner sections */
+  padding: 0;
   border-radius: 12px;
   background-color: #f0f4f8;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   text-align: center;
   color: #333;
-  overflow: hidden; /* Ensures border-radius applies cleanly */
+  overflow: hidden;
+  position: relative;
 }
 
 /* New Banner Style */
@@ -50,7 +51,7 @@ h1 {
   padding: 25px; /* Added padding here */
   border-radius: 10px; /* Kept border-radius on inner content */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  margin: 0 20px 20px 20px; /* Adjusted margins for inner sections */
+  margin: 0 25px 25px 25px; /* Increased margins for inner sections */
   box-sizing: border-box; /* Include padding in element's total width and height */
 }
 
@@ -103,7 +104,8 @@ h1 {
 .start-button,
 .next-button,
 .reset-button,
-.listen-button {
+.listen-button,
+.download-results-button { /* Added download button here */
   background-color: #4CAF50; /* Green */
   color: white;
   padding: 12px 25px;
@@ -119,9 +121,23 @@ h1 {
 .start-button:hover,
 .next-button:hover,
 .reset-button:hover,
-.listen-button:hover {
+.listen-button:hover,
+.download-results-button:hover { /* Added download button here */
   background-color: #45a049;
   transform: translateY(-2px);
+}
+
+.download-results-button {
+  background-color: #007bff; /* Blue for download */
+}
+
+.download-results-button:hover {
+  background-color: #0056b3;
+}
+
+.download-results-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
 .question-counter {
@@ -236,4 +252,36 @@ h1 {
   color: #333;
   margin-top: 15px;
   margin-bottom: 10px;
+}
+
+.quiz-duration, .current-date-time {
+  font-size: 1em; /* Smaller font for meta info */
+  color: #555;
+  margin-bottom: 8px;
+}
+
+.results-buttons-container {
+  display: flex;
+  flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+  justify-content: center;
+  gap: 15px; /* Spacing between buttons */
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.tts-help-info {
+  font-size: 0.85em;
+  color: #777;
+  margin-top: 25px; /* Space above help text */
+  line-height: 1.4;
+  padding: 0 15px;
+}
+
+.author-info {
+  font-size: 0.75em; /* Smaller font */
+  color: #888;
+  margin-top: 20px;
+  margin-bottom: 10px; /* Space from the bottom of the container */
+  text-align: center;
+  line-height: 1.3;
 }

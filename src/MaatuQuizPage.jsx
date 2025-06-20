@@ -1,5 +1,18 @@
-import React, { useState, useEffect, useMemo } from 'react'; // Removed useRef
+import React, { useState, useEffect, useMemo } from 'react';
 import './MaatuQuizPage.css';
+
+// Dynamically load html2canvas library for image downloading
+// This creates a script tag and appends it to the document body.
+const loadScript = (src) => {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = () => resolve(script);
+    script.onerror = () => reject(new Error(`Script load error for ${src}`));
+    document.body.appendChild(script);
+  });
+};
+
 
 // --- Your Curated Data ---
 const allSentences = [
@@ -42,7 +55,7 @@ const allSentences = [
   {
     english: "I am thirsty.",
     kannada: "ನೀರಡಿಕೆ ಆಗಿದೆ",
-    incorrectOptions: ["ನನಗೆ ಹಸಿವಾಗಿದೆ", "ನನಗೆ ಬೇಜಾರು", "ನನಗೆ ಖುಷಿಯಾಗಿದೆ", "ನನಗೆ ನಿದ್ದೆ ಬರ್ತಿದೆ"],
+    incorrectOptions: ["ನನಗೆ ಹಸಿವಾಗಿದೆ", "ನನಗೆ ಬೇಜಾರು", "ನನಗೆ ಖುಷಿಯಾಗಿದೆ", "ನ ನನಗೆ ನಿದ್ದೆ ಬರ್ತಿದೆ"],
     romanKannada: "nīraḍike āgide"
   },
   {
@@ -78,14 +91,14 @@ const allSentences = [
   {
     english: "I don't know.",
     kannada: "ನನಗೆ ಗೊತ್ತಿಲ್ಲ",
-    incorrectOptions: ["ನನಗೆ ಗೊತ್ತು", "ನಾನು ಮರೆತೆ", "ನಾನು ಕಲಿತೆ", "ನಾನು ನೋಡಿದೆ"],
+    incorrectOptions: ["ನನಗೆ ಗೊತ್ತು", "ನಾನು ಮರೆತೆ", "ನಾನು ಕಲಿತೆ", "ನ ನಾನು ನೋಡಿದೆ"],
     romanKannada: "nanage gottilla"
   },
   {
     english: "I forgot.",
     kannada: "ನಾನು ಮರೆತೆ.",
     incorrectOptions: ["ನಾನು ನೆನಪಿದೆ", "ನಾನು ಕಲಿತೆ", "ನಾನು ನೋಡಿದೆ", "ನಾನು ತಿಳಿದುಕೊಂಡೆ"],
-    romanKannada: "nānu marete."
+    romanKannana: "nānu marete."
   },
   {
     english: "Can I have some more?",
@@ -223,7 +236,7 @@ const allSentences = [
     english: "I don’t feel well./I am not feeling well.",
     kannada: "ನನಗೆ ಹುಷಾರಿಲ್ಲ",
     incorrectOptions: ["ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ", "ನನಗೆ ಸುಸ್ತಾಗಿದೆ", "ನನಗೆ ನಿದ್ದೆ ಬರ್ತಿದೆ", "ನನಗೆ ಹಸಿವಾಗಿದೆ"],
-    romanKannada: "nanage huṣārilla"
+    romanKannana: "nanage huṣārilla"
   },
   {
     english: "I am fine now.",
@@ -246,7 +259,7 @@ const allSentences = [
   {
     english: "I don’t want to do it.",
     kannada: "ನಾನು ಮಾಡಲ್ಲ",
-    incorrectOptions: ["ನಾನು ಮಾಡ್ತೀನಿ", "ನಾನು ಮಾಡಿದೆ", "ನಾನು ಮಾಡಬೇಕು", "ನಾನು ಮಾಡೋಣ"],
+    incorrectOptions: ["ನಾನು ಮಾಡ್ತೀನಿ", "ನಾನು ಮಾಡಿದೆ", "ನ ನಾನು ಮಾಡಬೇಕು", "ನಾನು ಮಾಡೋಣ"],
     romanKannada: "nānu māḍalla"
   },
   {
@@ -313,7 +326,7 @@ const allSentences = [
     english: "I cried.",
     kannada: "ನಾನು ಅತ್ತೆ",
     incorrectOptions: ["ನಾನು ನಕ್ಕೆ", "ನಾನು ಮಾಡಿದೆ", "ನಾನು ಓಡಿದೆ", "ನಾನು ತಿಂದೆ"],
-    romanKannada: "nānu atte"
+    romanKannana: "nānu atte"
   },
   {
     english: "We will cry.",
@@ -481,7 +494,7 @@ const allSentences = [
     english: "She ate.",
     kannada: "ಅವಳು ತಿಂದಳು",
     incorrectOptions: ["ಅವಳು ಕುಡಿದಳು", "ಅವಳು ಓದಿದಳು", "ಅವಳು ಬರೆದಳು", "ಅವಳು ನೋಡಿದಳು"],
-    romanKannada: "avaḷu tindaḷu"
+    romanKannana: "avaḷu tindaḷu"
   },
   {
     english: "Serve me lunch.",
@@ -493,13 +506,13 @@ const allSentences = [
     english: "She drank.",
     kannada: "ಅವಳು ಕುಡಿದಳು",
     incorrectOptions: ["ಅವಳು ತಿಂದಳು", "ಅವಳು ಓದಿದಳು", "ಅವಳು ಬರೆದಳು", "ಅವಳು ನೋಡಿದಳು"],
-    romanKannada: "avaḷu kuḍidaḷu"
+    romanKannana: "avaḷu kuḍidaḷu"
   },
   {
     english: "Open the door.",
     kannada: "ಬಾಗಿಲು ತೆರೆಯಿರಿ",
     incorrectOptions: ["ಬಾಗಿಲು ಮುಚ್ಚಿ", "ಬಾಗಿಲು ಹಾಕಿ", "ಬಾಗಿಲು ಎತ್ತಿ", "ಬಾಗಿಲು ಬಿಡಿ"],
-    romanKannada: "bāgilu tereyiri"
+    romanKannana: "bāgilu tereyiri"
   },
   {
     english: "He drank.",
@@ -680,7 +693,7 @@ const allSentences = [
     english: "Do we have tabs?",
     kannada: "ನಮ್ಮನೆಲಿ ಟ್ಯಾಬ್‌ ಇದೆಯಾ?", // Corrected Kannada script
     incorrectOptions: ["ನಮಗೆ ಟ್ಯಾಬ್ ಬೇಕಾ?", "ನೀವು ಟ್ಯಾಬ್ ಕೊಟ್ಟೀರಾ?", "ಟ್ಯಾಬ್ ಎಲ್ಲಿದೆ?", "ಟ್ಯಾಬ್ ಇಲ್ಲ?"],
-    romanKannada: "nammameḷi ṭyāb‌ ideyā?" // Corrected Romanization
+    romanKannana: "nammameḷi ṭyāb‌ ideyā?" // Corrected Romanization
   },
   {
     english: "Are we going somewhere today?",
@@ -692,7 +705,7 @@ const allSentences = [
     english: "Do I still have to do it?",
     kannada: "ನಾನು ಇದನ್ನ ಇನ್ನೂ ಮಾಡಲೇಬೇಕಾ?",
     incorrectOptions: ["ನಾನು ಇದನ್ನು ಮಾಡಲಾ?", "ನೀನು ಮಾಡು", "ಇನ್ನೂ ಮಾಡ್ತೀಯಾ?", "ಮಾಡಿ ಆಯ್ತಾ?"],
-    romanKannada: "nānu idanna innū māḍalēbēkā?"
+    romanKannana: "nānu idanna innū māḍalēbēkā?"
   },
   {
     english: "Can we go outside and decide?",
@@ -769,7 +782,7 @@ const allSentences = [
   {
     english: "I played with my friends at school.",
     kannada: "ನಾನು ಶಾಲೆಯಲ್ಲಿ ಗೆಳೆಯರೊಂದಿಗೆ ಆಡಿದೆ.",
-    incorrectOptions: ["ನಾನು ಮನೆಯಲ್ಲಿ ಆಡಿದೆ.", "ನ ನಾನು ಶಾಲೆಯಲ್ಲಿ ಓದಿದೆ.", "ಗೆಳೆಯರು ಎಲ್ಲಿದ್ದಾರೆ?", "ನಾನು ಆಟ ಆಡಲ್ಲ."],
+    incorrectOptions: ["ನಾನು ಮನೆಯಲ್ಲಿ ಆಡಿದೆ.", "ನಾನು ಶಾಲೆಯಲ್ಲಿ ಓದಿದೆ.", "ಗೆಳೆಯರು ಎಲ್ಲಿದ್ದಾರೆ?", "ನಾನು ಆಟ ಆಡಲ್ಲ."],
     romanKannada: "nānu śāleyalli geḷeyarondege āḍide."
   },
   {
@@ -782,7 +795,7 @@ const allSentences = [
     english: "I have to do my Kumon homework.",
     kannada: "ನಾನು ಕುಮೋನ್ ಮನೆಗೆಲಸ ಮುಗಿಸಬೇಕು.",
     incorrectOptions: ["ನಾನು ಕುಮೋನ್ ಮಾಡಿದೆ.", "ನನಗೆ ಕುಮೋನ್ ಬೇಡ.", "ಕುಮೋನ್ ಯಾವಾಗ?", "ಮನೆಗೆಲಸ ಮಾಡು."],
-    romanKannada: "nānu kumōn mane gelasa mugisabēku."
+    romanKannana: "nānu kumōn mane gelasa mugisabēku."
   },
   {
     english: "Can I watch TV?",
@@ -811,7 +824,7 @@ const allSentences = [
   {
     english: "I want to sleep for some more time.",
     kannada: "ನನಗೆ ಇನ್ನೂ ಸ್ವಲ್ಪ ಹೊತ್ತು ಮಲಗಬೇಕು.",
-    incorrectOptions: ["ನನಗೆ ಈಗ ನಿದ್ದೆ ಬೇಡ.", "ನಾನು ಎದ್ದೆ.", "ನಾನು ಕೆಲಸ ಮಾಡಬೇಕು.", "ನನಗೆ ಮಲಗಲಿಕ್ಕೆ ಇಷ್ಟ ಇಲ್ಲ."],
+    incorrectOptions: ["ನನಗೆ ಈಗ ನಿದ್ದೆ ಬೇಡ.", "ನಾನು ಎದ್ದೆ.", "ನ ನಾನು ಕೆಲಸ ಮಾಡಬೇಕು.", "ನನಗೆ ಮಲಗಲಿಕ್ಕೆ ಇಷ್ಟ ಇಲ್ಲ."],
     romanKannana: "nanage innū svalpa hottu malagabēku."
   },
   {
@@ -830,7 +843,7 @@ const allSentences = [
     english: "What is the time now?",
     kannada: "ಈಗ ಎಷ್ಟು ಗಂಟೆ ಆಯ್ತು?",
     incorrectOptions: ["ಟೈಮ್ ಯಾವಾಗ?", "ಈಗ ಯಾವಾಗ?", "ಗಂಟೆ ಏನು?", "ಟೈಮ್ ಎಲ್ಲಿ?"],
-    romanKannada: "īga eṣṭu gaṇṭe āytu?"
+    romanKannana: "īga eṣṭu gaṇṭe āytu?"
   },
   {
     english: "Can you fill my water bottle?",
@@ -860,7 +873,7 @@ const allSentences = [
     english: "I like to play in the bathtub for some more time.",
     kannada: "ನಾನು ಇನ್ನೂ ಸ್ವಲ್ಪ ಹೊತ್ತು ಬಾತ್‌ಟಬ್‌ನಲ್ಲಿ ಆಡ್ತೀನಿ.",
     incorrectOptions: ["ನಾನು ಬಾತ್‌ಟಬ್‌ನಲ್ಲಿ ಆಟ ಆಡಲ್ಲ.", "ಸ್ವಲ್ಪ ಹೊತ್ತು ಆಡ್ತೀನಿ.", "ಬಾತ್‌ಟಬ್ ಎಲ್ಲಿದೆ?", "ನಾನು ಈಗ ಸ್ನಾನ ಮಾಡ್ತೀನಿ."],
-    romanKannada: "nānu innū svalpa hottu bāth‌ṭabnalli āḍtīni."
+    romanKannana: "nānu innū svalpa hottu bāth‌ṭabnalli āḍtīni."
   },
   {
     english: "My markers are not working. Can you buy me a new set?",
@@ -890,7 +903,7 @@ const allSentences = [
     english: "What can I build with Lego? Give me some idea.",
     kannada: "ಲೆಗೋದಿಂದ ನಾನು ಏನು ಕಟ್ಟಬಹುದು? ನನಗೆ ಉಪಾಯ ಹೇಳು.",
     incorrectOptions: ["ಲೆಗೋ ಎಲ್ಲಿದೆ?", "ನಾನು ಏನು ಕಟ್ಟಲಿ?", "ನನಗೆ ಉಪಾಯ ಬೇಕು.", "ಲೆಗೋ ಬೇಡ."],
-    romanKannada: "legōdinda nānu ēnu kaṭṭabahudu? nanage upāya hēḷu."
+    romanKannana: "legōdinda nānu ēnu kaṭṭabahudu? nanage upāya hēḷu."
   },
   {
     english: "Can we go to the park?",
@@ -920,7 +933,7 @@ const allSentences = [
     english: "Should I write this?",
     kannada: "ನಾನು ಇದನ್ನು ಬರೆಯಬೇಕಾ?",
     incorrectOptions: ["ನಾನು ಇದನ್ನು ಬರೆದೆ?", "ನಾನು ಇದನ್ನು ಓದಿದೆ?", "ನಾನು ಬರೆಯಬೇಕು.", "ಬರೆಯಬೇಡ."],
-    romanKannada: "nānu idannu bareyabēkā?"
+    romanKannana: "nānu idannu bareyabēkā?"
   },
   {
     english: "I want water.",
@@ -944,7 +957,7 @@ const allSentences = [
     english: "Appa, do I have class today?",
     kannada: "ಅಪ್ಪ ನನ್ನ ಕ್ಲಾಸ್ ಇದೆಯಾ ಇವತ್ತು",
     incorrectOptions: ["ಅಪ್ಪಾ, ಕ್ಲಾಸ್ ಯಾವಾಗ?", "ಇವತ್ತು ಕ್ಲಾಸ್ ಇಲ್ಲ?", "ಅಪ್ಪಾ, ನೀನು ಕ್ಲಾಸ್ ಹೋಗು", "ಕ್ಲಾಸ್ ಇದೆಯಾ?"],
-    romanKannada: "appā nanna klās ideyā ivattu"
+    romanKannana: "appā nanna klās ideyā ivattu"
   },
   {
     english: "I will sleep.",
@@ -1010,7 +1023,7 @@ const allSentences = [
     english: "It's cold outside.",
     kannada: "ಹೊರಗಡೆ ಚಳಿ ಇದೆ",
     incorrectOptions: ["ಹೊರಗಡೆ ಬಿಸಿಲು ಇದೆ", "ಹೊರಗಡೆ ಸೆಕೆ ಇದೆ", "ಒಳಗಡೆ ಚಳಿ ಇದೆ", "ಚಳಿ ಇಲ್ಲ"],
-    romanKannada: "horagaḍe caḷi ide"
+    romanKannana: "horagaḍe caḷi ide"
   },
   {
     english: "Do not trouble/irritate me",
@@ -1115,13 +1128,15 @@ const generateOptions = (correctAnswer, allIncorrectOptions) => {
 // --- React Component ---
 function QuizPage() {
   const [quizStarted, setQuizStarted] = useState(false);
-  const [numQuestions, setNumQuestions] = useState(10); // Default to 10 questions
+  const [numQuestions, setNumQuestions] = useState(50); // Default to 50 questions
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [quizFinished, setQuizFinished] = useState(false);
-  // Removed showLearningFeedback as it was redundant
   const [studentName, setStudentName] = useState('');
+  const [isHtml2CanvasLoaded, setIsHtml2CanvasLoaded] = useState(false);
+  const [quizStartTime, setQuizStartTime] = useState(null); // New state for quiz start time
+  const [quizDuration, setQuizDuration] = useState(''); // New state for quiz duration
 
   // Use a separate state to store the actual questions for the current quiz session.
   // This array won't be cleared when quizFinished is true, preventing 0/0 errors.
@@ -1129,6 +1144,73 @@ function QuizPage() {
 
   // Moved after sessionQuestions declaration
   const currentQuestion = sessionQuestions[currentQuestionIndex];
+
+  // Audio Context for sound effects
+  // Initialized directly, no useRef needed since it's not being held across renders
+  const audioContext = useMemo(() => {
+    return new (window.AudioContext || window.webkitAudioContext)();
+  }, []);
+
+  const gainNode = useMemo(() => {
+    const node = audioContext.createGain();
+    node.connect(audioContext.destination);
+    node.gain.value = 0.1; // Low volume for effects
+    return node;
+  }, [audioContext]);
+
+
+  useEffect(() => {
+    // Load html2canvas
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js')
+      .then(() => {
+        setIsHtml2CanvasLoaded(true);
+        console.log("html2canvas loaded successfully.");
+      })
+      .catch(error => console.error("Failed to load html2canvas:", error));
+
+    return () => {
+      // Cleanup AudioContext on unmount if it was created
+      if (audioContext && audioContext.state !== 'closed') {
+        audioContext.close();
+      }
+    };
+  }, [audioContext]); // Depend on audioContext for cleanup
+
+
+  const playTone = (frequency, duration, type = 'sine') => {
+    // Ensure audio context is resumed before playing tone
+    if (audioContext.state === 'suspended') {
+      audioContext.resume().catch(e => console.error("Error resuming AudioContext before tone:", e));
+    }
+    if (!audioContext) {
+      console.warn("AudioContext not initialized.");
+      return;
+    }
+    const oscillator = audioContext.createOscillator();
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+    oscillator.connect(gainNode);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + duration);
+  };
+
+  const playCorrectSound = () => {
+    playTone(880, 0.1); // A high note
+    setTimeout(() => playTone(1320, 0.1), 100); // A higher note after a short delay
+  };
+
+  const playIncorrectSound = () => {
+    playTone(220, 0.2, 'sawtooth'); // A low, slightly jarring note
+  };
+
+  const playButtonClick = () => {
+    // Ensure audio context is resumed on any button click
+    if (audioContext.state === 'suspended') {
+      audioContext.resume().catch(e => console.error("Error resuming AudioContext on button click:", e));
+    }
+    playTone(1000, 0.05, 'triangle'); // A very short, subtle click
+  };
+
 
   // When the quiz starts, populate sessionQuestions
   useEffect(() => {
@@ -1190,7 +1272,7 @@ function QuizPage() {
   const speakKannada = (text) => {
     if (!synth) {
       console.warn("Web Speech API not supported in this browser.");
-      alert("Text-to-speech is not supported in your browser.");
+      alert("Text-to-speech is not supported in your browser. Please check browser settings or use a different browser.");
       return;
     }
     if (synth.speaking) {
@@ -1207,6 +1289,10 @@ function QuizPage() {
     }
 
     try {
+      // Ensure audio context is resumed before speaking
+      if (audioContext.state === 'suspended') {
+        audioContext.resume().catch(e => console.error("Error resuming AudioContext before speech:", e));
+      }
       synth.speak(utterance);
       console.log("Attempting to speak:", text);
     } catch (error) {
@@ -1216,6 +1302,12 @@ function QuizPage() {
   };
 
   const handleStartQuiz = () => {
+    playButtonClick(); // Play click sound
+    // Resume AudioContext on user interaction - already covered by playButtonClick
+    // if (audioContext.state === 'suspended') {
+    //   audioContext.resume().catch(e => console.error("Error resuming AudioContext:", e));
+    // }
+
     if (studentName.trim() === '') {
       alert("Please enter your name before starting the quiz.");
       return;
@@ -1226,7 +1318,7 @@ function QuizPage() {
       setScore(0);
       setSelectedOption(null);
       setQuizFinished(false);
-      // Removed setShowLearningFeedback(false)
+      setQuizStartTime(Date.now()); // Record start time
       setSessionQuestions(getRandomQuestions(allSentences, Math.min(numQuestions, allSentences.length)));
     } else {
       alert(`Please enter a number between 1 and ${allSentences.length} for the number of questions.`);
@@ -1234,30 +1326,43 @@ function QuizPage() {
   };
 
   const handleOptionSelect = (option) => {
+    // Ensure audio context is resumed on option selection
+    if (audioContext.state === 'suspended') {
+      audioContext.resume().catch(e => console.error("Error resuming AudioContext on option select:", e));
+    }
     if (selectedOption === null) { // Allow selection only if not already picked
       setSelectedOption(option);
-      // Removed setShowLearningFeedback(true)
+      if (option === currentQuestion.kannada) {
+        setScore(prevScore => prevScore + 1); // Update score for correct answer
+        playCorrectSound();
+      } else {
+        playIncorrectSound();
+      }
     }
   };
 
   const handleNextQuestion = () => {
+    playButtonClick(); // Play click sound
     if (selectedOption !== null) {
       // Stop any ongoing speech before moving to next question
       if (synth && synth.speaking) {
         synth.cancel();
       }
 
-      if (selectedOption === currentQuestion.kannada) {
-        setScore(prevScore => prevScore + 1);
-      }
-
       const nextIndex = currentQuestionIndex + 1;
       if (nextIndex < sessionQuestions.length) {
         setCurrentQuestionIndex(nextIndex);
         setSelectedOption(null); // Reset selection for next question
-        // Removed setShowLearningFeedback(false)
       } else {
         setQuizFinished(true);
+        // Calculate duration when quiz finishes
+        if (quizStartTime) {
+          const endTime = Date.now();
+          const durationInSeconds = Math.floor((endTime - quizStartTime) / 1000);
+          const minutes = Math.floor(durationInSeconds / 60);
+          const seconds = durationInSeconds % 60;
+          setQuizDuration(`${minutes}m ${seconds}s`);
+        }
       }
     } else {
       alert("Please select an answer before proceeding.");
@@ -1265,26 +1370,64 @@ function QuizPage() {
   };
 
   const handleListenToLearn = () => {
+    playButtonClick(); // Play click sound
     if (currentQuestion && currentQuestion.kannada) {
       speakKannada(currentQuestion.kannada);
     }
   };
 
   const resetQuiz = () => {
+    playButtonClick(); // Play click sound
     // Stop any ongoing speech
     if (synth && synth.speaking) {
       synth.cancel();
     }
     setQuizStarted(false);
-    setNumQuestions(10); // Reset to default
+    setNumQuestions(50); // Reset to default
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedOption(null);
     setQuizFinished(false);
-    // Removed setShowLearningFeedback(false)
     setSessionQuestions([]); // Clear session questions on reset
     setStudentName(''); // Reset student name
+    setQuizStartTime(null); // Reset start time
+    setQuizDuration(''); // Reset duration
   };
+
+  const handleDownloadResults = async () => {
+    if (!isHtml2CanvasLoaded) {
+      alert("Image capture library is still loading. Please wait a moment.");
+      return;
+    }
+
+    const resultsElement = document.querySelector('.quiz-results');
+    if (resultsElement) {
+      // No need to hide elements anymore as they are part of the target div
+
+      try {
+        // Use html2canvas from the global scope after it's loaded
+        const canvas = await window.html2canvas(resultsElement, {
+          scale: 2, // Increase scale for better quality
+          useCORS: true, // Enable CORS if you have images from other domains
+          backgroundColor: '#f0f4f8' // Match container background for clean edges
+        });
+        const image = canvas.toDataURL('image/jpeg', 0.9); // Convert to JPG with 90% quality
+
+        // Create a temporary link element to trigger the download
+        const link = document.createElement('a');
+        link.href = image;
+        link.download = `KannadaQuiz_Result_${studentName || 'Guest'}_${new Date().toLocaleDateString()}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+      } catch (error) {
+        console.error("Error capturing quiz results:", error);
+        alert("Failed to download results image. Please try again.");
+      }
+    }
+  };
+
 
   const getOptionClassName = (option) => {
     if (selectedOption === null) {
@@ -1299,9 +1442,14 @@ function QuizPage() {
     return "option-button"; // Other unselected options
   };
 
+  const currentDateTime = new Date().toLocaleString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+    hour: '2-digit', minute: '2-digit', second: '2-digit'
+  });
+
   return (
     <div className="quiz-container">
-      {/* New Smaller Heading */}
+      {/* New Smaller Heading - Always visible */}
       <div className="small-heading-banner">
         <h2>ಕನ್ನಡ ಕಲಿಕೆ ಕೆನಡಾ</h2>
       </div>
@@ -1390,7 +1538,26 @@ function QuizPage() {
           <p className="final-score">
             Your Score: {score} / {sessionQuestions.length} ({sessionQuestions.length > 0 ? ((score / sessionQuestions.length) * 100).toFixed(0) : 0}%)
           </p>
-          <button onClick={resetQuiz} className="reset-button">Start New Quiz</button>
+          {quizDuration && (
+            <p className="quiz-duration">Time taken: {quizDuration}</p>
+          )}
+          <p className="current-date-time">Completed on: {currentDateTime}</p>
+          <div className="results-buttons-container">
+             <button
+              onClick={handleDownloadResults}
+              className="download-results-button"
+              disabled={!isHtml2CanvasLoaded}
+            >
+              {isHtml2CanvasLoaded ? "Download Results (JPG)" : "Loading Downloader..."}
+            </button>
+            <button onClick={resetQuiz} className="reset-button">Start New Quiz</button>
+          </div>
+          <p className="tts-help-info">
+            *If "Listen to Learn" doesn't work, ensure your browser's text-to-speech is enabled and a Kannada voice is installed (check browser/OS settings).
+          </p>
+          <div className="author-info">
+            Author: Ragu Kattinakere <br/> Kannada Kalike Canada - Kannada Sangha Toronto.
+          </div>
         </div>
       )}
     </div>
