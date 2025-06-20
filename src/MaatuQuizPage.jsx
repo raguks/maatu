@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import './MaatuQuizPage.css';
 import { allSentences, wordBatches, kannadaQuestionsData, minimalLearningSentences, allPossibleEnglishAnswers } from './QuizData.js';
 
@@ -32,49 +32,63 @@ const getRandomQuestions = (data, count) => {
 };
 
 // Function to generate options for a question
-const generateOptions = (quizType, correctAnswer, allIncorrectOptionsForKannada, allPossibleEnglishAnswersPool = []) => {
+// Updated signature to correctly handle incorrect options based on quizType
+const generateOptions = (quizType, correctAnswer, incorrectOptionsProvided = []) => {
+  let chosenIncorrect = [];
+
   if (quizType === 'sentence' || quizType === 'minimalLearning') {
     // For sentence and minimal learning, prompt is English, options are Kannada
-    const uniqueIncorrectOptions = allIncorrectOptionsForKannada.filter(
+    // incorrectOptionsProvided will be currentQuestion.incorrectOptions for these types
+    const uniqueIncorrectOptions = incorrectOptionsProvided.filter(
       option => option !== correctAnswer
     );
 
-    let chosenIncorrect = [];
     if (uniqueIncorrectOptions.length >= 3) {
       chosenIncorrect = shuffleArray(uniqueIncorrectOptions).slice(0, 3);
     } else {
       chosenIncorrect = [...uniqueIncorrectOptions];
-      // Fallback: If not enough unique incorrect options, add generic Kannada placeholders
       while (chosenIncorrect.length < 3) {
-        chosenIncorrect.push(`[ಆಯ್ಕೆ ${chosenIncorrect.length + 1}]`); // Kannada for "Option"
+        chosenIncorrect.push(`[ಆಯ್ಕೆ ${chosenIncorrect.length + 1}]`); // Placeholders for Kannada options if insufficient
       }
     }
-    const options = shuffleArray([correctAnswer, ...chosenIncorrect]);
-    return options;
-  } else { // quizType === 'word' || quizType === 'kannadaQuestion'
+  } else if (quizType === 'word' || quizType === 'kannadaQuestion') {
     // For word and Kannada question, prompt is Kannada, options are English
-    const incorrectEnglishOptions = allPossibleEnglishAnswersPool.filter(
+    // incorrectOptionsProvided will be currentQuestion.incorrectOptions for these types (now present in wordBatches)
+    let incorrectCandidates = incorrectOptionsProvided.filter(
       word => word !== correctAnswer
     );
 
-    // Ensure we pick 3 unique incorrect options
-    const chosenIncorrect = shuffleArray(incorrectEnglishOptions).slice(0, 3);
-    
-    // Fallback if not enough unique incorrect options are available globally
-    while (chosenIncorrect.length < 3 && allPossibleEnglishAnswersPool.length > 1) {
-        const randomWord = allPossibleEnglishAnswersPool[Math.floor(Math.random() * allPossibleEnglishAnswersPool.length)];
-        if (randomWord !== correctAnswer && !chosenIncorrect.includes(randomWord)) {
-            chosenIncorrect.push(randomWord);
+    incorrectCandidates = shuffleArray(incorrectCandidates); // Shuffle candidates once
+
+    // Take up to 3 unique incorrect options from the filtered and shuffled candidates
+    for (let i = 0; i < incorrectCandidates.length && chosenIncorrect.length < 3; i++) {
+        if (!chosenIncorrect.includes(incorrectCandidates[i])) { // Ensure uniqueness within chosenIncorrect
+            chosenIncorrect.push(incorrectCandidates[i]);
         }
     }
-    // If still less than 3, add generic placeholders
+
+    // If still not enough unique English words from the provided incorrectOptions,
+    // and if allPossibleEnglishAnswers is available, try to draw from there.
+    // This is a fallback if specific incorrect options are too few.
+    if (chosenIncorrect.length < 3 && allPossibleEnglishAnswers.length > 0) {
+        let genericIncorrectCandidates = allPossibleEnglishAnswers.filter(
+            word => word !== correctAnswer && !chosenIncorrect.includes(word)
+        );
+        genericIncorrectCandidates = shuffleArray(genericIncorrectCandidates);
+
+        for (let i = 0; i < genericIncorrectCandidates.length && chosenIncorrect.length < 3; i++) {
+            chosenIncorrect.push(genericIncorrectCandidates[i]);
+        }
+    }
+
+    // If still not enough, add generic placeholders as a last resort
     while (chosenIncorrect.length < 3) {
       chosenIncorrect.push(`[Meaning ${chosenIncorrect.length + 1}]`);
     }
-
-    const options = shuffleArray([correctAnswer, ...chosenIncorrect]);
-    return options;
   }
+  
+  const options = shuffleArray([correctAnswer, ...chosenIncorrect]);
+  return options;
 };
 
 
@@ -170,21 +184,20 @@ function QuizPage() {
   useEffect(() => {
     if (quizStarted && !quizFinished) {
       let questionsSource = [];
-      let actualNumQuestions = numQuestions; // Default, might be overridden for specific quiz types
-
+      
       if (quizType === 'sentence') {
         questionsSource = allSentences;
       } else if (quizType === 'word') {
         // Use selectedWordBatchForStart for fetching questions when starting the quiz
         questionsSource = wordBatches[selectedWordBatchForStart] || [];
-        actualNumQuestions = questionsSource.length; // Fixed to batch size
       } else if (quizType === 'kannadaQuestion') {
         questionsSource = kannadaQuestionsData;
-        actualNumQuestions = questionsSource.length; // Fixed to data length
       } else if (quizType === 'minimalLearning') {
         questionsSource = minimalLearningSentences;
-        actualNumQuestions = questionsSource.length; // Fixed to data length
       }
+
+      // Ensure numQuestions does not exceed available questions
+      const actualNumQuestions = Math.min(numQuestions, questionsSource.length);
 
       setSessionQuestions(getRandomQuestions(questionsSource, actualNumQuestions));
       setCurrentQuestionIndex(0); // Reset question index for new quiz/batch
@@ -197,10 +210,13 @@ function QuizPage() {
   const options = useMemo(() => {
     if (currentQuestion) {
       if (quizType === 'sentence' || quizType === 'minimalLearning') {
+        // Pass quizType, correctAnswer (Kannada), and relevant incorrect options array
         return generateOptions(quizType, currentQuestion.kannada, currentQuestion.incorrectOptions);
       } else { // quizType === 'word' || quizType === 'kannadaQuestion'
-        // 'allPossibleEnglishAnswers' is a static import, so it doesn't need to be in the dependency array
-        return generateOptions(quizType, currentQuestion.english, [], allPossibleEnglishAnswers);
+        // Pass quizType, correctAnswer (English), AND currentQuestion.incorrectOptions (now present in wordBatches)
+        // Note: The previous logic for allPossibleEnglishAnswersPool is removed from here
+        // as incorrectOptions are now directly in the wordBatches data structure.
+        return generateOptions(quizType, currentQuestion.english, currentQuestion.incorrectOptions);
       }
     }
     return [];
@@ -279,32 +295,28 @@ function QuizPage() {
       return;
     }
 
-    let maxQuestions;
+    let maxQuestionsForSelectedType;
     if (quizType === 'sentence') {
-      maxQuestions = allSentences.length;
+      maxQuestionsForSelectedType = allSentences.length;
     } else if (quizType === 'word') {
-      // Use selectedWordBatchForStart for the maxQuestions here
-      maxQuestions = wordBatches[selectedWordBatchForStart].length;
+      maxQuestionsForSelectedType = wordBatches[selectedWordBatchForStart].length;
     } else if (quizType === 'kannadaQuestion') {
-        maxQuestions = kannadaQuestionsData.length;
+      maxQuestionsForSelectedType = kannadaQuestionsData.length;
     } else if (quizType === 'minimalLearning') {
-        maxQuestions = minimalLearningSentences.length;
+      maxQuestionsForSelectedType = minimalLearningSentences.length;
     }
 
-    // Set numQuestions to fixed batch/data length for Word, Kannada Question, and Minimal Learning quizzes
-    let adjustedNumQuestions = numQuestions;
-    if (quizType === 'word' || quizType === 'kannadaQuestion' || quizType === 'minimalLearning') {
-        adjustedNumQuestions = maxQuestions;
-    }
+    // Ensure requested numQuestions does not exceed available for the chosen type
+    const finalNumQuestions = Math.min(numQuestions, maxQuestionsForSelectedType);
 
-    if (adjustedNumQuestions > 0 && adjustedNumQuestions <= maxQuestions) {
-      setNumQuestions(adjustedNumQuestions); // Update numQuestions state
+    if (finalNumQuestions > 0) {
+      setNumQuestions(finalNumQuestions); // Update numQuestions state with the final capped value
       setQuizStarted(true);
       setQuizFinished(false);
       setQuizStartTime(Date.now());
       // sessionQuestions will be set by the useEffect now
     } else {
-      alert(`Please enter a number between 1 and ${maxQuestions} for the number of questions.`);
+      alert(`Please enter a number between 1 and ${maxQuestionsForSelectedType} for the number of questions.`);
     }
   };
 
@@ -345,17 +357,22 @@ function QuizPage() {
       } else {
         // Quiz batch finished logic
         if (quizType === 'word') {
-          const percentage = (score / sessionQuestions.length) * 100;
-          if (percentage >= 80) {
-            if (selectedWordBatchForStart < wordBatches.length - 1) { // Check selected batch, not currentWordBatchIndex
+          const totalQuestionsInBatch = wordBatches[selectedWordBatchForStart].length;
+          const percentage = (score / totalQuestionsInBatch) * 100;
+
+          // Condition to unlock next batch:
+          // 1. User must have attempted ALL questions in the *actual batch* (not just the sessionQuestions subset if it was restricted)
+          // 2. User must score 80% or higher on the entire batch.
+          if (sessionQuestions.length === totalQuestionsInBatch && percentage >= 80) {
+            if (selectedWordBatchForStart < wordBatches.length - 1) {
               // Unlock next batch and proceed
               setUnlockedWordBatches(prev => {
-                if (!prev.includes(selectedWordBatchForStart + 1)) { // Use selectedWordBatchForStart
+                if (!prev.includes(selectedWordBatchForStart + 1)) {
                   return [...prev, selectedWordBatchForStart + 1];
                 }
                 return prev;
               });
-              alert(`Congratulations! You scored ${percentage.toFixed(0)}%. Batch ${selectedWordBatchForStart + 1} completed! Moving to the next batch.`);
+              alert(`Congratulations! You scored ${percentage.toFixed(0)}% on Batch ${selectedWordBatchForStart + 1}. The next batch is now unlocked!`);
               setSelectedWordBatchForStart(prevIndex => prevIndex + 1); // Move to next batch to be loaded
               setQuizStarted(false); // Go back to start screen to show results and new batch selection
               setQuizFinished(true); // Show results for current batch
@@ -364,7 +381,14 @@ function QuizPage() {
               alert(`Congratulations! You scored ${percentage.toFixed(0)}%. You have completed all available word batches!`);
             }
           } else {
-            alert(`You scored ${percentage.toFixed(0)}%. You need at least 80% to unlock the next batch. Please repeat this batch to improve.`);
+            let message = `You scored ${percentage.toFixed(0)}% on Batch ${selectedWordBatchForStart + 1}.`;
+            if (sessionQuestions.length < totalQuestionsInBatch) {
+                message += ` To unlock the next batch, you must complete all ${totalQuestionsInBatch} questions in this batch.`;
+            }
+            if (percentage < 80) {
+                message += ` You need at least 80% to unlock the next batch. Please repeat this batch to improve.`;
+            }
+            alert(message);
             setQuizStarted(false); // Go back to start screen to allow repeating the batch
             setQuizFinished(true); // Show results for current batch
           }
@@ -399,13 +423,13 @@ function QuizPage() {
       synth.cancel();
     }
     setQuizStarted(false);
+    // studentName is retained, no change here
     setNumQuestions(50); // Reset to default
     setCurrentQuestionIndex(0);
     setScore(0);
     setSelectedOption(null);
     setQuizFinished(false);
     setSessionQuestions([]);
-    setStudentName('');
     setQuizStartTime(null);
     setQuizDuration('');
     setUnlockedWordBatches([0]); // Only first batch unlocked on full reset
@@ -487,17 +511,32 @@ function QuizPage() {
     setQuizType(newQuizType);
     setSelectedWordBatchForStart(0); // Reset selected batch when quiz type changes
 
-    // Adjust numQuestions based on the new quiz type
+    // Set numQuestions to a sensible default for the new quiz type
+    // This allows the user to then adjust it if they wish, up to max available.
     if (newQuizType === 'sentence') {
-      setNumQuestions(50); // Default for sentences
+      setNumQuestions(Math.min(50, allSentences.length));
     } else if (newQuizType === 'word') {
-      setNumQuestions(wordBatches[0].length); // Default to first word batch size
+      setNumQuestions(Math.min(50, wordBatches[0].length)); // Default to first batch, capped at its size
     } else if (newQuizType === 'kannadaQuestion') {
-      setNumQuestions(kannadaQuestionsData.length);
+      setNumQuestions(Math.min(50, kannadaQuestionsData.length));
     } else if (newQuizType === 'minimalLearning') {
-      setNumQuestions(minimalLearningSentences.length);
+      setNumQuestions(Math.min(50, minimalLearningSentences.length));
     }
   };
+
+  // Determine the max questions allowed for the current quiz type
+  const maxQuestionsForCurrentType = useMemo(() => {
+    if (quizType === 'sentence') {
+      return allSentences.length;
+    } else if (quizType === 'word') {
+      return wordBatches[selectedWordBatchForStart].length;
+    } else if (quizType === 'kannadaQuestion') {
+      return kannadaQuestionsData.length;
+    } else if (quizType === 'minimalLearning') {
+      return minimalLearningSentences.length;
+    }
+    return 0; // Should not happen
+  }, [quizType, selectedWordBatchForStart]);
 
 
   return (
@@ -538,23 +577,19 @@ function QuizPage() {
             </select>
           </div>
 
-          {quizType === 'sentence' && (
-            <>
-              <p>Choose how many questions you want to practice:</p>
-              <div className="input-group">
-                <input
-                  type="number"
-                  min="1"
-                  max={allSentences.length}
-                  value={numQuestions}
-                  onChange={(e) => setNumQuestions(Math.min(Number(e.target.value), allSentences.length))}
-                  className="num-questions-input"
-                />
-                <span className="available-sentences">(Available: {allSentences.length} sentences)</span>
-              </div>
-              <button onClick={handleStartQuiz} className="start-button">Start Sentence Quiz</button>
-            </>
-          )}
+          {/* This section for number of questions is now always visible */}
+          <p>Choose how many questions you want to practice:</p>
+          <div className="input-group">
+            <input
+              type="number"
+              min="1"
+              max={maxQuestionsForCurrentType} /* Dynamically set max based on quiz type */
+              value={numQuestions}
+              onChange={(e) => setNumQuestions(Math.max(1, Math.min(Number(e.target.value), maxQuestionsForCurrentType)))}
+              className="num-questions-input"
+            />
+            <span className="available-sentences">(Available: {maxQuestionsForCurrentType} questions)</span>
+          </div>
 
           {quizType === 'word' && (
             <>
@@ -567,7 +602,7 @@ function QuizPage() {
                     onClick={() => handleBatchSelect(index)}
                     disabled={!unlockedWordBatches.includes(index)}
                   >
-                    Batch {index + 1} {unlockedWordBatches.includes(index) ? '' : '🔒'}
+                    Batch {index + 1} {unlockedWordBatches.includes(index) ? '' : '�'}
                   </button>
                 ))}
               </div>
@@ -578,24 +613,15 @@ function QuizPage() {
             </>
           )}
 
-          {(quizType === 'kannadaQuestion' || quizType === 'minimalLearning') && (
-            <>
-                <p>This quiz type has a fixed number of questions for learning.</p>
-                <div className="input-group">
-                    <input
-                        type="number"
-                        value={numQuestions} // This will display the fixed number
-                        readOnly // Make it read-only
-                        className="num-questions-input"
-                    />
-                    <span className="available-sentences">
-                        (Available: {quizType === 'kannadaQuestion' ? kannadaQuestionsData.length : minimalLearningSentences.length} questions)
-                    </span>
-                </div>
-                <button onClick={handleStartQuiz} className="start-button">
-                    Start {quizType === 'kannadaQuestion' ? "Kannada Question Quiz" : "Kannada Lesson Quiz"}
-                </button>
-            </>
+          {/* The start button for other quiz types (Sentence, Kannada Question, Minimal Learning) */}
+          {(quizType !== 'word') && (
+            <button onClick={handleStartQuiz} className="start-button">
+              Start {
+                quizType === 'sentence' ? "Sentence Quiz" :
+                quizType === 'kannadaQuestion' ? "Kannada Question Quiz" :
+                "Kannada Lesson Quiz"
+              }
+            </button>
           )}
         </div>
       )}
@@ -690,7 +716,8 @@ function QuizPage() {
           </div>
           <p className="tts-help-info">
             *If "Listen to Learn" doesn't work, ensure your browser's text-to-speech is enabled and a Kannada voice is installed (check browser/OS settings).<br/>
-            For Word Quiz: ensure the selected batch is green (unlocked) to play. Score 80% to unlock next batch.
+            For Word Quiz: ensure the selected batch is green (unlocked) to play. Score 80% to unlock next batch.<br/>
+            For all quizzes, you can now choose the number of questions.
           </p>
           <div className="author-info">
             Author: Ragu Kattinakere <br/>
