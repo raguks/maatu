@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import './MaatuQuizPage.css';
 
 // Dynamically load html2canvas library for image downloading
-// This creates a script tag and appends it to the document body.
 const loadScript = (src) => {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
@@ -807,7 +806,7 @@ const allSentences = [
     english: "What's the food, Amma?",
     kannada: "ಅಮ್ಮಾ, ಊಟಕ್ಕೆ ಏನು?",
     incorrectOptions: ["ಅಮ್ಮಾ, ಎಲ್ಲಿ?", "ಅಮ್ಮಾ, ಯಾವಾಗ?", "ಅಮ್ಮಾ, ಏನು ಮಾಡ್ತಾ ಇದ್ದೀಯಾ?", "ಊಟಕ್ಕೆ ಏನು?"],
-    romanKannada: "ammā, ūṭakke ēnu!"
+    romanKannada: "ammā, ūṭakke ēnu?"
   },
   {
     english: "Can you give me Froot Loops or Maggi?",
@@ -1078,6 +1077,654 @@ const allSentences = [
     kannada: "ನನ್ನ ಕೂದಲು ಕಟ್ಟುತ್ತೀಯಾ",
     incorrectOptions: ["ನನ್ನ ಕೂದಲು ಬಿಡು", "ನನ್ನ ಕೂದಲು ಬಾಚು", "ಕೂದಲು ಎಲ್ಲಿದೆ?", "ನನ್ನ ಕೂದಲು ಬೇಕು"],
     romanKannada: "nanna kūdalu kaṭṭuttīyā"
+  },
+  {
+    english: "Come on",
+    kannada: "ಬನ್ನಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "banni"
+  },
+  {
+    english: "Forgive me",
+    kannada: "ಕ್ಷಮಿಸಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "kshamisi"
+  },
+  {
+    english: "Are you coming with me?",
+    kannada: "ನನ್ನ ಜೊತೆ ಬರ್ತೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna jothe barthira?"
+  },
+  {
+    english: "I don’t have time",
+    kannada: "ನನಗೆ ಸಮಯ ಇಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage samaya illa"
+  },
+  {
+    english: "What do you think?",
+    kannada: "ನಿಮ್ಮ ಅಭಿಪ್ರಾಯ ಏನು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma abhipraya enu?"
+  },
+  {
+    english: "It doesn’t matter.",
+    kannada: "ಪರವಾಗಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "parvagilla"
+  },
+  {
+    english: "What are your hobbies?",
+    kannada: "ನಿಮ್ಮ ಹವ್ಯಾಸಗಳು ಯಾವುವು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma havyasagalu yavuvu?"
+  },
+  {
+    english: "What do you need?",
+    kannada: "ನಿಮಗೆ ಏನು ಬೇಕು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage enu beku?"
+  },
+  {
+    english: "Absolutely not.",
+    kannada: "ಖಂಡಿತ ಇಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "khanditha illa"
+  },
+  {
+    english: "I admire you",
+    kannada: "ನಾನು ನಿಮ್ಮನ್ನು ಮೆಚ್ಚುತ್ತೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu nimmanu mechuttene"
+  },
+  {
+    english: "Is all good?",
+    kannada: "ಎಲ್ಲಾ ಚೆನ್ನಾಗಿದೆಯಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "ella chennagiddeya?"
+  },
+  {
+    english: "I knew it.",
+    kannada: "ನನಗೆ ಗೊತ್ತಿತ್ತು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage gothithu"
+  },
+  {
+    english: "It’s ok",
+    kannada: "ಸರಿ ಇದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "sari ide"
+  },
+  {
+    english: "I decline!",
+    kannada: "ನನಗೆ ಬೇಡ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage beda"
+  },
+  {
+    english: "What is your job?",
+    kannada: "ನಿಮ್ಮ ಕೆಲಸ ಏನು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma kelasa enu?"
+  },
+  {
+    english: "Come with me",
+    kannada: "ನನ್ನ ಜೊತೆ ಬನ್ನಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna jothe banni"
+  },
+  {
+    english: "I do not understand",
+    kannada: "ನನಗೆ ಅರ್ಥವಾಗುತ್ತಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage arthavaguttilla"
+  },
+  {
+    english: "I agree.",
+    kannada: "ನಾನು ಒಪ್ಪುತ್ತೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu opputtene"
+  },
+  {
+    english: "When is the train leaving?",
+    kannada: "ರೈಲು ಯಾವಾಗ ಹೊರಡುತ್ತದೆ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "railu yavaga horaduttade?"
+  },
+  {
+    english: "I love you.",
+    kannada: "ನಾನು ನಿನ್ನನ್ನು ಪ್ರೀತಿಸುತ್ತೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu ninnanu preetisuttene"
+  },
+  {
+    english: "Stop making such a noise",
+    kannada: "ಗಲಾಟೆ ಮಾಡಬೇಡ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "galate madabeda"
+  },
+  {
+    english: "Do you need anything?",
+    kannada: "ನಿಮಗೆ ಏನಾದರೂ ಬೇಕಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage enadaru beka?"
+  },
+  {
+    english: "Don’t move!",
+    kannada: "ಕದಲಬೇಡ!",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "kadala beda!"
+  },
+  {
+    english: "Do me a favor",
+    kannada: "ನನಗೊಂದು ಸಹಾಯ ಮಾಡು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanagondu sahaya madu"
+  },
+  {
+    english: "I’m sorry.",
+    kannada: "ಕ್ಷಮಿಸಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "kshamisi"
+  },
+  {
+    english: "I got it.",
+    kannada: "ನನಗೆ ಅರ್ಥವಾಯಿತು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage arthavayithu"
+  },
+  {
+    english: "Where are you going?",
+    kannada: "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "ellige hogtha iddeera?"
+  },
+  {
+    english: "I am tired.",
+    kannada: "ನನಗೆ ಸುಸ್ತಾಗಿದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage susthagide"
+  },
+  {
+    english: "It really takes time",
+    kannada: "ಅದು ನಿಜಕ್ಕೂ ಸಮಯ ತೆಗೆದುಕೊಳ್ಳುತ್ತದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "adu nijakku samaya tegedukolluttade"
+  },
+  {
+    english: "So I do",
+    kannada: "ಹಾಗೆ ಮಾಡ್ತೀನಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "hage madtini"
+  },
+  {
+    english: "So so",
+    kannada: "ಸುಮಾರಾಗಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "sumaragii"
+  },
+  {
+    english: "Forget it",
+    kannada: "ಮರೆತುಬಿಡು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "marethubidu"
+  },
+  {
+    english: "How much is it?",
+    kannada: "ಎಷ್ಟು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "eshtu?"
+  },
+  {
+    english: "Join me.",
+    kannada: "ನನ್ನ ಜೊತೆ ಸೇರಿಕೊಳ್ಳಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna jothe serikolli"
+  },
+  {
+    english: "Any day will do",
+    kannada: "ಯಾವ ದಿನವಾದರೂ ಸರಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "yava dinavadaru sari"
+  },
+  {
+    english: "Give me a hand",
+    kannada: "ಸಹಾಯ ಮಾಡಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "sahaya maadi"
+  },
+  {
+    english: "Talk to you tomorrow.",
+    kannada: "ನಾಳೆ ಮಾತಾಡ್ತೀನಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nale matadtini"
+  },
+  {
+    english: "They like each other.",
+    kannada: "ಅವರು ಒಬ್ಬರನ್ನೊಬ್ಬರು ಇಷ್ಟಪಡುತ್ತಾರೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "avaru obbarannobbaru ishtapaduttare"
+  },
+  {
+    english: "Be calm",
+    kannada: "ಶಾಂತವಾಗಿರಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "shantavagiri"
+  },
+  {
+    english: "Where did you get it?",
+    kannada: "ನಿಮಗೆ ಎಲ್ಲಿ ಸಿಕ್ಕಿತು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage elli sikithu?"
+  },
+  {
+    english: "Can you please repeat that?",
+    kannada: "ದಯವಿಟ್ಟು ಇನ್ನೊಮ್ಮೆ ಹೇಳ್ತೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "dayavittu innomme helthira?"
+  },
+  {
+    english: "Where are you?",
+    kannada: "ಎಲ್ಲಿದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "elliddeera?"
+  },
+  {
+    english: "What are you doing?",
+    kannada: "ಏನು ಮಾಡ್ತಾ ಇದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "enu madtha iddeera?"
+  },
+  {
+    english: "I am busy.",
+    kannada: "ನನಗೆ ಕೆಲಸ ಇದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage kelasa ide"
+  },
+  {
+    english: "How long will you stay?",
+    kannada: "ಎಷ್ಟು ದಿನ ಇರ್ತೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "eshtu dina irthira?"
+  },
+  {
+    english: "Call me back.",
+    kannada: "ನನಗೆ ಮತ್ತೆ ಫೋನ್ ಮಾಡಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage matthe phone maadi"
+  },
+  {
+    english: "Are you kidding?",
+    kannada: "ನೀವು ತಮಾಷೆ ಮಾಡ್ತಿದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "neevu tamashe madthira?"
+  },
+  {
+    english: "Allow me",
+    kannada: "ನನಗೆ ಬಿಡಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage bidi"
+  },
+  {
+    english: "How was your weekend?",
+    kannada: "ನಿಮ್ಮ ವಾರಾಂತ್ಯ ಹೇಗಿತ್ತು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma varanthya hegiithu?"
+  },
+  {
+    english: "It’s very thoughtful of you",
+    kannada: "ನಿಮ್ಮ ಯೋಚನೆ ತುಂಬಾ ಒಳ್ಳೆಯದು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma yochane thumba olleyadu"
+  },
+  {
+    english: "Let’s catch up!",
+    kannada: "ಮಾತಾಡೋಣ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "mathadonna"
+  },
+  {
+    english: "What’s your phone number?",
+    kannada: "ನಿಮ್ಮ ಫೋನ್ ನಂಬರ್ ಏನು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma phone number enu?"
+  },
+  {
+    english: "No, I don’t want",
+    kannada: "ಇಲ್ಲ, ನನಗೆ ಬೇಡ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "illa, nanage beda"
+  },
+  {
+    english: "I’m at home",
+    kannada: "ನಾನು ಮನೆಯಲ್ಲಿದ್ದೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu maneyalliddeene"
+  },
+  {
+    english: "I hope so.",
+    kannada: "ಹಾಗೆ ಆಶಿಸುತ್ತೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "hage asisuttene"
+  },
+  {
+    english: "I’m sorry",
+    kannada: "ಕ್ಷಮಿಸಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannana: "kshamisi"
+  },
+  {
+    english: "Did you get it?",
+    kannada: "ನಿಮಗೆ ಅರ್ಥವಾಯಿತಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage arthavayitha?"
+  },
+  {
+    english: "How are you?",
+    kannada: "ನೀವು ಹೇಗಿದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "neevu hegeedira?"
+  },
+  {
+    english: "Don’t worry",
+    kannada: "ಚಿಂತಿಸಬೇಡಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannana: "chintisabedi"
+  },
+  {
+    english: "Anything else?",
+    kannada: "ಬೇರೆ ಏನಾದರೂ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "bere enadaru?"
+  },
+  {
+    english: "Have a good weekend",
+    kannada: "ವಾರಾಂತ್ಯ ಚೆನ್ನಾಗಿರಲಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "varanthya chennagirali"
+  },
+  {
+    english: "Where do you live?",
+    kannada: "ಎಲ್ಲಿ ವಾಸವಾಗಿದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "elli vasavagiddeera?"
+  },
+  {
+    english: "God bless you",
+    kannada: "ದೇವರು ಆಶೀರ್ವದಿಸಲಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "devaru ashirvadisali"
+  },
+  {
+    english: "Is everything OK?",
+    kannada: "ಎಲ್ಲಾ ಸರಿ ಇದೆಯಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "ella sari iddeya?"
+  },
+  {
+    english: "It’s on the tip of my tongue",
+    kannada: "ನನ್ನ ನಾಲಿಗೆ ತುದಿಯಲ್ಲಿದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna nalige thudiyallide"
+  },
+  {
+    english: "Do you understand me?",
+    kannada: "ನಿನಗೆ ಅರ್ಥವಾಯಿತಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "ninage arthavayitha?"
+  },
+  {
+    english: "Believe me.",
+    kannada: "ನನ್ನನ್ನು ನಂಬಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nannanu nambi"
+  },
+  {
+    english: "I can’t wait",
+    kannada: "ನನಗೆ ಕಾಯಲು ಸಾಧ್ಯವಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage kayalu sadhyavilla"
+  },
+  {
+    english: "I don’t agree.",
+    kannada: "ನಾನು ಒಪ್ಪುವುದಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu oppuvudilla"
+  },
+  {
+    english: "Do i have to?",
+    kannada: "ನಾನು ಮಾಡಬೇಕಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu madabeka?"
+  },
+  {
+    english: "How are things going?",
+    kannada: "ಹೇಗಿದೆ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "hegide?"
+  },
+  {
+    english: "What are you talking about?",
+    kannada: "ಏನು ಮಾತಾಡ್ತಾ ಇದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "enu mathadtha iddeera?"
+  },
+  {
+    english: "What did you say?",
+    kannada: "ಏನು ಹೇಳಿದಿರಿ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "enu helidiri?"
+  },
+  {
+    english: "What’s your e-mail address?",
+    kannada: "ನಿಮ್ಮ ಇ-ಮೇಲ್ ವಿಳಾಸ ಏನು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma e-mail vilasa enu?"
+  },
+  {
+    english: "You are wasting my time.",
+    kannada: "ನನ್ನ ಸಮಯ ವ್ಯರ್ಥ ಮಾಡಬೇಡ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna samaya vyartha madabeda"
+  },
+  {
+    english: "What are you up to?",
+    kannada: "ಏನು ಮಾಡ್ತಾ ಇದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "enu madtha iddeera?"
+  },
+  {
+    english: "I have no idea.",
+    kannada: "ನನಗೆ ಗೊತ್ತಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage gothilla"
+  },
+  {
+    english: "Where are you from?",
+    kannada: "ನೀವು ಎಲ್ಲಿಂದ ಬಂದಿದ್ದೀರಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "neevu ellinda bandiddeera?"
+  },
+  {
+    english: "Slow down",
+    kannada: "ನಿಧಾನವಾಗಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nidhanavagi"
+  },
+  {
+    english: "Good afternoon",
+    kannada: "ಶುಭ ಮಧ್ಯಾಹ್ನ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "shubha madhyahna"
+  },
+  {
+    english: "Are you done?",
+    kannada: "ಮುಗಿತಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "mugitha?"
+  },
+  {
+    english: "You turn.",
+    kannada: "ನಿಮ್ಮ ಸರದಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma saradi"
+  },
+  {
+    english: "How do you feel?",
+    kannada: "ನಿಮಗೆ ಹೇಗನಿಸುತ್ತಿದೆ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage heganisuttide?"
+  },
+  {
+    english: "What’s your name?",
+    kannada: "ನಿಮ್ಮ ಹೆಸರು ಏನು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimma hesaru enu?"
+  },
+  {
+    english: "What’s the weather like?",
+    kannada: "ಹವಾಮಾನ ಹೇಗಿದೆ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "havamana hegide?"
+  },
+  {
+    english: "Not yet.",
+    kannada: "ಇನ್ನೂ ಇಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "innu illa"
+  },
+  {
+    english: "Can I help you?",
+    kannada: "ನಾನು ಸಹಾಯ ಮಾಡ್ಲಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu sahaya madla?"
+  },
+  {
+    english: "Cheer up!",
+    kannada: "ಖುಷಿಯಾಗಿರು!",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "khushiyagiru!"
+  },
+  {
+    english: "Enjoy yourself",
+    kannada: "ಮಜಾ ಮಾಡಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "maza maadi"
+  },
+  {
+    english: "I apologize",
+    kannada: "ನಾನು ಕ್ಷಮೆಯಾಚಿಸುತ್ತೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu kshamayachisuttene"
+  },
+  {
+    english: "A lovely day, isn’t it?",
+    kannada: "ಚೆನ್ನಾದ ದಿನ ಅಲ್ವಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "chennada dina alwa?"
+  },
+  {
+    english: "See you next time",
+    kannada: "ಮುಂದಿನ ಬಾರಿ ಸಿಗೋಣ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "mundina bari sigonna"
+  },
+  {
+    english: "Shut up",
+    kannada: "ಬಾಯಿ ಮುಚ್ಚು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannana: "bayi mucchu"
+  },
+  {
+    english: "Are you sure?",
+    kannada: "ಖಚಿತವಾ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "khachithava?"
+  },
+  {
+    english: "Be careful!",
+    kannada: "ಎಚ್ಚರಿಕೆಯಿಂದ ಇರಿ!",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "eccharikeyinda iri!"
+  },
+  {
+    english: "What do you want?",
+    kannada: "ನಿಮಗೆ ಏನು ಬೇಕು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimage enu beku?"
+  },
+  {
+    english: "Don’t be so childish",
+    kannada: "ಮಕ್ಕಳ ತರ ಇರಬೇಡ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "makkala thara irabeda"
+  },
+  {
+    english: "Be quiet!",
+    kannada: "ಸುಮ್ಮನಿರಿ!",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "summaniri!"
+  },
+  {
+    english: "You are going too fast",
+    kannada: "ನೀವು ತುಂಬಾ ವೇಗವಾಗಿ ಹೋಗ್ತಾ ಇದ್ದೀರಾ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನ ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "neevu thumba vegavagi hogtha iddeera"
+  },
+  {
+    english: "I’m good.",
+    kannada: "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu chennagiddeene"
+  },
+  {
+    english: "I hate you!",
+    kannada: "ನಾನು ನಿನ್ನನ್ನು ದ್ವೇಷಿಸುತ್ತೇನೆ!",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanu ninnanu dweshisuttene!"
+  },
+  {
+    english: "What is going on?",
+    kannada: "ಏನು ನಡೀತಾ ಇದೆ?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "enu naditha ide?"
+  },
+  {
+    english: "Thank you very much.",
+    kannada: "ತುಂಬಾ ಧನ್ಯವಾದಗಳು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannana: "thumba dhanyavadagalu"
+  },
+  {
+    english: "How can I go to the town center?",
+    kannada: "ನಗರ ಕೇಂದ್ರಕ್ಕೆ ಹೇಗೆ ಹೋಗಬೇಕು?",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nagara kendrakke hege hogabeku?"
+  },
+  {
+    english: "I do not mean it",
+    kannada: "ನನ್ನ ಉದ್ದೇಶ ಅದು ಆಗಿರಲಿಲ್ಲ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanna uddesha adu agirallilla"
+  },
+  {
+    english: "Have a good trip",
+    kannada: "ಪ್ರಯಾಣ ಸುಖಕರವಾಗಿರಲಿ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "prayanna sukhakaravagirali"
+  },
+  {
+    english: "Nice to meet you.",
+    kannada: "ನಿಮ್ಮನ್ನು ಭೇಟಿಯಾದದ್ದು ಸಂತೋಷವಾಯಿತು",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nimmanu bhetiyadaddu santhosavathu"
+  },
+  {
+    english: "I would love to.",
+    kannada: "ನನಗೆ ಇಷ್ಟವಾಗುತ್ತದೆ",
+    incorrectOptions: ["ನೀನು ಎಲ್ಲಿದ್ದೀಯಾ?", "ಏನು ಮಾಡ್ತಿದ್ದೀಯಾ?", "ನಾನು ಚೆನ್ನಾಗಿದ್ದೇನೆ?", "ಎಲ್ಲಿಗೆ ಹೋಗ್ತಾ ಇದ್ದೀರಾ?"],
+    romanKannada: "nanage ishtavaguttade"
   }
 ];
 
@@ -1250,8 +1897,94 @@ const wordBatches = [
   ]
 ];
 
-// Flatten all word batches to get a comprehensive list of English words for distractors
-const allEnglishWords = Array.from(new Set(wordBatches.flat().map(w => w.english)));
+// --- New Kannada Question Data ---
+const kannadaQuestionsData = [
+  { kannada: "ಯಾರು?", romanKannada: "yāru?", english: "Who?", incorrectOptions: ["What?", "When?", "Where?"] },
+  { kannada: "ಏನು?", romanKannada: "ēnu?", english: "What?", incorrectOptions: ["Who?", "Why?", "How?"] },
+  { kannada: "ಯಾಕೆ?", romanKannada: "yāke?", english: "Why?", incorrectOptions: ["What?", "Where?", "How?"] },
+  { kannada: "ಹೇಗೆ?", romanKannada: "hēge?", english: "How?", incorrectOptions: ["Why?", "When?", "Who?"] },
+  { kannada: "ಎಲ್ಲಿ?", romanKannada: "elli?", english: "Where?", incorrectOptions: ["When?", "Why?", "What?"] },
+  { kannada: "ಎಷ್ಟು?", romanKannada: "eṣṭu?", english: "How much?", incorrectOptions: ["How?", "How many?", "What?"] },
+  { kannada: "ಯಾರದ್ದು?", romanKannada: "yāraddu?", english: "Whose?", incorrectOptions: ["Who?", "Which?", "Why?"] },
+  { kannada: "ಯಾವುದು?", romanKannada: "yāvudu?", english: "Which?", incorrectOptions: ["What?", "Who?", "Why?"] },
+  { kannada: "ಯಾವ?", romanKannada: "yāva?", english: "Which (one)?", incorrectOptions: ["Who?", "What?", "When?"] },
+  { kannada: "ಯಾವಾಗ?", romanKannada: "yāvāga?", english: "When?", incorrectOptions: ["Where?", "How?", "Why?"] },
+  { kannada: "ಸರಿಯಾ?", romanKannada: "sariyā?", english: "Is it right?", incorrectOptions: ["Is it wrong?", "Is it good?", "Is it bad?"] },
+  { kannada: "ತಪ್ಪಾ?", romanKannada: "tappā?", english: "Is it wrong?", incorrectOptions: ["Is it right?", "Is it good?", "Is it okay?"] },
+  { kannada: "ಇದಾ?", romanKannada: "idā?", english: "This one?", incorrectOptions: ["That one?", "Which one?", "Any one?"] },
+  { kannada: "ಅದಾ?", romanKannada: "adā?", english: "That one?", incorrectOptions: ["This one?", "Which one?", "Some one?"] },
+  { kannada: "ಆಯಿತಾ?", romanKannada: "āyitā?", english: "Is it done?", incorrectOptions: ["Is it starting?", "Is it finished?", "Is it ready?"] },
+  { kannada: "ಮಾಡ್ತಾ ಇದ್ದೀರಾ?", romanKannada: "māḍtā iddīrā?", english: "Are you doing?", incorrectOptions: ["Are you coming?", "Are you going?", "Are you eating?"] },
+  { kannada: "ಓಡ್ತಾ ಇದ್ದೀರಾ?", romanKannada: "ōḍtā iddīrā?", english: "Are you running?", incorrectOptions: ["Are you walking?", "Are you sitting?", "Are you eating?"] },
+  { kannada: "ಮಳೆ ಬರುತ್ತಾ?", romanKannada: "maḷe baruttā?", english: "Does it rain?", incorrectOptions: ["Does it snow?", "Is it hot?", "Is it cold?"] },
+  { kannada: "ಹಿಮ ಬೀಳುತ್ತಾ?", romanKannada: "hima bīḷuttā?", english: "Does snow fall?", incorrectOptions: ["Does it rain?", "Is it windy?", "Is it sunny?"] },
+  { kannada: "ಹಾಡುತ್ತೀಯಾ?", romanKannada: "hāḍuttīyā?", english: "Will you sing?", incorrectOptions: ["Will you dance?", "Will you play?", "Will you read?"] },
+  { kannada: "ಓಡುತ್ತೀಯಾ?", romanKannada: "ōḍuttīyā?", english: "Will you run?", incorrectOptions: ["Will you walk?", "Will you jump?", "Will you eat?"] },
+  { kannada: "ನೋಡಿದೀಯಾ?", romanKannada: "nōḍidīyā?", english: "Have you seen it?", incorrectOptions: ["Have you heard it?", "Have you done it?", "Have you eaten it?"] },
+  { kannada: "ಬೇಕಾ?", romanKannada: "bēkā?", english: "Do you want it?", incorrectOptions: ["Do you need it?", "Do you have it?", "Do you like it?"] },
+  { kannada: "ಬೇಡವಾ?", romanKannada: "bēḍavā?", english: "Do you not want it?", incorrectOptions: ["Do you want it?", "Do you need it?", "Do you like it?"] },
+  { kannada: "ಹೌದಾ?", romanKannada: "haudā?", english: "Is that so?", incorrectOptions: ["Is that false?", "Is that right?", "Is that wrong?"] },
+  { kannada: "ಅಲ್ವಾ?", romanKannada: "alvā?", english: "Is that not so?", incorrectOptions: ["Is that so?", "Is it right?", "Is it wrong?"] },
+];
+
+// --- New Minimal Learning Sentences Data ---
+const minimalLearningSentences = [
+  // Pronouns & Basic Verbs (Present Tense)
+  { english: "I eat.", kannada: "ನಾನು ತಿನ್ನುತ್ತೇನೆ.", incorrectOptions: ["ನಾನು ಓದುತ್ತೇನೆ.", "ನಾನು ಕುಡಿಯುತ್ತೇನೆ.", "ನಾನು ಹೋಗುತ್ತೇನೆ."], romanKannada: "nānu tinnuttēne." },
+  { english: "You (formal) go.", kannada: "ನೀವು ಹೋಗುತ್ತೀರಾ.", incorrectOptions: ["ನೀನು ಹೋಗುತ್ತೀಯಾ.", "ನೀವು ಬರುತ್ತೀರಾ.", "ನೀವು ತಿನ್ನುತ್ತೀರಾ."], romanKannada: "nīvu hōguttīrā." },
+  { english: "You (informal) come.", kannada: "ನೀನು ಬರುತ್ತೀಯಾ.", incorrectOptions: ["ನೀನು ಹೋಗುತ್ತೀಯಾ.", "ನೀನು ತಿನ್ನುತ್ತೀಯಾ.", "ನೀನು ಓದುತ್ತೀಯಾ."], romanKannada: "nīnu baruttīyā." },
+  { english: "He drinks water.", kannada: "ಅವನು ನೀರು ಕುಡಿಯುತ್ತಾನೆ.", incorrectOptions: ["ಅವಳು ನೀರು ಕುಡಿಯುತ್ತಾಳೆ.", "ಅವನು ಹಾಲು ಕುಡಿಯುತ್ತಾನೆ.", "ಅವನು ನೀರು ಕುಡಿಯಲಿಲ್ಲ."], romanKannada: "avanu nīru kuḍiyuttāne." },
+  { english: "She learns Kannada.", kannada: "ಅವಳು ಕನ್ನಡ ಕಲಿಯುತ್ತಾಳೆ.", incorrectOptions: ["ಅವನು ಕನ್ನಡ ಕಲಿಯುತ್ತಾನೆ.", "ಅವಳು ಇಂಗ್ಲಿಷ್ ಕಲಿಯುತ್ತಾಳೆ.", "ಅವಳು ಕನ್ನಡ ಕಲಿಸಿದಳು."], romanKannada: "avaḷu kannaḍa kaliyuttāḷe." },
+  { english: "It runs.", kannada: "ಅದು ಓಡುತ್ತದೆ.", incorrectOptions: ["ಅದು ನಡೆಯುತ್ತದೆ.", "ಅದು ಕುಳಿತುಕೊಳ್ಳುತ್ತದೆ.", "ಅದು ಮಲಗುತ್ತದೆ."], romanKannada: "adu ōḍuttade." },
+  { english: "We read books.", kannada: "ನಾವು ಪುಸ್ತಕಗಳನ್ನು ಓದುತ್ತೇವೆ.", incorrectOptions: ["ನಾವು ಪುಸ್ತಕಗಳನ್ನು ಬರೆಯುತ್ತೇವೆ.", "ನಾವು ಪಾಠಗಳನ್ನು ಓದುತ್ತೇವೆ.", "ನಾವು ಪುಸ್ತಕಗಳನ್ನು ತಿಂದೆವು."], romanKannada: "nāvu pustakagaḷannu ōduttēve." },
+  { english: "They sleep.", kannada: "ಅವರು ಮಲಗುತ್ತಾರೆ.", incorrectOptions: ["ಅವರು ಏಳುತ್ತಾರೆ.", "ಅವರು ತಿನ್ನುತ್ತಾರೆ.", "ಅವರು ಆಡುತ್ತಾರೆ."], romanKannada: "avaru malaguttāre." },
+
+  // Past Tense
+  { english: "I ate food.", kannada: "ನಾನು ಊಟ ತಿಂದೆ.", incorrectOptions: ["ನಾನು ಊಟ ತಿನ್ನುತ್ತೇನೆ.", "ನಾನು ನೀರು ತಿಂದೆ.", "ನಾನು ತಿನ್ನಲಿಲ್ಲ."], romanKannana: "nānu ūṭa tinde." },
+  { english: "You (formal) came yesterday.", kannada: "ನೀವು ನಿನ್ನೆ ಬಂದಿರಿ.", incorrectOptions: ["ನೀನು ನಿನ್ನೆ ಬಂದೆ.", "ನೀವು ನಾಳೆ ಬರ್ತೀರಾ.", "ನೀವು ಇಂದು ಬಂದಿರಿ."], romanKannana: "nīvu ninne bandiri." },
+  { english: "He spoke.", kannada: "ಅವನು ಮಾತನಾಡಿದ.", incorrectOptions: ["ಅವಳು ಮಾತನಾಡಿದಳು.", "ಅವನು ಮಾತನಾಡುತ್ತಾನೆ.", "ಅವನು ಕೇಳಿದ."], romanKannada: "avanu mātanaḍida." },
+  { english: "She wrote a letter.", kannada: "ಅವಳು ಪತ್ರ ಬರೆದಳು.", incorrectOptions: ["ಅವನು ಪತ್ರ ಬರೆದನು.", "ಅವಳು ಪುಸ್ತಕ ಬರೆದಳು.", "ಅವಳು ಪತ್ರ ಓದಿದಳು."], romanKannada: "avaḷu patra baredaḷu." },
+  { english: "We played.", kannada: "ನಾವು ಆಡಿದೆವು.", incorrectOptions: ["ನಾವು ಓದಿದೆವು.", "ನಾವು ಮಾತನಾಡಿದೆವು.", "ನಾವು ಆಡುತ್ತೇವೆ."], romanKannada: "nāvu āḍidevu." },
+
+  // Future Tense
+  { english: "I will go tomorrow.", kannada: "ನಾನು ನಾಳೆ ಹೋಗುತ್ತೇನೆ.", incorrectOptions: ["ನಾನು ಇಂದು ಹೋಗುತ್ತೇನೆ.", "ನಾನು ನಾಳೆ ಬಂದೆ.", "ನಾನು ನಾಳೆ ಹೋಗಲಿಲ್ಲ."], romanKannana: "nānu nāḷe hōguttēne." },
+  { english: "You (informal) will study.", kannada: "ನೀನು ಓದುತ್ತೀಯಾ.", incorrectOptions: ["ನೀನು ಓದಿದೆ.", "ನೀನು ಆಡುತ್ತೀಯಾ.", "ನೀನು ಓದು."], romanKannada: "nīnu ōduttīyā." },
+  { english: "They will come.", kannada: "ಅವರು ಬರುತ್ತಾರೆ.", incorrectOptions: ["ಅವರು ಬಂದರು.", "ಅವರು ಹೋಗುತ್ತಾರೆ.", "ಅವರು ತಿನ್ನುತ್ತಾರೆ."], romanKannada: "avaru baruttāre." },
+
+  // Numbers (simple usage)
+  { english: "One book.", kannada: "ಒಂದು ಪುಸ್ತಕ.", incorrectOptions: ["ಎರಡು ಪುಸ್ತಕ.", "ಒಂದು ಪೆನ್.", "ಹಲವು ಪುಸ್ತಕ."], romanKannada: "ondu pustaka." },
+  { english: "Two girls.", kannada: "ಎರಡು ಹುಡುಗಿಯರು.", incorrectOptions: ["ಮೂರು ಹುಡುಗಿಯರು.", "ಒಂದು ಹುಡುಗಿ.", "ಎರಡು ಹುಡುಗರು."], romanKannada: "eraḍu huḍugiyaru." },
+  { english: "Three flowers.", kannada: "ಮೂರು ಹೂಗಳು.", incorrectOptions: ["ನಾಲ್ಕು ಹೂಗಳು.", "ಎರಡು ಹೂಗಳು.", "ಮೂರು ಎಲೆಗಳು."], romanKannada: "mūru hūgaḷu." },
+
+  // Prepositions (simple usage)
+  { english: "The book is on the table.", kannada: "ಪುಸ್ತಕ ಮೇಜಿನ ಮೇಲೆ ಇದೆ.", incorrectOptions: ["ಪುಸ್ತಕ ಮೇಜಿನ ಕೆಳಗೆ ಇದೆ.", "ಪುಸ್ತಕ ಮೇಜಿನ ಒಳಗೆ ಇದೆ.", "ಪುಸ್ತಕ ಮೇಜಿನ ಹತ್ತಿರ ಇದೆ."], romanKannada: "pustaka mējina mēle ide." },
+  { english: "The cat is under the chair.", kannada: "ಬೆಕ್ಕು ಕುರ್ಚಿಯ ಕೆಳಗೆ ಇದೆ.", incorrectOptions: ["ಬೆಕ್ಕು ಕುರ್ಚಿಯ ಮೇಲೆ ಇದೆ.", "ಬೆಕ್ಕು ಕುರ್ಚಿಯ ಒಳಗೆ ಇದೆ.", "ಬೆಕ್ಕು ಕುರ್ಚಿಯ ಹಿಂದೆ ಇದೆ."], romanKannada: "bekku kurciya keḷage ide." },
+  { english: "I am in the house.", kannada: "ನಾನು ಮನೆಯಲ್ಲಿ ಇದ್ದೇನೆ.", incorrectOptions: ["ನಾನು ಹೊರಗೆ ಇದ್ದೇನೆ.", "ನಾನು ಶಾಲೆಗೆ ಹೋಗುತ್ತೇನೆ.", "ನಾನು ಮಲಗುತ್ತೇನೆ."], romanKannada: "nānu maneyalli iddēne." },
+  { english: "Come with me.", kannada: "ನನ್ನ ಜೊತೆ ಬಾ.", incorrectOptions: ["ನಿನ್ನ ಜೊತೆ ಬಾ.", "ನನ್ನ ಜೊತೆ ಹೋಗು.", "ನನ್ನ ಜೊತೆ ನಿಲ್ಲು."], romanKannada: "nanna jote bā." },
+  { english: "He came from Bangalore.", kannada: "ಅವನು ಬೆಂಗಳೂರಿನಿಂದ ಬಂದ.", incorrectOptions: ["ಅವನು ಬೆಂಗಳೂರಿಗೆ ಹೋದ.", "ಅವನು ಬೆಂಗಳೂರಿನಲ್ಲಿ ಇದ್ದಾನೆ.", "ಅವನು ಬೆಂಗಳೂರಿನಿಂದ ಬಂದಿಲ್ಲ."], romanKannada: "avanu beṅgaḷūrininda banda." },
+  { english: "Go to school.", kannada: "ಶಾಲೆಗೆ ಹೋಗು.", incorrectOptions: ["ಶಾಲೆಗೆ ಬನ್ನಿ.", "ಮನೆಗೆ ಹೋಗು.", "ಕೆಲಸಕ್ಕೆ ಹೋಗು."], romanKannada: "śālege hōgu." }
+];
+
+
+// Pool of all possible English answers for generating distractors in Word and Kannada Question quizzes
+const allPossibleEnglishAnswers = Array.from(new Set([
+    ...allSentences.map(s => s.english),
+    ...wordBatches.flat().map(w => w.english),
+    ...kannadaQuestionsData.map(q => q.english),
+    ...minimalLearningSentences.map(s => s.english),
+    "Is that so?", "Is it wrong?", "Is it good?", "Is it bad?", "Is it okay?", // Additional common English question meanings
+    "Is it starting?", "Is it finished?", "Is it ready?", "Are you coming?", "Are you going?", "Are you eating?",
+    "Are you walking?", "Are you sitting?", "Are you eating?", "Does it snow?", "Is it hot?", "Is it cold?",
+    "Is it windy?", "Is it sunny?", "Will you dance?", "Will you play?", "Will you read?", "Will you jump?", "Will you eat?",
+    "Have you heard it?", "Have you done it?", "Have you eaten it?", "Do you need it?", "Do you have it?", "Do you like it?",
+    "Is that false?", "Is that right?", "Is that not so?",
+    // Common verbs, adjectives, and nouns to expand distractor pool
+    "run", "walk", "sing", "dance", "play", "sleep", "read", "write", "learn", "teach", "come", "go", "do",
+    "book", "water", "food", "house", "car", "phone", "time", "day", "night", "morning", "evening",
+    "good", "bad", "big", "small", "happy", "sad", "tired", "hungry", "thirsty", "busy", "free",
+    "yes", "no", "okay", "please", "thank you", "sorry", "hello", "goodbye",
+    "on", "in", "under", "over", "with", "from", "to", "at", "before", "after", "here", "there", "this", "that", "any", "some"
+]));
 
 
 // --- Helper Functions (Defined before the component) ---
@@ -1273,10 +2006,10 @@ const getRandomQuestions = (data, count) => {
 };
 
 // Function to generate options for a question
-const generateOptions = (quizType, correctAnswer, allIncorrectOptions, allPossibleEnglishWords = []) => {
-  if (quizType === 'sentence') {
-    // Existing logic for sentence quiz
-    const uniqueIncorrectOptions = allIncorrectOptions.filter(
+const generateOptions = (quizType, correctAnswer, allIncorrectOptionsForKannada, allPossibleEnglishAnswersPool = []) => {
+  if (quizType === 'sentence' || quizType === 'minimalLearning') {
+    // For sentence and minimal learning, prompt is English, options are Kannada
+    const uniqueIncorrectOptions = allIncorrectOptionsForKannada.filter(
       option => option !== correctAnswer
     );
 
@@ -1284,17 +2017,17 @@ const generateOptions = (quizType, correctAnswer, allIncorrectOptions, allPossib
     if (uniqueIncorrectOptions.length >= 3) {
       chosenIncorrect = shuffleArray(uniqueIncorrectOptions).slice(0, 3);
     } else {
-      // Fallback: If not enough unique incorrect options, take all available
-      // and if still less than 3, add generic placeholders to reach 4 total options.
       chosenIncorrect = [...uniqueIncorrectOptions];
+      // Fallback: If not enough unique incorrect options, add generic Kannada placeholders
       while (chosenIncorrect.length < 3) {
-        chosenIncorrect.push(`[Option ${chosenIncorrect.length + 1}]`); // Fallback placeholder
+        chosenIncorrect.push(`[ಆಯ್ಕೆ ${chosenIncorrect.length + 1}]`); // Kannada for "Option"
       }
     }
     const options = shuffleArray([correctAnswer, ...chosenIncorrect]);
     return options;
-  } else { // quizType === 'word'
-    const incorrectEnglishOptions = allPossibleEnglishWords.filter(
+  } else { // quizType === 'word' || quizType === 'kannadaQuestion'
+    // For word and Kannada question, prompt is Kannada, options are English
+    const incorrectEnglishOptions = allPossibleEnglishAnswersPool.filter(
       word => word !== correctAnswer
     );
 
@@ -1302,8 +2035,8 @@ const generateOptions = (quizType, correctAnswer, allIncorrectOptions, allPossib
     const chosenIncorrect = shuffleArray(incorrectEnglishOptions).slice(0, 3);
     
     // Fallback if not enough unique incorrect options are available globally
-    while (chosenIncorrect.length < 3 && allPossibleEnglishWords.length > 1) {
-        const randomWord = allPossibleEnglishWords[Math.floor(Math.random() * allPossibleEnglishWords.length)];
+    while (chosenIncorrect.length < 3 && allPossibleEnglishAnswersPool.length > 1) {
+        const randomWord = allPossibleEnglishAnswersPool[Math.floor(Math.random() * allPossibleEnglishAnswersPool.length)];
         if (randomWord !== correctAnswer && !chosenIncorrect.includes(randomWord)) {
             chosenIncorrect.push(randomWord);
         }
@@ -1322,7 +2055,7 @@ const generateOptions = (quizType, correctAnswer, allIncorrectOptions, allPossib
 // --- React Component ---
 function QuizPage() {
   const [quizStarted, setQuizStarted] = useState(false);
-  const [quizType, setQuizType] = useState('sentence'); // 'sentence' or 'word'
+  const [quizType, setQuizType] = useState('sentence'); // 'sentence', 'word', 'kannadaQuestion', 'minimalLearning'
   const [numQuestions, setNumQuestions] = useState(50); // Default to 50 questions
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -1335,8 +2068,8 @@ function QuizPage() {
 
   // Word Quiz specific states
   const [currentWordBatchIndex, setCurrentWordBatchIndex] = useState(0);
-  // Store unlocked batches, initially only the first one (index 0)
-  const [unlockedWordBatches, setUnlockedWordBatches] = useState([0]);
+  const [unlockedWordBatches, setUnlockedWordBatches] = useState([0]); // Initially only the first batch is unlocked
+  const [selectedWordBatchForStart, setSelectedWordBatchForStart] = useState(0); // Track selected batch for start button
 
   // Use a separate state to store the actual questions for the current quiz session.
   const [sessionQuestions, setSessionQuestions] = useState([]);
@@ -1411,35 +2144,41 @@ function QuizPage() {
   // When the quiz starts or batch changes, populate sessionQuestions
   useEffect(() => {
     if (quizStarted && !quizFinished) {
-      let questionsToUse = [];
-      let actualNumQuestions = numQuestions;
+      let questionsSource = [];
+      let actualNumQuestions = numQuestions; // Default, might be overridden for specific quiz types
 
       if (quizType === 'sentence') {
-        questionsToUse = allSentences;
-      } else { // quizType === 'word'
-        questionsToUse = wordBatches[currentWordBatchIndex] || [];
-        // For word quiz, numQuestions means the size of the batch, which is fixed at 50
-        actualNumQuestions = questionsToUse.length;
+        questionsSource = allSentences;
+      } else if (quizType === 'word') {
+        // Use selectedWordBatchForStart for fetching questions when starting the quiz
+        questionsSource = wordBatches[selectedWordBatchForStart] || [];
+        actualNumQuestions = questionsSource.length; // Fixed to batch size
+      } else if (quizType === 'kannadaQuestion') {
+        questionsSource = kannadaQuestionsData;
+        actualNumQuestions = questionsSource.length; // Fixed to data length
+      } else if (quizType === 'minimalLearning') {
+        questionsSource = minimalLearningSentences;
+        actualNumQuestions = questionsSource.length; // Fixed to data length
       }
 
-      setSessionQuestions(getRandomQuestions(questionsToUse, actualNumQuestions));
+      setSessionQuestions(getRandomQuestions(questionsSource, actualNumQuestions));
       setCurrentQuestionIndex(0); // Reset question index for new quiz/batch
       setScore(0); // Reset score for new quiz/batch
       setSelectedOption(null); // Reset selected option
     }
-  }, [quizStarted, quizFinished, quizType, numQuestions, currentWordBatchIndex]); // Added currentWordBatchIndex as dependency
+  }, [quizStarted, quizFinished, quizType, numQuestions, selectedWordBatchForStart]); // Changed dependency to selectedWordBatchForStart
 
   // Memoize options for the current question
   const options = useMemo(() => {
     if (currentQuestion) {
-      if (quizType === 'sentence') {
-        return generateOptions('sentence', currentQuestion.kannada, currentQuestion.incorrectOptions);
-      } else { // quizType === 'word'
-        return generateOptions('word', currentQuestion.english, [], allEnglishWords); // Pass allEnglishWords for distractors
+      if (quizType === 'sentence' || quizType === 'minimalLearning') {
+        return generateOptions(quizType, currentQuestion.kannada, currentQuestion.incorrectOptions);
+      } else { // quizType === 'word' || quizType === 'kannadaQuestion'
+        return generateOptions(quizType, currentQuestion.english, [], allPossibleEnglishAnswers); // Pass allPossibleEnglishAnswers for distractors
       }
     }
     return [];
-  }, [currentQuestion, quizType, allEnglishWords]); // allEnglishWords is a new dependency for word quiz
+  }, [currentQuestion, quizType, allPossibleEnglishAnswers]); // allPossibleEnglishAnswers is a new dependency for relevant quiz types
 
 
   // Web Speech API setup
@@ -1517,18 +2256,27 @@ function QuizPage() {
     let maxQuestions;
     if (quizType === 'sentence') {
       maxQuestions = allSentences.length;
-    } else { // quizType === 'word'
-      maxQuestions = wordBatches[currentWordBatchIndex].length; // Fixed at batch size
-      setNumQuestions(maxQuestions); // Set numQuestions to batch size
+    } else if (quizType === 'word') {
+      // Use selectedWordBatchForStart for the maxQuestions here
+      maxQuestions = wordBatches[selectedWordBatchForStart].length;
+    } else if (quizType === 'kannadaQuestion') {
+        maxQuestions = kannadaQuestionsData.length;
+    } else if (quizType === 'minimalLearning') {
+        maxQuestions = minimalLearningSentences.length;
     }
 
+    // Set numQuestions to fixed batch/data length for Word, Kannada Question, and Minimal Learning quizzes
+    let adjustedNumQuestions = numQuestions;
+    if (quizType === 'word' || quizType === 'kannadaQuestion' || quizType === 'minimalLearning') {
+        adjustedNumQuestions = maxQuestions;
+    }
 
-    if (numQuestions > 0 && numQuestions <= maxQuestions) {
+    if (adjustedNumQuestions > 0 && adjustedNumQuestions <= maxQuestions) {
+      setNumQuestions(adjustedNumQuestions); // Update numQuestions state
       setQuizStarted(true);
       setQuizFinished(false);
       setQuizStartTime(Date.now());
-
-      // sessionQuestions will be set by the useEffect now, based on quizType and currentWordBatchIndex
+      // sessionQuestions will be set by the useEffect now
     } else {
       alert(`Please enter a number between 1 and ${maxQuestions} for the number of questions.`);
     }
@@ -1542,9 +2290,9 @@ function QuizPage() {
       setSelectedOption(option);
 
       let isCorrect;
-      if (quizType === 'sentence') {
+      if (quizType === 'sentence' || quizType === 'minimalLearning') {
         isCorrect = (option === currentQuestion.kannada);
-      } else { // quizType === 'word'
+      } else if (quizType === 'word' || quizType === 'kannadaQuestion') {
         isCorrect = (option === currentQuestion.english);
       }
 
@@ -1573,28 +2321,28 @@ function QuizPage() {
         if (quizType === 'word') {
           const percentage = (score / sessionQuestions.length) * 100;
           if (percentage >= 80) {
-            if (currentWordBatchIndex < wordBatches.length - 1) {
-              // Unlock next batch
+            if (selectedWordBatchForStart < wordBatches.length - 1) { // Check selected batch, not currentWordBatchIndex
+              // Unlock next batch and proceed
               setUnlockedWordBatches(prev => {
-                if (!prev.includes(currentWordBatchIndex + 1)) {
-                  return [...prev, currentWordBatchIndex + 1];
+                if (!prev.includes(selectedWordBatchForStart + 1)) { // Use selectedWordBatchForStart
+                  return [...prev, selectedWordBatchForStart + 1];
                 }
                 return prev;
               });
-              alert(`Congratulations! You scored ${percentage.toFixed(0)}%. Batch ${currentWordBatchIndex + 1} completed! You can now move to the next batch.`);
-              // Automatically move to next batch if desired, or let user pick.
-              // For now, let's just finish the quiz and let user restart with new options.
-              setQuizFinished(true); // Finish the current batch session
+              alert(`Congratulations! You scored ${percentage.toFixed(0)}%. Batch ${selectedWordBatchForStart + 1} completed! Moving to the next batch.`);
+              setSelectedWordBatchForStart(prevIndex => prevIndex + 1); // Move to next batch to be loaded
+              setQuizStarted(false); // Go back to start screen to show results and new batch selection
+              setQuizFinished(true); // Show results for current batch
             } else {
               setQuizFinished(true); // All batches completed
               alert(`Congratulations! You scored ${percentage.toFixed(0)}%. You have completed all available word batches!`);
             }
           } else {
             alert(`You scored ${percentage.toFixed(0)}%. You need at least 80% to unlock the next batch. Please repeat this batch to improve.`);
-            // Force restart of current batch
-            resetQuiz(); // Resetting will put them back at the start page, where they can re-select the current batch
+            setQuizStarted(false); // Go back to start screen to allow repeating the batch
+            setQuizFinished(true); // Show results for current batch
           }
-        } else { // Sentence quiz finished
+        } else { // Sentence, Kannada Question, Minimal Learning quizzes finished
           setQuizFinished(true);
         }
 
@@ -1614,10 +2362,8 @@ function QuizPage() {
 
   const handleListenToLearn = () => {
     playButtonClick();
-    if (currentQuestion && currentQuestion.kannada) { // Always speak Kannada regardless of quiz type
+    if (currentQuestion && currentQuestion.kannada) {
       speakKannada(currentQuestion.kannada);
-    } else if (currentQuestion && quizType === 'word' && currentQuestion.kannada) {
-       speakKannada(currentQuestion.kannada);
     }
   };
 
@@ -1636,8 +2382,10 @@ function QuizPage() {
     setStudentName('');
     setQuizStartTime(null);
     setQuizDuration('');
-    setCurrentWordBatchIndex(0); // Reset word batch index
+    setCurrentWordBatchIndex(0); // Reset word batch index used for initial selection styling
     setUnlockedWordBatches([0]); // Only first batch unlocked on full reset
+    setSelectedWordBatchForStart(0); // Reset selected batch for starting
+    setQuizType('sentence'); // Reset to default quiz type
   };
 
   const handleDownloadResults = async () => {
@@ -1677,9 +2425,9 @@ function QuizPage() {
     }
     
     let isCorrectOption;
-    if (quizType === 'sentence') {
+    if (quizType === 'sentence' || quizType === 'minimalLearning') {
       isCorrectOption = (option === currentQuestion.kannada);
-    } else { // quizType === 'word'
+    } else { // quizType === 'word' || quizType === 'kannadaQuestion'
       isCorrectOption = (option === currentQuestion.english);
     }
 
@@ -1700,11 +2448,8 @@ function QuizPage() {
   const handleBatchSelect = (index) => {
     playButtonClick();
     if (unlockedWordBatches.includes(index)) {
-      setCurrentWordBatchIndex(index);
-      setQuizStarted(true); // Automatically start the quiz for the selected batch
-      setQuizFinished(false);
-      setQuizStartTime(Date.now());
-      setScore(0); // Reset score for new batch
+      setSelectedWordBatchForStart(index); // Only set the selected batch, don't start quiz immediately
+      setCurrentWordBatchIndex(index); // Also update this for visual feedback
       setNumQuestions(wordBatches[index].length); // Set numQuestions to batch size
     } else {
       alert("This batch is locked. Please complete the previous batches with at least 80% score to unlock it.");
@@ -1735,23 +2480,41 @@ function QuizPage() {
           </div>
 
           <div className="quiz-type-selection">
-            <label>
+            <label className={`quiz-type-label ${quizType === 'sentence' ? 'selected' : ''}`}>
               <input
                 type="radio"
                 value="sentence"
                 checked={quizType === 'sentence'}
-                onChange={() => { playButtonClick(); setQuizType('sentence'); setNumQuestions(50); }}
+                onChange={() => { playButtonClick(); setQuizType('sentence'); setNumQuestions(50); setSelectedWordBatchForStart(0); }}
               />
               ವಾಕ್ಯ ರಸಪ್ರಶ್ನೆ (Sentence Quiz)
             </label>
-            <label>
+            <label className={`quiz-type-label ${quizType === 'word' ? 'selected' : ''}`}>
               <input
                 type="radio"
                 value="word"
                 checked={quizType === 'word'}
-                onChange={() => { playButtonClick(); setQuizType('word'); setNumQuestions(wordBatches[currentWordBatchIndex].length); }}
+                onChange={() => { playButtonClick(); setQuizType('word'); setNumQuestions(wordBatches[selectedWordBatchForStart].length); }}
               />
               ಪದ ರಸಪ್ರಶ್ನೆ (Word Quiz)
+            </label>
+            <label className={`quiz-type-label ${quizType === 'kannadaQuestion' ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                value="kannadaQuestion"
+                checked={quizType === 'kannadaQuestion'}
+                onChange={() => { playButtonClick(); setQuizType('kannadaQuestion'); setNumQuestions(kannadaQuestionsData.length); setSelectedWordBatchForStart(0); }}
+              />
+              ಕನ್ನಡ ಪ್ರಶ್ನೆ (Kannada Question Quiz)
+            </label>
+            <label className={`quiz-type-label ${quizType === 'minimalLearning' ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                value="minimalLearning"
+                checked={quizType === 'minimalLearning'}
+                onChange={() => { playButtonClick(); setQuizType('minimalLearning'); setNumQuestions(minimalLearningSentences.length); setSelectedWordBatchForStart(0); }}
+              />
+              ಕನ್ನಡ ಪಾಠ (Kannada Lesson Quiz)
             </label>
           </div>
 
@@ -1780,7 +2543,7 @@ function QuizPage() {
                 {wordBatches.map((batch, index) => (
                   <button
                     key={index}
-                    className={`batch-button ${unlockedWordBatches.includes(index) ? 'unlocked' : 'locked'}`}
+                    className={`batch-button ${unlockedWordBatches.includes(index) ? 'unlocked' : 'locked'} ${selectedWordBatchForStart === index ? 'selected-batch' : ''}`}
                     onClick={() => handleBatchSelect(index)}
                     disabled={!unlockedWordBatches.includes(index)}
                   >
@@ -1789,7 +2552,29 @@ function QuizPage() {
                 ))}
               </div>
               <p className="batch-info">Total words available across all batches: {wordBatches.flat().length}</p>
-              {/* No explicit "Start Word Quiz" button here, as selecting a batch starts it */}
+              <button onClick={handleStartQuiz} className="start-button" disabled={!unlockedWordBatches.includes(selectedWordBatchForStart)}>
+                Start Word Quiz (Batch {selectedWordBatchForStart + 1})
+              </button>
+            </>
+          )}
+
+          {(quizType === 'kannadaQuestion' || quizType === 'minimalLearning') && (
+            <>
+                <p>This quiz type has a fixed number of questions for learning.</p>
+                <div className="input-group">
+                    <input
+                        type="number"
+                        value={numQuestions} // This will display the fixed number
+                        readOnly // Make it read-only
+                        className="num-questions-input"
+                    />
+                    <span className="available-sentences">
+                        (Available: {quizType === 'kannadaQuestion' ? kannadaQuestionsData.length : minimalLearningSentences.length} questions)
+                    </span>
+                </div>
+                <button onClick={handleStartQuiz} className="start-button">
+                    Start {quizType === 'kannadaQuestion' ? "Kannada Question Quiz" : "Kannada Lesson Quiz"}
+                </button>
             </>
           )}
         </div>
@@ -1798,15 +2583,14 @@ function QuizPage() {
       {quizStarted && !quizFinished && currentQuestion && (
         <div className="quiz-content">
           <p className="question-counter">Question {currentQuestionIndex + 1} / {sessionQuestions.length}
-            {quizType === 'word' && ` (Batch ${currentWordBatchIndex + 1})`}
+            {quizType === 'word' && ` (Batch ${selectedWordBatchForStart + 1})`}
           </p>
           <div className="question-box">
-            {quizType === 'sentence' ? (
+            {quizType === 'sentence' || quizType === 'minimalLearning' ? (
               <p className="english-sentence">{currentQuestion.english}</p>
-            ) : (
+            ) : ( // This handles 'word' and 'kannadaQuestion'
               <>
-                <p className="kannada-word-question">{currentQuestion.kannada}</p>
-                <p className="roman-kannada-question">({currentQuestion.romanKannada})</p>
+                <p className="kannada-word-question">{currentQuestion.kannada} ({currentQuestion.romanKannada})</p> {/* Added space here */}
               </>
             )}
           </div>
@@ -1826,10 +2610,18 @@ function QuizPage() {
 
           {selectedOption !== null && (
             <div className="feedback-area">
-              {quizType === 'sentence' && currentQuestion.romanKannada && (
-                <p className="roman-kannada-feedback">
-                  {currentQuestion.romanKannada}
-                </p>
+              {quizType === 'sentence' || quizType === 'minimalLearning' ? (
+                currentQuestion.romanKannada && (
+                  <p className="roman-kannada-feedback">
+                    {currentQuestion.romanKannada}
+                  </p>
+                )
+              ) : ( // This handles 'word' and 'kannadaQuestion'
+                currentQuestion.english && (
+                  <p className="roman-kannada-feedback">
+                    Correct: {currentQuestion.english}
+                  </p>
+                )
               )}
               <button
                 onClick={handleListenToLearn}
@@ -1853,7 +2645,7 @@ function QuizPage() {
             <div className="small-heading-banner">
               <h2>ಕನ್ನಡ ಕಲಿಕೆ ಕೆನಡಾ</h2>
             </div>
-            <h2>Kannada Quiz Finished!</h2>
+            <h2>Kannada {quizType} Quiz Finished!</h2>
             {studentName && <p className="student-name-result">Student: {studentName}</p>}
             <p className="final-score">
               Your Score: {score} / {sessionQuestions.length} ({sessionQuestions.length > 0 ? ((score / sessionQuestions.length) * 100).toFixed(0) : 0}%)
@@ -1877,7 +2669,8 @@ function QuizPage() {
             <button onClick={resetQuiz} className="reset-button">Start New Quiz</button>
           </div>
           <p className="tts-help-info">
-            *If "Listen to Learn" doesn't work, ensure your browser's text-to-speech is enabled and a Kannada voice is installed (check browser/OS settings).\n            For Word Quiz: ensure the selected batch is green (unlocked) to play. Score 80% to unlock next batch.
+            *If "Listen to Learn" doesn't work, ensure your browser's text-to-speech is enabled and a Kannada voice is installed (check browser/OS settings).<br/>
+            For Word Quiz: ensure the selected batch is green (unlocked) to play. Score 80% to unlock next batch.
           </p>
           <div className="author-info">
             Author: Ragu Kattinakere <br/>
