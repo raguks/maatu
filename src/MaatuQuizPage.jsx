@@ -44,7 +44,7 @@ const generateOptions = (quizType, currentQuestion, allPossibleEnglishAnswersPoo
   if (quizType === 'sentence' || quizType === 'minimalLearning') {
     // For English prompt -> Kannada options: Correct answer is the Kannada text.
     correctAnswer = currentQuestion.kannada;
-  } else if (quizType === 'word' || quizType === 'kannadaQuestion') { 
+  } else if (quizType === 'word' || quizType === 'kannadaQuestion') {
     // For Kannada prompt -> English options: Correct answer is the English text.
     correctAnswer = currentQuestion.english;
   } else if (quizType === 'letterIdentification') {
@@ -111,14 +111,14 @@ const generateOptions = (quizType, currentQuestion, allPossibleEnglishAnswersPoo
 // --- React Component ---
 function QuizPage() {
   // State to manage the active main tab: 'mainQuiz', 'letterGame', or 'tracing'.
-  const [mainActiveTab, setMainActiveTab] = useState('mainQuiz'); 
+  const [mainActiveTab, setMainActiveTab] = useState('mainQuiz');
 
   // State to track if a quiz session has started.
   const [quizStarted, setQuizStarted] = useState(false);
   // State to determine the type of quiz within the 'mainQuiz' tab.
   const [quizType, setQuizType] = useState('sentence');
   // State for the subtype within the 'letterGame' tab (varnamale, kaagunita, ottakshara, ottaksharaWords).
-  const [letterSubtype, setLetterSubtype] = useState('varnamale'); 
+  const [letterSubtype, setLetterSubtype] = useState('varnamale');
 
   // Number of questions for the current quiz session.
   const [numQuestions, setNumQuestions] = useState(50); // Default to 50 questions
@@ -139,20 +139,20 @@ function QuizPage() {
   // Timestamp when the quiz started, used for duration calculation.
   const [quizStartTime, setQuizStartTime] = useState(null);
   // Formatted string representing the duration of the quiz.
-  const [quizDuration, setQuizDuration] = useState(''); 
+  const [quizDuration, setQuizDuration] = useState('');
 
   // Word Quiz specific states:
   // Array of unlocked word batch indices (e.g., [0, 1] means batch 1 and 2 are unlocked).
-  const [unlockedWordBatches, setUnlockedWordBatches] = useState([0]); 
+  const [unlockedWordBatches, setUnlockedWordBatches] = useState([0]);
   // The currently selected word batch before starting a quiz.
-  const [selectedWordBatchForStart, setSelectedWordBatchForStart] = useState(0); 
+  const [selectedWordBatchForStart, setSelectedWordBatchForStart] = useState(0);
 
   // The actual list of questions for the current quiz session.
   const [sessionQuestions, setSessionQuestions] = useState([]);
 
   // Letter Identification specific states:
   // Object to track how many times each Kannada letter/word has been incorrectly identified.
-  const [letterErrorCounts, setLetterErrorCounts] = useState({}); 
+  const [letterErrorCounts, setLetterErrorCounts] = useState({});
   // Set of Kannada letters/words that the user has correctly identified on the first attempt.
   const [masteredLetters, setMasteredLetters] = useState(new Set());
 
@@ -375,7 +375,7 @@ function QuizPage() {
     else if (subtype === 'kaagunita') sourceData = kaagunita;
     else if (subtype === 'ottakshara') sourceData = ottakshara;
     else if (subtype === 'ottaksharaWords') sourceData = ottaksharaWordsData;
-    else return null; 
+    else return null;
 
     const foundItem = sourceData.find(item => item.romanKannada === romanKannadaText);
     return foundItem ? foundItem.kannada : null;
@@ -392,7 +392,7 @@ function QuizPage() {
 
     let questionsSource = [];
     let currentQuizMaxQuestions = 0;
-    
+
     if (mainActiveTab === 'mainQuiz') {
       if (quizType === 'sentence') {
         questionsSource = allSentences;
@@ -404,7 +404,7 @@ function QuizPage() {
         questionsSource = minimalLearningSentences;
       }
       currentQuizMaxQuestions = questionsSource.length;
-      setSessionQuestions(getRandomQuestions(questionsSource, Math.min(numQuestions, currentQuizMaxQuestions))); 
+      setSessionQuestions(getRandomQuestions(questionsSource, Math.min(numQuestions, currentQuizMaxQuestions)));
     } else if (mainActiveTab === 'letterGame') {
         if (letterSubtype === 'varnamale') {
           questionsSource = varnamale;
@@ -416,13 +416,11 @@ function QuizPage() {
           questionsSource = ottaksharaWordsData;
         }
         currentQuizMaxQuestions = questionsSource.length; // Max questions for letter game is the full set of the subtype
-        
-        // Reset error counts and mastered letters specifically for the letter game on start.
+
+        // Reset error counts specifically for the letter game on start.
         setLetterErrorCounts({});
-        setMasteredLetters(new Set());
-        // Generate questions for the letter game, prioritizing missed/unmastered letters, only at start.
-        // For letter game, we want to test on all available questions in the selected subtype, so we use currentQuizMaxQuestions for count.
-        setSessionQuestions(generateLetterIdentificationQuestions(questionsSource, {}, new Set(), currentQuizMaxQuestions)); 
+        // Pass the current state of masteredLetters to influence question generation
+        setSessionQuestions(generateLetterIdentificationQuestions(questionsSource, {}, masteredLetters, currentQuizMaxQuestions));
         // The numQuestions state for letter game is already set to currentQuizMaxQuestions by handleLetterSubtypeChange
     }
 
@@ -453,14 +451,14 @@ function QuizPage() {
     console.log("Current Question in handleOptionSelect:", currentQuestion);
 
     // Only allow selection if an option hasn't been picked yet for the current question.
-    if (selectedOption === null) { 
+    if (selectedOption === null) {
       setSelectedOption(option);
 
       let isCorrect;
       if (mainActiveTab === 'mainQuiz') {
         if (quizType === 'sentence' || quizType === 'minimalLearning') {
           isCorrect = (option === currentQuestion.kannada);
-        } else if (quizType === 'word' || quizType === 'kannadaQuestion') { 
+        } else if (quizType === 'word' || quizType === 'kannadaQuestion') {
           isCorrect = (option === currentQuestion.english);
         }
       } else if (mainActiveTab === 'letterGame') {
@@ -502,7 +500,7 @@ function QuizPage() {
                 console.warn(`No Kannada equivalent found for Roman Kannada option: ${option}. Speaking Roman Kannada directly.`);
                 // Fallback: if no Kannada equivalent is found, try to speak the Romanized text directly.
                 // This might not be perfectly pronounced as Kannada, but it's the clicked text.
-                textToSpeak = option; 
+                textToSpeak = option;
             }
             speakKannada(textToSpeak); // Speak what was clicked (or its Kannada equivalent if in letter game)
           }
@@ -673,13 +671,13 @@ function QuizPage() {
     if (selectedOption === null) {
       return "option-button"; // Default style if no option is selected yet.
     }
-    
+
     let isCorrectOption;
     // Check if the current tab is 'mainQuiz' or 'letterGame' to determine correctness logic
     if (mainActiveTab === 'mainQuiz') {
       if (quizType === 'sentence' || quizType === 'minimalLearning') {
         isCorrectOption = (option === currentQuestion.kannada);
-      } else if (quizType === 'word' || quizType === 'kannadaQuestion') { 
+      } else if (quizType === 'word' || quizType === 'kannadaQuestion') {
         isCorrectOption = (option === currentQuestion.english);
       }
     } else if (mainActiveTab === 'letterGame') {
@@ -694,7 +692,7 @@ function QuizPage() {
       return "option-button incorrect"; // Apply 'incorrect' class if it's the selected wrong answer.
     }
     // If an option is selected but it's not the current 'option' and not the 'correct' option, it should remain default.
-    return "option-button"; 
+    return "option-button";
   };
 
   // Formats the current date and time for display.
@@ -720,7 +718,7 @@ function QuizPage() {
     playButtonClick();
     setQuizType(newQuizType); // Update the quiz type.
     setSelectedWordBatchForStart(0); // Reset word batch selection when main quiz type changes.
-    
+
     // Set a sensible default for `numQuestions` based on the newly selected quiz type, capped by max available.
     if (newQuizType === 'sentence') {
       setNumQuestions(Math.min(50, allSentences.length));
@@ -739,7 +737,7 @@ function QuizPage() {
     setLetterSubtype(newSubtype); // Update the letter subtype.
     // Reset error counts and mastered letters when changing letter subtypes.
     setLetterErrorCounts({});
-    setMasteredLetters(new Set());
+    setMasteredLetters(new Set()); // Clear mastered letters for the new subtype.
     // Adjust `numQuestions` based on the total number of letters/words in the newly selected subtype for finite play.
     let newNumQuestions = 50; // Default or fallback value.
     if (newSubtype === 'varnamale') {
@@ -988,7 +986,7 @@ function QuizPage() {
                   letterSubtype === 'varnamale' ? 'Alphabets' :
                   letterSubtype === 'kaagunita' ? 'Vowel Signs' :
                   letterSubtype === 'ottakshara' ? 'Compound Letters' :
-                  'Compound Words' 
+                  'Compound Words'
                 })`}
           </p>
           <div className="question-box">
@@ -1003,7 +1001,7 @@ function QuizPage() {
             {/* Display Kannada letter/word in a very large font for the letter identification game. */}
             {mainActiveTab === 'letterGame' && (
               // Only Kannada text, no Romanization for letter game
-              <p className="kannada-letter-display">{currentQuestion.kannada}</p> 
+              <p className="kannada-letter-display">{currentQuestion.kannada}</p>
             )}
           </div>
 
@@ -1021,7 +1019,7 @@ function QuizPage() {
           </div>
 
           {/* Feedback area and buttons are now consistently displayed only if showFeedback is true */}
-          {showFeedback && ( 
+          {showFeedback && (
             <div className="feedback-area">
               {(mainActiveTab === 'mainQuiz' && (quizType === 'sentence' || quizType === 'minimalLearning')) && currentQuestion.romanKannada && (
                 <p className="roman-kannada-feedback">
@@ -1054,7 +1052,7 @@ function QuizPage() {
             </div>
           )}
           {/* Stop Game button is always visible during the letter game when a quiz is started */}
-          {mainActiveTab === 'letterGame' && quizStarted && !quizFinished && ( 
+          {mainActiveTab === 'letterGame' && quizStarted && !quizFinished && (
               <div className="stop-game-button-container">
                   <button onClick={handleStopLetterQuiz} className="reset-button">
                       Stop Game
@@ -1127,7 +1125,7 @@ function QuizPage() {
         </>
       )}
       {/* Footer Logo - Placeholder, replace src with your actual logo image URL. */}.
-      <div className="logo-bottom-right"> 
+      <div className="logo-bottom-right">
         <svg width="60" height="60" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <radialGradient id="grad" cx="30%" cy="30%" r="100%">
@@ -1142,7 +1140,7 @@ function QuizPage() {
         </svg>
         {/*<img src="https://placehold.co/60x60/yellow/red?text=Ka" alt="Kannada Maple Logo" />*/}
       </div>
-    </div>  
+    </div>
   );
 }
 
