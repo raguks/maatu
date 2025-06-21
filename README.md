@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Getting Started with ಕನ್ನಡ ಕಲಿ
+ಕನ್ನಡ ಕಲಿ ಕೆನಡಾಆ - ಮನೆಯ ಮಾತು ಕಲಿ
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 

@@ -1,6 +1,6 @@
 {
-  "name": "ಮನೆಮಾತು",
-  "short_name": "Kannada Quiz-ಮನೆಮಾತು",
+  "name": "ಕನ್ನಡ ಕಲಿ",
+  "short_name": "ಕನ್ನಡ ಕಲಿ",
   "description": "A daily quiz to learn Kannada words and phrases.",
   "start_url": "./",
   "display": "standalone",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import './MaatuQuizPage.css'; // Keep the existing CSS
 import { allSentences, wordBatches, kannadaQuestionsData, minimalLearningSentences, allPossibleEnglishAnswers } from './QuizData.js';
 // Import the new AksharaData
@@ -34,8 +34,7 @@ const getRandomQuestions = (data, count) => {
   return shuffled.slice(0, count);
 };
 
-// Function to generate options for a question, now more flexible for new quiz types.
-// It ensures there are always 4 options (1 correct, up to 3 incorrect).
+// Function to generate options for a question, ensuring 4 options (1 correct, up to 3 incorrect).
 const generateOptions = (quizType, currentQuestion, allPossibleEnglishAnswersPool = [], allPossibleLetterTransliterationsPool = []) => {
   let correctAnswer;
   // Ensure incorrectOptionsProvided is an array, even if currentQuestion.incorrectOptions is undefined or null
@@ -45,11 +44,11 @@ const generateOptions = (quizType, currentQuestion, allPossibleEnglishAnswersPoo
   if (quizType === 'sentence' || quizType === 'minimalLearning') {
     // For English prompt -> Kannada options: Correct answer is the Kannada text.
     correctAnswer = currentQuestion.kannada;
-  } else if (quizType === 'word' || quizType === 'kannadaQuestion' || quizType === 'ottaksharaWords') {
+  } else if (quizType === 'word' || quizType === 'kannadaQuestion') { 
     // For Kannada prompt -> English options: Correct answer is the English text.
     correctAnswer = currentQuestion.english;
   } else if (quizType === 'letterIdentification') {
-    // For Kannada letter -> English transliteration options: Correct answer is the Roman Kannada.
+    // For Kannada letter/word -> English transliteration options: Correct answer is the Roman Kannada.
     correctAnswer = currentQuestion.romanKannada; // Correct answer is transliteration
   } else {
     // Log an error if an unhandled quiz type is encountered.
@@ -71,12 +70,12 @@ const generateOptions = (quizType, currentQuestion, allPossibleEnglishAnswersPoo
     chosenIncorrect = [...uniqueIncorrectOptions]; // Copy to be safe
 
     let genericCandidates = [];
+    // For letter identification (including ottaksharaWords as it is now part of letter identification), use the transliteration pool.
     if (quizType === 'letterIdentification') {
-      // For letter identification, use the general transliteration pool for distractor options.
       genericCandidates = allPossibleLetterTransliterationsPool.filter(
         translit => translit !== correctAnswer && !chosenIncorrect.includes(translit)
       );
-    } else if (quizType === 'word' || quizType === 'kannadaQuestion' || quizType === 'ottaksharaWords') {
+    } else if (quizType === 'word' || quizType === 'kannadaQuestion') { // Only for main quiz types that need English options
       // For English options (word/Kannada question), use the general English words pool.
       genericCandidates = allPossibleEnglishAnswersPool.filter(
         word => word !== correctAnswer && !chosenIncorrect.includes(word)
@@ -97,7 +96,7 @@ const generateOptions = (quizType, currentQuestion, allPossibleEnglishAnswersPoo
     while (chosenIncorrect.length < 3) {
       if (quizType === 'sentence' || quizType === 'minimalLearning') {
         chosenIncorrect.push(`[ಆಯ್ಕೆ ${chosenIncorrect.length + 1}]`); // Placeholder in Kannada for Kannada options
-      } else { // word, kannadaQuestion, ottaksharaWords, letterIdentification (English/Roman Kannada options)
+      } else { // word, kannadaQuestion, letterIdentification (English/Roman Kannada options)
         chosenIncorrect.push(`[Option ${chosenIncorrect.length + 1}]`); // Placeholder in English
       }
     }
@@ -118,7 +117,7 @@ function QuizPage() {
   const [quizStarted, setQuizStarted] = useState(false);
   // State to determine the type of quiz within the 'mainQuiz' tab.
   const [quizType, setQuizType] = useState('sentence');
-  // State for the subtype within the 'letterGame' tab (varnamale, kaagunita, ottakshara).
+  // State for the subtype within the 'letterGame' tab (varnamale, kaagunita, ottakshara, ottaksharaWords).
   const [letterSubtype, setLetterSubtype] = useState('varnamale'); 
 
   // Number of questions for the current quiz session.
@@ -152,9 +151,9 @@ function QuizPage() {
   const [sessionQuestions, setSessionQuestions] = useState([]);
 
   // Letter Identification specific states:
-  // Object to track how many times each Kannada letter has been incorrectly identified.
+  // Object to track how many times each Kannada letter/word has been incorrectly identified.
   const [letterErrorCounts, setLetterErrorCounts] = useState({}); 
-  // Set of Kannada letters that the user has correctly identified on the first attempt.
+  // Set of Kannada letters/words that the user has correctly identified on the first attempt.
   const [masteredLetters, setMasteredLetters] = useState(new Set());
 
 
@@ -223,11 +222,6 @@ function QuizPage() {
     setTimeout(() => playTone(1320, 0.1), 100); // A higher note after a short delay for a 'chime' effect.
   };
 
-  // Plays a sound indicating an incorrect answer.
-  const playIncorrectSound = () => {
-    playTone(220, 0.2, 'sawtooth'); // A low, slightly jarring note.
-  };
-
   // Plays a subtle click sound for button interactions.
   const playButtonClick = () => {
     if (audioContext && audioContext.state === 'suspended') {
@@ -240,23 +234,21 @@ function QuizPage() {
   // It prioritizes letters that haven't been mastered or were frequently missed.
   const generateLetterIdentificationQuestions = (sourceData, errorCounts, masteredSet, count) => {
     let questions = [];
-    // Extract all Kannada characters from the source data.
-    // const allLetters = sourceData.map(item => item.kannada); // This line is not directly used in the logic below, can be removed if not needed elsewhere.
 
-    // 1. Prioritize letters not yet seen/mastered in this session.
+    // 1. Prioritize items not yet seen/mastered in this session.
     let unmastered = sourceData.filter(item => !masteredSet.has(item.kannada));
-    unmastered = shuffleArray(unmastered); // Shuffle to randomize the order of unmastered letters.
+    unmastered = shuffleArray(unmastered); // Shuffle to randomize the order of unmastered items.
 
-    // 2. Prioritize letters that were frequently missed based on `errorCounts`.
-    let missedLetters = Object.entries(errorCounts)
-      .filter(([, c]) => c > 0) // Consider only letters with at least one error.
+    // 2. Prioritize items that were frequently missed based on `errorCounts`.
+    let missedItems = Object.entries(errorCounts)
+      .filter(([, c]) => c > 0) // Consider only items with at least one error.
       .sort((a, b) => b[1] - a[1]) // Sort by most errors first (descending order).
       .map(([kannadaChar]) => sourceData.find(item => item.kannada === kannadaChar)) // Get the full question object.
       .filter(item => item && !masteredSet.has(item.kannada) && !unmastered.some(q => q.kannada === item.kannada)); // Exclude if already mastered or already in the unmastered list.
 
     // Combine prioritized lists, ensuring uniqueness.
     let prioritizedQuestions = [...unmastered];
-    missedLetters.forEach(item => {
+    missedItems.forEach(item => {
         if (!prioritizedQuestions.some(q => q.kannada === item.kannada)) {
             prioritizedQuestions.push(item);
         }
@@ -264,7 +256,7 @@ function QuizPage() {
 
     questions = [...prioritizedQuestions]; // Start building the session questions with prioritized items.
 
-    // 3. Fill the rest with random letters from the full source, avoiding duplicates if possible.
+    // 3. Fill the rest with random items from the full source, avoiding duplicates if possible.
     let fillerQuestions = shuffleArray(sourceData).filter(item => !questions.some(q => q.kannada === item.kannada));
 
     // For a finite game, ensure we pick exactly `count` or up to the maximum available.
@@ -376,6 +368,20 @@ function QuizPage() {
     }
   };
 
+  // Helper to get Kannada character/word from Roman Kannada, used for pronunciation
+  const getKannadaFromRomanKannada = (romanKannadaText, subtype) => {
+    let sourceData;
+    if (subtype === 'varnamale') sourceData = varnamale;
+    else if (subtype === 'kaagunita') sourceData = kaagunita;
+    else if (subtype === 'ottakshara') sourceData = ottakshara;
+    else if (subtype === 'ottaksharaWords') sourceData = ottaksharaWordsData;
+    else return null; 
+
+    const foundItem = sourceData.find(item => item.romanKannada === romanKannadaText);
+    return foundItem ? foundItem.kannada : null;
+  };
+
+
   // Handler for when the "Start Quiz" button is clicked.
   const handleStartQuiz = () => {
     playButtonClick(); // Play button click sound.
@@ -396,8 +402,6 @@ function QuizPage() {
         questionsSource = kannadaQuestionsData;
       } else if (quizType === 'minimalLearning') {
         questionsSource = minimalLearningSentences;
-      } else if (quizType === 'ottaksharaWords') { // New Ottakshara Words quiz
-        questionsSource = ottaksharaWordsData;
       }
       currentQuizMaxQuestions = questionsSource.length;
       setSessionQuestions(getRandomQuestions(questionsSource, Math.min(numQuestions, currentQuizMaxQuestions))); 
@@ -408,6 +412,8 @@ function QuizPage() {
           questionsSource = kaagunita;
         } else if (letterSubtype === 'ottakshara') {
           questionsSource = ottakshara;
+        } else if (letterSubtype === 'ottaksharaWords') { // New: Ottakshara Words as a letter game subtype
+          questionsSource = ottaksharaWordsData;
         }
         currentQuizMaxQuestions = questionsSource.length; // Max questions for letter game is the full set of the subtype
         
@@ -415,11 +421,12 @@ function QuizPage() {
         setLetterErrorCounts({});
         setMasteredLetters(new Set());
         // Generate questions for the letter game, prioritizing missed/unmastered letters, only at start.
-        setSessionQuestions(generateLetterIdentificationQuestions(questionsSource, {}, new Set(), currentQuizMaxQuestions)); // Pass empty counts/mastered for initial generation.
+        // For letter game, we want to test on all available questions in the selected subtype, so we use currentQuizMaxQuestions for count.
+        setSessionQuestions(generateLetterIdentificationQuestions(questionsSource, {}, new Set(), currentQuizMaxQuestions)); 
         // The numQuestions state for letter game is already set to currentQuizMaxQuestions by handleLetterSubtypeChange
     }
 
-    // Ensure `numQuestions` (the user-requested count) does not exceed the `currentQuizMaxQuestions`.
+    // Ensure `numQuestions` (user-requested count) does not exceed `currentQuizMaxQuestions`.
     const finalNumQuestionsToSet = Math.min(numQuestions, currentQuizMaxQuestions);
     setNumQuestions(finalNumQuestionsToSet); // Update the state with the capped number of questions.
 
@@ -453,7 +460,7 @@ function QuizPage() {
       if (mainActiveTab === 'mainQuiz') {
         if (quizType === 'sentence' || quizType === 'minimalLearning') {
           isCorrect = (option === currentQuestion.kannada);
-        } else if (quizType === 'word' || quizType === 'kannadaQuestion' || quizType === 'ottaksharaWords') {
+        } else if (quizType === 'word' || quizType === 'kannadaQuestion') { 
           isCorrect = (option === currentQuestion.english);
         }
       } else if (mainActiveTab === 'letterGame') {
@@ -470,7 +477,7 @@ function QuizPage() {
         } else {
           setLetterErrorCounts(prev => ({
             ...prev,
-            [currentQuestion.kannada]: (prev[currentQuestion.kannada] || 0) + 1 // Increment error count for the letter.
+            [currentQuestion.kannada]: (prev[currentQuestion.kannada] || 0) + 1 // Increment error count for the letter/word.
           }));
         }
       }
@@ -481,8 +488,28 @@ function QuizPage() {
           return prevScore + 1; // Increment score if the answer is correct.
         });
         playCorrectSound(); // Play correct answer sound.
-      } else {
-        playIncorrectSound(); // Play incorrect answer sound.
+      } else { // If the answer is incorrect
+        playTone(220, 0.2, 'sawtooth'); // Play incorrect sound
+        setTimeout(() => {
+          let textToSpeak = option; // Default to speaking the clicked option
+          // If in letter game, and the clicked option is Roman Kannada, try to find its Kannada equivalent.
+          if (mainActiveTab === 'letterGame') {
+              const kannadaEquivalent = getKannadaFromRomanKannada(option, letterSubtype);
+              if (kannadaEquivalent) {
+                  textToSpeak = kannadaEquivalent;
+              } else {
+                  console.warn(`No Kannada equivalent found for Roman Kannada option: ${option}. Speaking Roman Kannada directly.`);
+                  // Fallback: if no Kannada equivalent is found, try to speak the Romanized text directly.
+                  // This might not be perfectly pronounced as Kannada, but it's the clicked text.
+                  textToSpeak = option; 
+              }
+          }
+          // For main quiz, 'option' is either Kannada (sentence/minimalLearning) or English (word/kannadaQuestion),
+          // both of which `speakKannada` can handle directly.
+          
+          speakKannada(textToSpeak); // Speak what was clicked (or its Kannada equivalent if in letter game)
+
+        }, 300);
       }
 
       // Show feedback area after a short delay
@@ -581,13 +608,8 @@ function QuizPage() {
   const handleListenToLearn = () => {
     playButtonClick();
     if (currentQuestion) {
-      // If it's the letter game, speak the Kannada letter.
-      if (mainActiveTab === 'letterGame') {
-        speakKannada(currentQuestion.kannada);
-      } else {
-        // Otherwise, speak the Kannada part of the question for other quiz types.
-        speakKannada(currentQuestion.kannada);
-      }
+      // For both letter game and main quiz types, always speak the Kannada `kannada` property.
+      speakKannada(currentQuestion.kannada);
     }
   };
 
@@ -660,11 +682,11 @@ function QuizPage() {
     if (mainActiveTab === 'mainQuiz') {
       if (quizType === 'sentence' || quizType === 'minimalLearning') {
         isCorrectOption = (option === currentQuestion.kannada);
-      } else if (quizType === 'word' || quizType === 'kannadaQuestion' || quizType === 'ottaksharaWords') {
+      } else if (quizType === 'word' || quizType === 'kannadaQuestion') { 
         isCorrectOption = (option === currentQuestion.english);
       }
     } else if (mainActiveTab === 'letterGame') {
-      // For letter game, the correct option is `currentQuestion.romanKannada`
+      // For letter game (including ottaksharaWords), the correct option is `currentQuestion.romanKannada`
       isCorrectOption = (option === currentQuestion.romanKannada);
     }
 
@@ -711,8 +733,6 @@ function QuizPage() {
       setNumQuestions(Math.min(50, kannadaQuestionsData.length));
     } else if (newQuizType === 'minimalLearning') {
       setNumQuestions(Math.min(50, minimalLearningSentences.length));
-    } else if (newQuizType === 'ottaksharaWords') {
-      setNumQuestions(Math.min(50, ottaksharaWordsData.length));
     }
   };
 
@@ -723,7 +743,7 @@ function QuizPage() {
     // Reset error counts and mastered letters when changing letter subtypes.
     setLetterErrorCounts({});
     setMasteredLetters(new Set());
-    // Adjust `numQuestions` based on the total number of letters in the newly selected subtype for finite play.
+    // Adjust `numQuestions` based on the total number of letters/words in the newly selected subtype for finite play.
     let newNumQuestions = 50; // Default or fallback value.
     if (newSubtype === 'varnamale') {
       newNumQuestions = varnamale.length; // Set to the total number of alphabets.
@@ -731,6 +751,8 @@ function QuizPage() {
       newNumQuestions = kaagunita.length; // Set to the total number of vowel signs.
     } else if (newSubtype === 'ottakshara') {
       newNumQuestions = ottakshara.length; // Set to the total number of compound letters.
+    } else if (newSubtype === 'ottaksharaWords') { // New: Ottakshara Words
+      newNumQuestions = ottaksharaWordsData.length;
     }
     setNumQuestions(newNumQuestions); // Update `numQuestions` to reflect the full length of the selected subtype.
   };
@@ -746,13 +768,12 @@ function QuizPage() {
         return kannadaQuestionsData.length;
       } else if (quizType === 'minimalLearning') {
         return minimalLearningSentences.length;
-      } else if (quizType === 'ottaksharaWords') {
-        return ottaksharaWordsData.length;
       }
     } else if (mainActiveTab === 'letterGame') {
       if (letterSubtype === 'varnamale') return varnamale.length;
       if (letterSubtype === 'kaagunita') return kaagunita.length;
       if (letterSubtype === 'ottakshara') return ottakshara.length;
+      if (letterSubtype === 'ottaksharaWords') return ottaksharaWordsData.length; // Added for Ottakshara Words
       return 0; // Should not happen if `letterSubtype` is always valid.
     }
     return 0; // Should not happen for main quiz types.
@@ -766,7 +787,6 @@ function QuizPage() {
     else if (quizType === 'word') text += `Word Quiz (Batch ${selectedWordBatchForStart + 1})`;
     else if (quizType === 'kannadaQuestion') text += "Kannada Question Quiz";
     else if (quizType === 'minimalLearning') text += "Kannada Lesson Quiz";
-    else if (quizType === 'ottaksharaWords') text += "Ottakshara Words Quiz";
     else text += "Quiz"; // Fallback text.
     return text;
   }, [quizType, selectedWordBatchForStart]);
@@ -777,6 +797,7 @@ function QuizPage() {
     if (letterSubtype === 'varnamale') text += 'Letter Game (Alphabets)';
     else if (letterSubtype === 'kaagunita') text += 'Letter Game (Vowel Signs)';
     else if (letterSubtype === 'ottakshara') text += 'Letter Game (Compound)';
+    else if (letterSubtype === 'ottaksharaWords') text += 'Letter Game (Compound Words)'; // Added for Ottakshara Words
     else text += "Letter Game"; // Fallback text.
     return text;
   }, [letterSubtype]);
@@ -788,7 +809,7 @@ function QuizPage() {
         <h2>ಕನ್ನಡ ಕಲಿಕೆ ಕೆನಡಾ</h2>
       </div>
 
-      <h1> ಮನೆಯ ಮಾತು ಕಲಿ (Daily Kannada Quiz)</h1>
+      <h1>ಮನೆಯ ಮಾತು ಕಲಿ - Kannada Kali Quiz</h1>
 
       {/* Main Tabs for Quiz Sections - Allows switching between main quizzes and the letter game. */}
       <div className="main-tab-buttons">
@@ -805,7 +826,7 @@ function QuizPage() {
           disabled={quizStarted}
           /* Disable tab button when quiz is active */
         >
-          ಮನೆಯ ಮಾತು ರಸಪ್ರಶ್ನೆ (Main Quizzes)
+          ಮನೆಯ ಮಾತು ಪ್ರಶ್ನೆ - Sentence Quizzes
         </button>
         <button
           className={`main-tab-button ${mainActiveTab === 'letterGame' ? 'active' : ''}`}
@@ -821,7 +842,7 @@ function QuizPage() {
           disabled={quizStarted}
           /* Disable tab button when quiz is active */
         >
-          ಅಕ್ಷರ ಗುರುತಿಸುವಿಕೆ (Letter Game)
+          ಅಕ್ಷರದ ಆಟ (Letter Games)
         </button>
       </div>
 
@@ -855,7 +876,6 @@ function QuizPage() {
                   <option value="word">ಪದ ರಸಪ್ರಶ್ನೆ (Word Quiz)</option>
                   <option value="kannadaQuestion">ಕನ್ನಡ ಪ್ರಶ್ನೆ (Kannada Question Quiz)</option>
                   <option value="minimalLearning">ಕನ್ನಡ ಪಾಠ (Kannada Lesson Quiz)</option>
-                  <option value="ottaksharaWords">ಒತ್ತಕ್ಷರ ಪದಗಳು (Ottakshara Words)</option> {/* New quiz type option. */}
                 </select>
               </div>
 
@@ -920,10 +940,16 @@ function QuizPage() {
                 >
                   ಒತ್ತಕ್ಷರ (Compound)
                 </button>
+                <button
+                  className={`tab-button ${letterSubtype === 'ottaksharaWords' ? 'active' : ''}`}
+                  onClick={() => handleLetterSubtypeChange('ottaksharaWords')}
+                >
+                  ಒತ್ತಕ್ಷರ ಪದಗಳು (Compound Words)
+                </button>
               </div>
 
-              {/* Information about the number of letters in the selected category. */}
-              <p>You will be tested on {maxQuestionsForCurrentType} unique letters/compounds from the selected category.</p>
+              {/* Information about the number of letters/words in the selected category. */}
+              <p>You will be tested on {maxQuestionsForCurrentType} unique {letterSubtype === 'ottaksharaWords' ? 'words' : 'letters'}/compounds from the selected category.</p>
               {/* Start button for the letter game. */}
               <button onClick={handleStartQuiz} className="start-button">
                 {letterGameStartButtonText}
@@ -942,21 +968,23 @@ function QuizPage() {
             {mainActiveTab === 'letterGame' && ` (${ // Display letter subtype info for letter game.
                   letterSubtype === 'varnamale' ? 'Alphabets' :
                   letterSubtype === 'kaagunita' ? 'Vowel Signs' :
-                  'Compound'
+                  letterSubtype === 'ottakshara' ? 'Compound Letters' :
+                  'Compound Words' 
                 })`}
           </p>
           <div className="question-box">
             {(mainActiveTab === 'mainQuiz' && (quizType === 'sentence' || quizType === 'minimalLearning')) && (
               <p className="english-sentence">{currentQuestion.english}</p> // Display English sentence.
             )}
-            {(mainActiveTab === 'mainQuiz' && (quizType === 'word' || quizType === 'kannadaQuestion' || quizType === 'ottaksharaWords')) && (
+            {(mainActiveTab === 'mainQuiz' && (quizType === 'word' || quizType === 'kannadaQuestion')) && (
               <>
                 <p className="kannada-word-question">{currentQuestion.kannada} ({currentQuestion.romanKannada})</p> {/* Display Kannada word with Romanization. */}
               </>
             )}
-            {/* Display Kannada letter in a very large font for the letter identification game. */}
+            {/* Display Kannada letter/word in a very large font for the letter identification game. */}
             {mainActiveTab === 'letterGame' && (
-              <p className="kannada-letter-display">{currentQuestion.kannada}</p>
+              // Only Kannada text, no Romanization for letter game
+              <p className="kannada-letter-display">{currentQuestion.kannada}</p> 
             )}
           </div>
 
@@ -981,12 +1009,12 @@ function QuizPage() {
                   {currentQuestion.romanKannada} {/* Display Roman Kannada for Sentence/Minimal Learning. */}
                 </p>
               )}
-              {(mainActiveTab === 'mainQuiz' && (quizType === 'word' || quizType === 'kannadaQuestion' || quizType === 'ottaksharaWords')) && currentQuestion.english && (
+              {(mainActiveTab === 'mainQuiz' && (quizType === 'word' || quizType === 'kannadaQuestion')) && currentQuestion.english && (
                 <p className="roman-kannada-feedback">
                   Correct: {currentQuestion.english} {/* Display correct English for Word/Kannada Question. */}
                 </p>
               )}
-              {/* For letter identification, show the correct transliteration with "Correct: " prefix */}
+              {/* For letter identification (including ottaksharaWords), show the correct transliteration with "Correct: " prefix */}
               {mainActiveTab === 'letterGame' && currentQuestion.romanKannada && (
                 <p className="roman-kannada-feedback">
                   Correct: {currentQuestion.romanKannada}
@@ -1033,17 +1061,17 @@ function QuizPage() {
             )}
             <p className="current-date-time">Completed on: {currentDateTime}</p>
 
-            {/* Display most frequently missed letters for the Letter Identification Game. */}
+            {/* Display most frequently missed letters/words for the Letter Identification Game. */}
             {mainActiveTab === 'letterGame' && Object.keys(letterErrorCounts).length > 0 && (
                 <div className="most-missed-letters-section">
-                    <h3>Most Frequently Missed Letters:</h3>
+                    <h3>Most Frequently Missed {letterSubtype === 'ottaksharaWords' ? 'Words' : 'Letters'}:</h3>
                     <ul className="missed-letters-list">
                         {Object.entries(letterErrorCounts)
                             .sort(([, countA], [, countB]) => countB - countA) // Sort by highest error count.
-                            .slice(0, 5) // Show only the top 5 missed letters.
-                            .map(([letter, count]) => (
-                                <li key={letter}>
-                                    <span className="missed-letter-kannada">{letter}</span>
+                            .slice(0, 5) // Show only the top 5 missed items.
+                            .map(([item, count]) => (
+                                <li key={item}>
+                                    <span className="missed-letter-kannada">{item}</span>
                                     <span className="missed-letter-count"> (Missed: {count} times)</span>
                                 </li>
                             ))}
@@ -1072,7 +1100,7 @@ function QuizPage() {
             *If "Listen to Learn" doesn't work, ensure your browser's text-to-speech is enabled and a Kannada voice is installed (check browser/OS settings).<br/>
             For Word Quiz: ensure the selected batch is green (unlocked) to play. Score 80% to unlock next batch.<br/>
             {mainActiveTab === 'mainQuiz' && `For all quizzes, you can now choose the number of questions.`}
-            {mainActiveTab === 'letterGame' && `For the Letter Identification Game, you practice all letters in the selected category.`}
+            {mainActiveTab === 'letterGame' && `For the Letter Identification Game, you practice all ${letterSubtype === 'ottaksharaWords' ? 'words' : 'letters'} in the selected category.`}
           </p>
           <div className="author-info">
             Author: Ragu Kattinakere <br/>
@@ -1080,10 +1108,22 @@ function QuizPage() {
         </>
       )}
       {/* Footer Logo - Placeholder, replace src with your actual logo image URL. */}.
-      <div className="logo-bottom-right">
-        <img src="https://placehold.co/60x60/f0f4f8/2c3e50?text=Kಕ" alt="Kannada Maple Logo" />
+      <div className="logo-bottom-right"> 
+        <svg width="60" height="60" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="grad" cx="30%" cy="30%" r="100%">
+            <stop offset="0%" stop-color="#8e2de2" />
+            <stop offset="100%" stop-color="#ff416c" />
+          </radialGradient>
+        </defs>
+        <circle cx="256" cy="256" r="256" fill="url(#grad)" />
+        <text x="50%" y="55%" font-size="240" text-anchor="middle" fill="#ffffff" font-family="'Noto Sans Kannada', sans-serif" dominant-baseline="middle">
+          ಕ
+        </text>
+        </svg>
+        {/*<img src="https://placehold.co/60x60/yellow/red?text=Ka" alt="Kannada Maple Logo" />*/}
       </div>
-    </div>
+    </div>  
   );
 }
 
