@@ -110,7 +110,7 @@ const generateOptions = (quizType, currentQuestion, allPossibleEnglishAnswersPoo
 
 // --- React Component ---
 function QuizPage() {
-  // State to manage the active main tab: 'mainQuiz' or 'letterGame'.
+  // State to manage the active main tab: 'mainQuiz', 'letterGame', or 'tracing'.
   const [mainActiveTab, setMainActiveTab] = useState('mainQuiz'); 
 
   // State to track if a quiz session has started.
@@ -491,24 +491,21 @@ function QuizPage() {
       } else { // If the answer is incorrect
         playTone(220, 0.2, 'sawtooth'); // Play incorrect sound
         setTimeout(() => {
-          let textToSpeak = option; // Default to speaking the clicked option
-          // If in letter game, and the clicked option is Roman Kannada, try to find its Kannada equivalent.
+          // Speak only if it's the letter game tab
           if (mainActiveTab === 'letterGame') {
-              const kannadaEquivalent = getKannadaFromRomanKannada(option, letterSubtype);
-              if (kannadaEquivalent) {
-                  textToSpeak = kannadaEquivalent;
-              } else {
-                  console.warn(`No Kannada equivalent found for Roman Kannada option: ${option}. Speaking Roman Kannada directly.`);
-                  // Fallback: if no Kannada equivalent is found, try to speak the Romanized text directly.
-                  // This might not be perfectly pronounced as Kannada, but it's the clicked text.
-                  textToSpeak = option; 
-              }
+            let textToSpeak = option; // Default to speaking the clicked option
+            // If in letter game, and the clicked option is Roman Kannada, try to find its Kannada equivalent.
+            const kannadaEquivalent = getKannadaFromRomanKannada(option, letterSubtype);
+            if (kannadaEquivalent) {
+                textToSpeak = kannadaEquivalent;
+            } else {
+                console.warn(`No Kannada equivalent found for Roman Kannada option: ${option}. Speaking Roman Kannada directly.`);
+                // Fallback: if no Kannada equivalent is found, try to speak the Romanized text directly.
+                // This might not be perfectly pronounced as Kannada, but it's the clicked text.
+                textToSpeak = option; 
+            }
+            speakKannada(textToSpeak); // Speak what was clicked (or its Kannada equivalent if in letter game)
           }
-          // For main quiz, 'option' is either Kannada (sentence/minimalLearning) or English (word/kannadaQuestion),
-          // both of which `speakKannada` can handle directly.
-          
-          speakKannada(textToSpeak); // Speak what was clicked (or its Kannada equivalent if in letter game)
-
         }, 300);
       }
 
@@ -826,7 +823,7 @@ function QuizPage() {
           disabled={quizStarted}
           /* Disable tab button when quiz is active */
         >
-          ಮನೆಯ ಮಾತು ಪ್ರಶ್ನೆ - Sentence Quizzes
+          ಮನೆಯ ಮಾತು-Sentence Quiz
         </button>
         <button
           className={`main-tab-button ${mainActiveTab === 'letterGame' ? 'active' : ''}`}
@@ -842,7 +839,21 @@ function QuizPage() {
           disabled={quizStarted}
           /* Disable tab button when quiz is active */
         >
-          ಅಕ್ಷರದ ಆಟ (Letter Games)
+          ಅಕ್ಷರದ ಆಟ-Letter Games
+        </button>
+        <button
+          className={`main-tab-button ${mainActiveTab === 'tracing' ? 'active' : ''}`}
+          onClick={() => {
+            if (!quizStarted) { // Prevent tab switching if a quiz is currently active.
+              setMainActiveTab('tracing');
+              setQuizType(null); // No quiz type for tracing tab
+              setLetterSubtype(null); // No letter subtype for tracing tab
+              setNumQuestions(0); // No questions for tracing tab
+            }
+          }}
+          disabled={quizStarted}
+        >
+          ಅಕ್ಷರ ತಿದ್ದು-Tracing
         </button>
       </div>
 
@@ -956,6 +967,14 @@ function QuizPage() {
               </button>
             </>
           )}
+
+          {/* Content for Tracing Tab, shown when `mainActiveTab` is 'tracing'. */}
+          {mainActiveTab === 'tracing' && (
+            <div className="tracing-content-placeholder">
+              <p>This section will feature interactive Kannada letter tracing exercises.</p>
+              <p>Stay tuned for updates!</p>
+            </div>
+          )}
         </div>
       )}
 
@@ -1051,7 +1070,7 @@ function QuizPage() {
             <div className="small-heading-banner">
               <h2>ಕನ್ನಡ ಕಲಿಕೆ ಕೆನಡಾ</h2>
             </div>
-            <h2>{mainActiveTab === 'letterGame' ? "Kannada Letter Identification Game" : `Kannada ${quizType} Quiz`} Finished!</h2>
+            <h2>{mainActiveTab === 'letterGame' ? "Kannada Letter Game" : `Kannada ${quizType} Quiz`} Finished!</h2>
             {studentName && <p className="student-name-result">Student: {studentName}</p>}
             <p className="final-score">
               Your Score: {score} / {sessionQuestions.length} ({sessionQuestions.length > 0 ? ((score / sessionQuestions.length) * 100).toFixed(0) : 0}%)

@@ -386,12 +386,12 @@ h1 {
 /* Main Tab Buttons (Quiz Type Selection) */
 .main-tab-buttons {
   display: flex;
-  justify-content: center;
-  margin-bottom: 25px;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 5px;
-  gap: 10px;
-  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 5px;
+  margin: 0 25px; /* Aligns with inner content blocks */
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .main-tab-button {
