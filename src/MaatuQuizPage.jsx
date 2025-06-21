@@ -129,6 +129,8 @@ function QuizPage() {
   const [score, setScore] = useState(0);
   // The option selected by the user for the current question.
   const [selectedOption, setSelectedOption] = useState(null);
+  // Controls the visibility of the feedback area and its buttons
+  const [showFeedback, setShowFeedback] = useState(false);
   // State to indicate if the quiz has finished.
   const [quizFinished, setQuizFinished] = useState(false);
   // Name entered by the student.
@@ -236,9 +238,10 @@ function QuizPage() {
 
   // Helper function to generate questions specifically for the Letter Identification game.
   // It prioritizes letters that haven't been mastered or were frequently missed.
-  const generateLetterIdentificationQuestions = (sourceData, errorCounts, masteredSet) => {
+  const generateLetterIdentificationQuestions = (sourceData, errorCounts, masteredSet, count) => {
     let questions = [];
-    const allLetters = sourceData.map(item => item.kannada); // Extract all Kannada characters from the source data.
+    // Extract all Kannada characters from the source data.
+    // const allLetters = sourceData.map(item => item.kannada); // This line is not directly used in the logic below, can be removed if not needed elsewhere.
 
     // 1. Prioritize letters not yet seen/mastered in this session.
     let unmastered = sourceData.filter(item => !masteredSet.has(item.kannada));
@@ -246,10 +249,10 @@ function QuizPage() {
 
     // 2. Prioritize letters that were frequently missed based on `errorCounts`.
     let missedLetters = Object.entries(errorCounts)
-      .filter(([, count]) => count > 0) // Consider only letters with at least one error.
+      .filter(([, c]) => c > 0) // Consider only letters with at least one error.
       .sort((a, b) => b[1] - a[1]) // Sort by most errors first (descending order).
       .map(([kannadaChar]) => sourceData.find(item => item.kannada === kannadaChar)) // Get the full question object.
-      .filter(item => item && !masteredSet.has(item.kannada) && !unmastered.includes(item)); // Exclude if already mastered or already in the unmastered list.
+      .filter(item => item && !masteredSet.has(item.kannada) && !unmastered.some(q => q.kannada === item.kannada)); // Exclude if already mastered or already in the unmastered list.
 
     // Combine prioritized lists, ensuring uniqueness.
     let prioritizedQuestions = [...unmastered];
@@ -264,64 +267,31 @@ function QuizPage() {
     // 3. Fill the rest with random letters from the full source, avoiding duplicates if possible.
     let fillerQuestions = shuffleArray(sourceData).filter(item => !questions.some(q => q.kannada === item.kannada));
 
-    // For a finite game, ensure we pick exactly `numQuestions` or up to the maximum available.
-    // The `numQuestions` state for the letter game is capped at the maximum available letters for the subtype
-    // when the quiz starts in `handleStartQuiz`.
-    while (questions.length < numQuestions && fillerQuestions.length > 0) {
+    // For a finite game, ensure we pick exactly `count` or up to the maximum available.
+    while (questions.length < count && fillerQuestions.length > 0) {
         questions.push(fillerQuestions.shift()); // Take from filler and remove to avoid re-picking.
     }
 
-    // If still not enough questions to meet `numQuestions` (e.g., if `numQuestions` is very large
-    // or if the unique pool is smaller than requested), randomly pick from the source data.
-    // This ensures `sessionQuestions` always has `numQuestions` items if `sourceData` allows.
-    while (questions.length < numQuestions) {
+    // If still not enough questions to meet `count`, randomly pick from the source data.
+    while (questions.length < count) {
         questions.push(sourceData[Math.floor(Math.random() * sourceData.length)]);
     }
 
-    // Final shuffle and cap to `numQuestions` before returning.
-    return shuffleArray(questions.slice(0, numQuestions));
+    // Final shuffle and cap to `count` before returning.
+    return shuffleArray(questions.slice(0, count));
   };
 
 
-  // Effect hook to populate `sessionQuestions` when a quiz starts or parameters change.
+  // Effect to reset selected option and feedback display when a new question is displayed.
+  // This is crucial to prevent the feedback area and buttons from showing prematurely.
   useEffect(() => {
-    if (quizStarted && !quizFinished) {
-      let questionsSource = [];
-      
-      if (mainActiveTab === 'mainQuiz') {
-        // Select question source based on `quizType` for the main quizzes.
-        if (quizType === 'sentence') {
-          questionsSource = allSentences;
-        } else if (quizType === 'word') {
-          questionsSource = wordBatches[selectedWordBatchForStart] || [];
-        } else if (quizType === 'kannadaQuestion') {
-          questionsSource = kannadaQuestionsData;
-        } else if (quizType === 'minimalLearning') {
-          questionsSource = minimalLearningSentences;
-        } else if (quizType === 'ottaksharaWords') { // New Ottakshara Words quiz
-          questionsSource = ottaksharaWordsData;
-        }
-        // Generate random questions for main quizzes based on `numQuestions`.
-        setSessionQuestions(getRandomQuestions(questionsSource, numQuestions)); 
-      } else if (mainActiveTab === 'letterGame') {
-        // Select question source based on `letterSubtype` for the Letter Identification game.
-        if (letterSubtype === 'varnamale') {
-          questionsSource = varnamale;
-        } else if (letterSubtype === 'kaagunita') {
-          questionsSource = kaagunita;
-        } else if (letterSubtype === 'ottakshara') {
-          questionsSource = ottakshara;
-        }
-        // Generate questions for the letter game, prioritizing missed/unmastered letters.
-        setSessionQuestions(generateLetterIdentificationQuestions(questionsSource, letterErrorCounts, masteredLetters));
-      }
-      
-      // Reset quiz session states for a new quiz/batch.
-      setCurrentQuestionIndex(0); 
-      setScore(0); 
-      setSelectedOption(null); 
+    // Only reset if a quiz is active and a question is available
+    if (quizStarted && currentQuestion) {
+      setSelectedOption(null);
+      setShowFeedback(false); // Ensure feedback is hidden when a new question loads
     }
-  }, [quizStarted, quizFinished, quizType, numQuestions, selectedWordBatchForStart, letterSubtype, mainActiveTab, letterErrorCounts, masteredLetters]); // Dependencies for this effect.
+  }, [currentQuestionIndex, quizStarted, currentQuestion]);
+
 
   // Memoized `options` array for the current question, ensuring it only re-generates when necessary.
   const options = useMemo(() => {
@@ -414,28 +384,39 @@ function QuizPage() {
       return; // Prevent quiz start if name is empty.
     }
 
+    let questionsSource = [];
     let currentQuizMaxQuestions = 0;
-    // Determine the maximum available questions based on the active tab and quiz/letter subtype.
+    
     if (mainActiveTab === 'mainQuiz') {
       if (quizType === 'sentence') {
-        currentQuizMaxQuestions = allSentences.length;
+        questionsSource = allSentences;
       } else if (quizType === 'word') {
-        currentQuizMaxQuestions = wordBatches[selectedWordBatchForStart]?.length || 0; // Use optional chaining for safety.
+        questionsSource = wordBatches[selectedWordBatchForStart] || [];
       } else if (quizType === 'kannadaQuestion') {
-        currentQuizMaxQuestions = kannadaQuestionsData.length;
+        questionsSource = kannadaQuestionsData;
       } else if (quizType === 'minimalLearning') {
-        currentQuizMaxQuestions = minimalLearningSentences.length;
-      } else if (quizType === 'ottaksharaWords') {
-        currentQuizMaxQuestions = ottaksharaWordsData.length;
+        questionsSource = minimalLearningSentences;
+      } else if (quizType === 'ottaksharaWords') { // New Ottakshara Words quiz
+        questionsSource = ottaksharaWordsData;
       }
+      currentQuizMaxQuestions = questionsSource.length;
+      setSessionQuestions(getRandomQuestions(questionsSource, Math.min(numQuestions, currentQuizMaxQuestions))); 
     } else if (mainActiveTab === 'letterGame') {
-        if (letterSubtype === 'varnamale') currentQuizMaxQuestions = varnamale.length;
-        else if (letterSubtype === 'kaagunita') currentQuizMaxQuestions = kaagunita.length;
-        else if (letterSubtype === 'ottakshara') currentQuizMaxQuestions = ottakshara.length;
+        if (letterSubtype === 'varnamale') {
+          questionsSource = varnamale;
+        } else if (letterSubtype === 'kaagunita') {
+          questionsSource = kaagunita;
+        } else if (letterSubtype === 'ottakshara') {
+          questionsSource = ottakshara;
+        }
+        currentQuizMaxQuestions = questionsSource.length; // Max questions for letter game is the full set of the subtype
         
         // Reset error counts and mastered letters specifically for the letter game on start.
         setLetterErrorCounts({});
         setMasteredLetters(new Set());
+        // Generate questions for the letter game, prioritizing missed/unmastered letters, only at start.
+        setSessionQuestions(generateLetterIdentificationQuestions(questionsSource, {}, new Set(), currentQuizMaxQuestions)); // Pass empty counts/mastered for initial generation.
+        // The numQuestions state for letter game is already set to currentQuizMaxQuestions by handleLetterSubtypeChange
     }
 
     // Ensure `numQuestions` (the user-requested count) does not exceed the `currentQuizMaxQuestions`.
@@ -446,10 +427,13 @@ function QuizPage() {
       setQuizStarted(true); // Begin the quiz.
       setQuizFinished(false); // Ensure quiz finished state is reset.
       setQuizStartTime(Date.now()); // Record the start time.
-      // `sessionQuestions` will be populated by the `useEffect` hook, which depends on `quizStarted`.
     } else {
       alert(`No questions available for this selection.`); // Alert if no questions can be generated.
     }
+    setCurrentQuestionIndex(0); // Reset question index.
+    setScore(0); // Reset score.
+    setSelectedOption(null); // Clear selected option.
+    setShowFeedback(false); // Ensure feedback is hidden.
   };
 
   // Handler for when a user selects an option.
@@ -457,7 +441,12 @@ function QuizPage() {
     if (audioContext && audioContext.state === 'suspended') {
       audioContext.resume().catch(e => console.error("Error resuming AudioContext on option select:", e));
     }
-    if (selectedOption === null) { // Only allow selection if an option hasn't been picked yet for the current question.
+    console.log("handleOptionSelect triggered.");
+    console.log("Current selectedOption (before update):", selectedOption);
+    console.log("Current Question in handleOptionSelect:", currentQuestion);
+
+    // Only allow selection if an option hasn't been picked yet for the current question.
+    if (selectedOption === null) { 
       setSelectedOption(option);
 
       let isCorrect;
@@ -468,9 +457,14 @@ function QuizPage() {
           isCorrect = (option === currentQuestion.english);
         }
       } else if (mainActiveTab === 'letterGame') {
+        // Correctness logic for letter game: compare selected option with currentQuestion.romanKannada
         isCorrect = (option === currentQuestion.romanKannada);
 
+        // Add console log to debug score registration for letter game
+        console.log(`Letter Game: Selected: "${option}", Correct Answer: "${currentQuestion?.romanKannada}", Is Correct: ${isCorrect}, Current Question: `, currentQuestion);
+
         // Update letter error counts and mastered letters for the letter identification quiz.
+        // These updates are fine as they don't affect sessionQuestions re-generation anymore.
         if (isCorrect) {
           setMasteredLetters(prev => new Set(prev).add(currentQuestion.kannada)); // Add to mastered set if correct.
         } else {
@@ -482,80 +476,87 @@ function QuizPage() {
       }
 
       if (isCorrect) {
-        setScore(prevScore => prevScore + 1); // Increment score if the answer is correct.
+        setScore(prevScore => {
+          console.log(`Score before: ${prevScore}, Score after: ${prevScore + 1}`);
+          return prevScore + 1; // Increment score if the answer is correct.
+        });
         playCorrectSound(); // Play correct answer sound.
       } else {
         playIncorrectSound(); // Play incorrect answer sound.
       }
+
+      // Show feedback area after a short delay
+      setTimeout(() => {
+        setShowFeedback(true);
+      }, 300); // 300ms delay to allow styling to apply before buttons appear
     }
   };
 
   // Handler for navigating to the next question or finishing the quiz.
   const handleNextQuestion = () => {
     playButtonClick(); // Play button click sound.
-    if (selectedOption !== null) { // Only proceed if an option has been selected.
-      if (synth && synth.speaking) {
-        synth.cancel(); // Stop any ongoing speech.
-      }
+    console.log("handleNextQuestion triggered.");
+    console.log("State before next question logic:", { selectedOption, showFeedback, currentQuestionIndex, sessionQuestionsLength: sessionQuestions.length });
 
-      const nextIndex = currentQuestionIndex + 1;
+    if (synth && synth.speaking) {
+      synth.cancel(); // Stop any ongoing speech.
+    }
 
-      // Logic for progressing through questions or finishing the quiz.
-      if (nextIndex < sessionQuestions.length) {
-        setCurrentQuestionIndex(nextIndex); // Move to the next question.
-        setSelectedOption(null); // Reset selected option for the new question.
-      } else {
-        // Quiz session has ended.
-        if (quizType === 'word' && mainActiveTab === 'mainQuiz') { // Special logic for Word Quiz batches.
-          const totalQuestionsInBatch = wordBatches[selectedWordBatchForStart].length;
-          const percentage = (score / totalQuestionsInBatch) * 100;
+    const nextIndex = currentQuestionIndex + 1;
 
-          // Check conditions for unlocking the next batch: complete all questions in the batch AND score >= 80%.
-          if (sessionQuestions.length === totalQuestionsInBatch && percentage >= 80) {
-            if (selectedWordBatchForStart < wordBatches.length - 1) {
-              // Unlock the next batch if available.
-              setUnlockedWordBatches(prev => {
-                if (!prev.includes(selectedWordBatchForStart + 1)) {
-                  return [...prev, selectedWordBatchForStart + 1];
-                }
-                return prev;
-              });
-              alert(`Congratulations! You scored ${percentage.toFixed(0)}% on Batch ${selectedWordBatchForStart + 1}. The next batch is now unlocked!`);
-              setSelectedWordBatchForStart(prevIndex => prevIndex + 1); // Move to the newly unlocked batch's index.
-              setQuizStarted(false); // Return to the start screen.
-              setQuizFinished(true); // Mark quiz as finished to show results.
-            } else {
-              setQuizFinished(true); // All batches completed.
-              alert(`Congratulations! You scored ${percentage.toFixed(0)}%. You have completed all available word batches!`);
-            }
-          } else {
-            // If conditions not met, provide feedback and prompt to repeat.
-            let message = `You scored ${percentage.toFixed(0)}% on Batch ${selectedWordBatchForStart + 1}.`;
-            if (sessionQuestions.length < totalQuestionsInBatch) {
-                message += ` To unlock the next batch, you must complete all ${totalQuestionsInBatch} questions in this batch.`;
-            }
-            if (percentage < 80) {
-                message += ` You need at least 80% to unlock the next batch. Please repeat this batch to improve.`;
-            }
-            alert(message);
+    // Logic for progressing through questions or finishing the quiz.
+    if (nextIndex < sessionQuestions.length) {
+      setCurrentQuestionIndex(nextIndex); // Move to the next question.
+      // selectedOption and showFeedback are reset by the useEffect on currentQuestionIndex change
+    } else {
+      // Quiz session has ended.
+      if (quizType === 'word' && mainActiveTab === 'mainQuiz') { // Special logic for Word Quiz batches.
+        const totalQuestionsInBatch = wordBatches[selectedWordBatchForStart].length;
+        const percentage = (score / totalQuestionsInBatch) * 100;
+
+        // Check conditions for unlocking the next batch: complete all questions in the batch AND score >= 80%.
+        if (sessionQuestions.length === totalQuestionsInBatch && percentage >= 80) {
+          if (selectedWordBatchForStart < wordBatches.length - 1) {
+            // Unlock the next batch if available.
+            setUnlockedWordBatches(prev => {
+              if (!prev.includes(selectedWordBatchForStart + 1)) {
+                return [...prev, selectedWordBatchForStart + 1];
+              }
+              return prev;
+            });
+            alert(`Congratulations! You scored ${percentage.toFixed(0)}% on Batch ${selectedWordBatchForStart + 1}. The next batch is now unlocked!`);
+            setSelectedWordBatchForStart(prevIndex => prevIndex + 1); // Move to the newly unlocked batch's index.
             setQuizStarted(false); // Return to the start screen.
             setQuizFinished(true); // Mark quiz as finished to show results.
+          } else {
+            setQuizFinished(true); // All batches completed.
+            alert(`Congratulations! You scored ${percentage.toFixed(0)}%. You have completed all available word batches!`);
           }
-        } else { // For all other main quiz types and Letter Identification game, simply finish.
-          setQuizFinished(true);
+        } else {
+          // If conditions not met, provide feedback and prompt to repeat.
+          let message = `You scored ${percentage.toFixed(0)}% on Batch ${selectedWordBatchForStart + 1}.`;
+          if (sessionQuestions.length < totalQuestionsInBatch) {
+              message += ` To unlock the next batch, you must complete all ${totalQuestionsInBatch} questions in this batch.`;
+          }
+          if (percentage < 80) {
+              message += ` You need at least 80% to unlock the next batch. Please repeat this batch to improve.`;
+          }
+          alert(message);
+          setQuizStarted(false); // Return to the start screen.
+          setQuizFinished(true); // Mark quiz as finished to show results.
         }
-
-        // Calculate and set the quiz duration when the quiz finishes.
-        if (quizStartTime) {
-          const endTime = Date.now();
-          const durationInSeconds = Math.floor((endTime - quizStartTime) / 1000);
-          const minutes = Math.floor(durationInSeconds / 60);
-          const seconds = durationInSeconds % 60;
-          setQuizDuration(`${minutes}m ${seconds}s`);
-        }
+      } else { // For all other main quiz types and Letter Identification game, simply finish.
+        setQuizFinished(true);
       }
-    } else {
-      alert("Please select an answer before proceeding."); // Prompt user to select an answer.
+
+      // Calculate and set the quiz duration when the quiz finishes.
+      if (quizStartTime) {
+        const endTime = Date.now();
+        const durationInSeconds = Math.floor((endTime - quizStartTime) / 1000);
+        const minutes = Math.floor(durationInSeconds / 60);
+        const seconds = durationInSeconds % 60;
+        setQuizDuration(`${minutes}m ${seconds}s`);
+      }
     }
   };
 
@@ -601,6 +602,7 @@ function QuizPage() {
     setCurrentQuestionIndex(0); // Reset question index.
     setScore(0); // Reset score.
     setSelectedOption(null); // Clear selected option.
+    setShowFeedback(false); // Clear feedback display state
     setQuizFinished(false); // Quiz not finished.
     setSessionQuestions([]); // Clear session-specific questions.
     setQuizStartTime(null); // Clear start time.
@@ -654,6 +656,7 @@ function QuizPage() {
     }
     
     let isCorrectOption;
+    // Check if the current tab is 'mainQuiz' or 'letterGame' to determine correctness logic
     if (mainActiveTab === 'mainQuiz') {
       if (quizType === 'sentence' || quizType === 'minimalLearning') {
         isCorrectOption = (option === currentQuestion.kannada);
@@ -661,6 +664,7 @@ function QuizPage() {
         isCorrectOption = (option === currentQuestion.english);
       }
     } else if (mainActiveTab === 'letterGame') {
+      // For letter game, the correct option is `currentQuestion.romanKannada`
       isCorrectOption = (option === currentQuestion.romanKannada);
     }
 
@@ -670,7 +674,8 @@ function QuizPage() {
     if (option === selectedOption && !isCorrectOption) {
       return "option-button incorrect"; // Apply 'incorrect' class if it's the selected wrong answer.
     }
-    return "option-button"; // Default for other unselected options after an answer has been chosen.
+    // If an option is selected but it's not the current 'option' and not the 'correct' option, it should remain default.
+    return "option-button"; 
   };
 
   // Formats the current date and time for display.
@@ -968,7 +973,8 @@ function QuizPage() {
             ))}
           </div>
 
-          {selectedOption !== null && ( // Show feedback area only after an option is selected.
+          {/* Feedback area and buttons are now consistently displayed only if showFeedback is true */}
+          {showFeedback && ( 
             <div className="feedback-area">
               {(mainActiveTab === 'mainQuiz' && (quizType === 'sentence' || quizType === 'minimalLearning')) && currentQuestion.romanKannada && (
                 <p className="roman-kannada-feedback">
@@ -980,7 +986,7 @@ function QuizPage() {
                   Correct: {currentQuestion.english} {/* Display correct English for Word/Kannada Question. */}
                 </p>
               )}
-              {/* For letter identification, show the correct transliteration. */}
+              {/* For letter identification, show the correct transliteration with "Correct: " prefix */}
               {mainActiveTab === 'letterGame' && currentQuestion.romanKannada && (
                 <p className="roman-kannada-feedback">
                   Correct: {currentQuestion.romanKannada}
@@ -1000,7 +1006,8 @@ function QuizPage() {
               </button>
             </div>
           )}
-          {mainActiveTab === 'letterGame' && quizStarted && !quizFinished && ( // Always show stop button for letter game during quiz
+          {/* Stop Game button is always visible during the letter game when a quiz is started */}
+          {mainActiveTab === 'letterGame' && quizStarted && !quizFinished && ( 
               <div className="stop-game-button-container">
                   <button onClick={handleStopLetterQuiz} className="reset-button">
                       Stop Game
@@ -1072,7 +1079,7 @@ function QuizPage() {
           </div>
         </>
       )}
-      {/* Footer Logo - Placeholder, replace src with your actual logo image URL. */}
+      {/* Footer Logo - Placeholder, replace src with your actual logo image URL. */}.
       <div className="logo-bottom-right">
         <img src="https://placehold.co/60x60/f0f4f8/2c3e50?text=Kಕ" alt="Kannada Maple Logo" />
       </div>
